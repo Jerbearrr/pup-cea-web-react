@@ -1,0 +1,109 @@
+
+
+.app-menu {
+    color: white;
+    height: 100vh;
+    width: 260px;
+    background-color: #202125;
+    z-index: 200;
+
+  
+    transition: 0.3s;
+
+    position: fixed;
+    left: 0;
+    top: 0;
+
+    display: flex;
+   
+    flex-direction: column!important;
+
+}
+.menuheader ul{
+    display: flex;
+    flex-direction: column!important;
+}
+
+.menu-open {
+    transform: translateX(0%);
+}
+.menuheader{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    height: 90px;
+    border-bottom: 1px solid white;
+    width: 100%;
+    align-self: flex-start!important;
+    padding-right: 10px;
+    
+    
+}
+.menuheader svg{
+    margin-right: 10px;
+    
+    border: 1px solid white;
+    border-radius: 4px;
+    padding: 6px 3px;
+    height: 30px;
+    cursor: pointer;
+
+}
+.sidemenu{
+    border-bottom: 1px solid rgba(255, 255, 255, .05);
+    width: 100%;
+    margin: 0!important;
+    justify-content: flex-start!important;
+    padding-left: 20px;
+
+}
+.sidemenu h2{
+    font-weight: 500!important;
+    font-size: 0.896rem!important;
+    line-height: 1.3em
+   
+}
+@media only screen and (max-width: 600px) {
+    .sidemenu h2 {
+            font-weight: 400 !important;
+            font-size: 0.797rem !important;
+    
+      }
+}
+.sidemenu h2:hover {
+    color:rgb(211, 60, 60);
+    cursor: pointer;
+
+}
+.bm-overlay{
+   
+    left:0;
+    right: 0;
+    top:0;
+    bottom: 0;
+   
+    border: none!important;
+}
+.bm-menu-wrap{
+    left: 0;
+    top: 0;
+    width: 260px!important;
+    border: none!important;
+}
+.bm-item-list{
+    width: 250px !important;
+    border: none!important;
+}
+.bm-item{
+    border: none!important;
+}
+.my-class{
+    position: fixed;
+    z-index: 100;
+    width: 100%;
+    height: 100%;
+   
+    opacity: 1;
+    border: none!important;
+  
+}

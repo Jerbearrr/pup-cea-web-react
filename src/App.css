@@ -1,0 +1,46 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+@import url("https://fonts.googleapis.com/css?family=Montserrat");
+
+@import url('https: //fonts.googleapis.com/css2?family=Montserrat:wght@500&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@600&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@700&display=swap');
+
+@import url('https: //fonts.googleapis.com/css2?family=Ceviche+One&display=swap"rel="stylesheet');
+
+input[type='text']:focus {
+  box-shadow: none;
+}
+
+* {
+  scrollbar-color: #2a2c31 #18191a;
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: Montserrat, Arial;
+  letter-spacing: 1px;
+  position: relative;
+  image-rendering: -webkit-optimize-contrast;
+  -moz-text-size-adjust: none;
+    -webkit-text-size-adjust: none;
+    text-size-adjust: none;
+    
+  -webkit-tap-highlight-color: transparent!important;
+}
+*::-webkit-scrollbar {
+   background-color: #202125;
+   width: 10px;
+
+}
+*::-webkit-scrollbar-track {
+ 
+}
+*::-webkit-scrollbar-thumb {
+  background: #f4f4f4b0;
+  margin: 0 5px;
+
+  width: 2px;
+}
+
+

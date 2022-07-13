@@ -1,0 +1,518 @@
+.inputfilebtn{
+    max-width: 178px;
+    border: 1px solid #a43033;
+    padding: 0 20px;
+    border-radius: 5px;
+    background-color: #a43033;
+    box-shadow: 0px 1px 1px 0px rgba(0, 0, 0, 0.5);
+
+}
+.minheightset{
+    min-height: 100vh;
+}
+
+.inputfilebtn:hover{
+    background-color: #8e292c;
+    cursor: pointer;
+}
+.inputfilebtnbtn input {
+   width: 100%;
+}
+.inputfilebtnbtn:hover{
+    cursor: pointer;
+}
+.addbooklabel{
+    font-size: 0.99rem;
+    font-weight: 600;
+    letter-spacing: 1px;
+}
+.form-groupaddbook input{
+    color: black;
+    background-color: rgba(255, 255, 255, 0.901);
+    border-radius: 4px;
+    font-size: 0.89rem;
+    font-weight: 600;
+}
+.form-groupaddbook .textareadesc {
+    color: black;
+    font-size: 0.89rem;
+    font-weight: 500;
+    letter-spacing: 1px;
+    background-color: rgba(255, 255, 255, 0.901);
+    overflow: hidden;
+    height: 40px;
+    border-radius: 4px;
+  
+}
+.form-groupaddbook textarea {
+    color: black;
+    font-size: 0.99rem;
+    font-weight: 600;
+    letter-spacing: 1px;
+    background-color: rgba(255, 255, 255, 0.901);
+    height: 40px;
+    overflow: hidden;
+    border-radius: 4px;
+}
+.auto_height {
+   
+    width: 100%;
+    letter-spacing: 1px;
+}
+.form-groupaddbook{
+    letter-spacing: 1px;
+    
+}
+#react-select-2-input{
+    outline: none !important;
+    outline-offset: none !important;
+    color:black;
+    letter-spacing: 1px;
+}
+#react-select-2-listbox{
+    color: black;
+    letter-spacing: 1px;
+}
+.materialtype__control {
+    min-height: 15px!important;
+    letter-spacing: 1px;
+   
+}
+.materialtype__menu{
+
+    background-color: rgb(241, 237, 237)!important;
+    color: black!important;
+    letter-spacing: 1px;
+}
+.materialtype__value-container{
+    padding: 0px 8px !important;
+    letter-spacing: 1px;
+}
+.materialtype__input-container{
+    margin: 0!important;
+    padding: 0!important;
+    letter-spacing: 1px;
+}
+.infoaddbook{
+    height:30px;
+    border-radius: 4px;
+    background-color: rgba(255, 255, 255, 0.901);
+    color: black;
+    max-width: 250px;
+    letter-spacing: 1px;
+}
+.materialtype__multi-value__remove{
+    color: rgb(255, 255, 255)!important;
+}
+.materialtype__multi-value__remove:hover {
+    color: rgb(216, 64, 64) !important;
+   
+    background-color: rgba(255, 255, 255, 0)!important;
+}
+.materialtype__multi-value{
+    border:1px solid white;
+    border-radius: 5px!important;
+    background-color: #a43033!important;
+    color:white!important;
+}
+.materialtype__multi-value__label{
+    color: white!important;
+}
+.addbooksubmit{
+    position: relative;
+   
+    border: 1px solid rgba(255, 255, 255, 0.832);
+    max-width: 400px;
+    border-radius: 4px;
+}
+.addbooksubmit:before {
+    content: "";
+    position: absolute;
+    top: 2px;
+    left: 2px;
+    right: 2px;
+    bottom: 2px;
+    border-radius: 0.1rem;
+    background-color: #fff;
+    opacity: .1;
+}
+
+.addbooksubmit:hover {
+    background-color: #922b2e;
+    border: 1px solid white;
+    max-width: 400px;
+    border-radius: 4px;
+    cursor: pointer;
+}
+.addbookbtn{
+
+    color: white;
+    border: 1px solid rgba(255, 255, 255, 0.663);
+    font-size: 0.8rem;
+   
+}
+.addbookbtn:hover{
+    background-color: #8e292c;
+    cursor: pointer;
+}
+.btnparent{
+    padding-bottom: 0.1rem;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.214);
+}
+.btnparent .tabactive{
+    background-color: rgba(255, 255, 255, 0)!important;
+    padding: 0!important;
+}
+.btnparent .tabinactive {
+    background-color: rgba(255, 255, 255, 0) !important;
+    padding: 0 !important;
+}
+.searchresultbar{
+    left: 0;
+    right: 0;
+    background-color: #202125;
+    top: 0.2em;
+    z-index: 2;
+  
+    
+    border-color: rgba(255, 255, 255, 0.339);
+    border-style: solid;
+    border-width: 0px 1px 1px 1px;
+    box-shadow: 0 12px 28px 0 rgba(0, 0, 0, 0.2), 0 2px 4px 0 rgba(0, 0, 0, 0.1), inset 0 0 0 1px rgba(255, 255, 255, 0.0);
+}
+.searchresultbar2 {
+    left: 0;
+    right: 0;
+    background-color: #202125;
+    top: 0.5em;
+    padding-top: 0.2em;
+    z-index: -3;
+    border-radius: 0 0 10px 10px;
+    overflow:hidden;
+    padding-bottom: 8px ;
+    border-bottom: 7px solid rgb(16, 16, 16);
+
+
+
+    box-shadow: 0 12px 28px 0 rgba(0, 0, 0, 0.2), 0 2px 4px 0 rgba(0, 0, 0, 0.1), inset 0 0 0 1px rgba(255, 255, 255, 0.0);
+    border-style: solid;
+
+
+}
+.searchresultbar div {
+   align-self: flex-start;
+
+
+
+}
+.resultcontainer{
+    max-height: 8em;
+    border-bottom:1px solid rgba(255, 255, 255, 0.339);
+    border-style: dashed;
+    
+}
+.resultcontainer2 {
+    max-height: 7em;
+ 
+}
+.resultcontainer2:hover {
+    cursor: pointer;
+    background-color: #353840;
+    
+}
+.resultcontainer:hover{
+    cursor: pointer;
+    background-color: #353840;
+}
+.resultcontainer img{
+    height: 100%;
+    
+}
+.resultimg{
+    max-height: 5rem;
+    
+}
+.resultimgcont{
+    padding: 0.5em;
+}
+.resultdetails{
+    padding: 0.5em;
+    flex-wrap: wrap;
+    
+
+  
+   
+}
+.resultdetailstitle {
+  
+    font-size: 0.88rem;
+    font-weight: 500;
+
+
+ 
+    word-wrap: break-word;
+    display: -webkit-box;
+        -webkit-line-clamp: 2;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+
+}
+.resultdetailstitle2 {
+
+    font-size: 0.80rem;
+    font-weight: 500;
+    word-wrap: break-word;
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+
+}
+.resultdetailsauthor {
+    margin-top: 0.2em;
+    font-size: 0.75rem;
+    color: #aaa;
+        word-wrap: break-word;
+            display: -webkit-box;
+                -webkit-line-clamp:1;
+                -webkit-box-orient: vertical;
+                overflow: hidden;
+}
+.resultdetailsauthor2 {
+    margin-top: 0.2em;
+    font-size: 0.70rem;
+    color: #aaa;
+    word-wrap: break-word;
+    display: -webkit-box;
+    -webkit-line-clamp: 1;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+
+.loading {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+.loading .span1 {
+    -webkit-animation-delay: -.32s;
+    animation-delay: -.32s;
+}
+.loading > div {
+    width: 15px;
+    height: 15px;
+    margin: 0 0.2em;
+    background-color: #aaa;
+    border-radius: 100%;
+    display: inline-block;
+    -webkit-animation: bounceball 0.5s infinite alternate;
+    animation: bounceball  0.5s infinite alternate;
+}
+.loading>div:nth-child(2) {
+    animation-delay: 0.1s;
+}
+
+.loading>div:nth-child(3) {
+    animation-delay: 0.3s;
+}
+
+@keyframes bounceball {
+    from {
+   
+        
+        transform: translate3d(0);
+    }
+
+    to {
+       
+   
+        transform: translate3d(0, -0.4rem, 0);
+    }
+}
+@keyframes bounceball {
+    0% {
+        opacity: 1;
+    }
+
+    30% {
+        opacity: 0.75;
+    }
+
+    50% {
+        opacity: 0.5;
+    }
+
+    100% {
+        opacity: 0.25;
+    }
+}
+.loadingcont{
+    height: 4em;
+}
+.delfilebtn{
+    background-color: #A43033;
+
+}
+.delfilebtn:hover {
+    background-color: #882a2d;
+    cursor: pointer;
+
+}
+.spanfilename{
+    font-size: 0.8rem;
+    border: 1px solid rgba(255, 254, 254, 0.601);
+    display: -webkit-box;
+        -webkit-line-clamp: 1;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+
+}
+.spanfilename:hover{
+    background-color: #a43033;
+    color: white;
+    border: 1px solid rgba(255, 254, 254, 0.601);
+    display: -webkit-box;
+        -webkit-line-clamp: 1;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+        cursor: pointer;
+    
+}
+.EditModalPortal .ReactModal__Content{
+        min-height: 300px !important;
+        max-height: 300px!important;
+}
+
+@media only screen and (max-width: 600px) {
+
+    .infoaddbook {
+            height: 30px;
+            border-radius: 4px;
+            background-color: rgba(255, 255, 255, 0.901);
+            color: black;
+            max-width: 250px;
+            letter-spacing: 1px;
+            width: 100%!important;
+        }
+    .searchresultbar {
+            left: 0;
+            right: 0;
+            background-color: #202125;
+            top: 0.2em;
+            z-index: 2;
+    
+    
+            border-color: rgba(255, 255, 255, 0.339);
+            border-style: solid;
+            border-width: 0px 0px 1px 0px!important;
+    
+        }
+.form-groupaddbook input {
+        color: black;
+        background-color: rgba(255, 255, 255, 0.901);
+        border-radius: 4px;
+        font-size: 0.89rem;
+        font-weight: 600;
+        padding: 0.3rem 0.7rem;
+    }
+        .form-groupaddbook .textareadesc {
+          
+            padding: 0.3rem 0.7rem;
+        }
+
+}
+
+.contimage{
+    overflow: hidden;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    max-height: 240px;
+    
+}
+.contrcontimg{
+    height: 220px;
+    display: flex;
+    justify-content: center;
+        align-items: center;
+    max-width: 150px;
+    background-color: #16171a;
+}
+.conttitle{
+
+overflow-x: hidden;
+overflow-y: auto;
+}
+.contmredetails{
+    overflow-x: hidden;
+    overflow-y: auto;
+    border-top: 1px solid rgba(255, 255, 255, 0.539);
+}
+.threelines{
+     
+        display: -webkit-box;
+        -webkit-line-clamp: 3;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+}
+.switch {
+    position: relative;
+    display: inline-block;
+    width: 60px;
+    height: 34px;
+}
+
+.switch input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+    border: 1px solid rgba(255, 255, 255, 0.464);
+}
+
+.slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #ccc;
+    -webkit-transition: .4s;
+    transition: .4s;
+}
+
+.slider:before {
+    position: absolute;
+    content: "";
+    height: 26px;
+    width: 26px;
+    left: 4px;
+    bottom: 4px;
+    background-color: white;
+    -webkit-transition: .4s;
+    transition: .4s;
+}
+
+input:checked+.slider {
+    background-color: #2196F3;
+}
+
+input:focus+.slider {
+    box-shadow: 0 0 1px #2196F3;
+}
+
+input:checked+.slider:before {
+    -webkit-transform: translateX(26px);
+    -ms-transform: translateX(26px);
+    transform: translateX(26px);
+}
+
+/* Rounded sliders */
+.slider.round {
+    border-radius: 34px;
+}
+
+.slider.round:before {
+    border-radius: 50%;
+}

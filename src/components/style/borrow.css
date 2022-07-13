@@ -1,0 +1,115 @@
+.optionborrow select{
+    border: 2px solid black;
+}
+.optionborrow{
+    z-index: 2;
+    width: 100%;
+    background-color: white;
+
+}
+.borrowstatusselect {
+    border: none;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.085);
+    background-color: transparent;
+    font-size: 0.797rem;
+    font-weight: 500;
+    
+    color: black;
+}
+.borrowstatusselect option{
+    padding: 50px!important;
+    line-height: 2em;
+}
+.borrowstatusselect:focus {
+   
+    -webkit-box-shadow: none;
+    box-shadow: none;
+    
+}
+.itemtypeselect option {
+    background-color: white;
+    padding: 40px!important;
+    margin: 40px!important;
+
+
+}
+.makethisbold{
+    font-weight: 500!important;
+    letter-spacing: normal;
+}
+
+@media only screen and (max-width: 600px) {
+.optionborrow select {
+    width: 100%;
+}
+
+}
+.nodata{
+    background-color: #202125;
+    color: white;
+    border-radius: 5px;
+}
+.stattext{
+    z-index: 2;
+    color: white;
+    left: 25px;
+    right: 0;
+    text-align: center;
+    justify-content: center;
+    top:2px
+}
+.tabactive{
+background-color: rgb(164, 48, 51);
+    color: white;
+
+}
+.tabinactive{
+    background-color: #202125;
+    cursor: pointer;
+    color: white;
+
+}
+.tabinactive:hover{
+    background-color: rgb(164, 48, 51);
+    color: white;
+
+}
+@media only screen and (max-width: 600px) {
+.tabactive {
+    background-color: rgb(164, 48, 51);
+    color: white;
+font-size: 0.896rem !important;
+
+}
+
+.tabinactive {
+    background-color: #202125;
+    cursor: pointer;
+    color: white;
+font-size: 0.896rem!important;
+}
+
+.tabinactive:hover {
+    background-color: rgb(164, 48, 51);
+    color: white;
+font-size: 0.896rem !important;
+}
+
+}
+
+.my-custom-react-select__menu {
+    z-index: 999!important;
+    background-color: red;
+}
+.resulttext{
+    font-size: 0.996rem;
+        letter-spacing: normal;
+        padding: 0 auto;
+        display: flex;
+            justify-content: center;
+            /* align horizontal */
+            align-items: center;
+            /* align vertical */
+     
+
+}

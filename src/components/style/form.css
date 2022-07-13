@@ -1,0 +1,123 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+
+.loginform{
+    max-width:350px;
+    background-color: #1c1c1fda;
+    border: 1px solid rgba(255, 255, 255, 0.734);
+    margin: auto auto;
+    color: white;
+
+}
+.signupform{
+    max-width:550px;
+    
+border: 1px solid rgba(255, 255, 255, 0.734);
+    margin: auto auto;
+    color: white;
+    background-color: #1c1c1fda;
+
+}
+.logincont{
+    width: 100%;
+    position: relative;
+}
+.forminside{
+    width: 100%;
+    max-width: 380px;
+    display: block;
+}
+.modal-header{
+    border-bottom: 1px solid rgba(255, 255, 255, 0.734);
+    max-width:390px;
+    width: 100%;
+}
+.modal-header2 {
+    border-bottom: 1px solid rgba(255, 255, 255, 0.734);
+    max-width: 590px;
+    width: 100%;
+}
+.modal-title{
+    font-size: 1.694rem;
+    letter-spacing: normal;
+    font-weight: 600;
+    font-family: 'IM Fell DW Pica SC',
+    serif;
+}
+.formsubmitbtn{
+    border: 1px solid white;
+    width: 100%;
+    background-color: #a43033;
+}
+.formsubmitbtn:not([disabled]):hover {
+    border: 1px solid white;
+    width: 100%;
+    background-color: #912b2e;
+    cursor: pointer;
+}
+.forgottext{
+    font-size: 0.797rem;
+}
+.form-group label{
+    font-size: 1.095rem;
+}
+.form-group input{
+    color: black;
+    padding: 0.5rem;
+}
+@media only screen and (max-width: 768px) {
+    .form-group input {
+        color: black;
+        padding: 0.25rem;
+    }
+   
+
+}
+
+.loginadminbtn{
+    box-shadow: 0px 1px 1px 0px rgba(0, 0, 0, 0.5);
+    color:rgb(255, 255, 255) ;
+    font-weight: 500;
+    letter-spacing: normal;
+   
+    background-color: #ffffff38;
+    cursor: pointer;
+    border-radius: 5px;
+}
+.loginadminbtn:hover{
+    background-color: #524e4e38;
+    cursor: pointer;
+}
+.loginadminbtn span{
+    letter-spacing: normal;
+}
+.forgotmaincont{
+    max-width: 500px;
+    background-color: white;
+    color: black;
+    width: 100%;
+        border: none;
+            border-radius: 8px;
+            box-shadow: 0 1px 2px rgb(0 0 0 / 10%), 0 2px 4px rgb(0 0 0 / 10%);
+}
+.forgotmaincont .header{
+    border-bottom: 1px solid rgba(0, 0, 0, .1);
+}
+.forgotcont input{
+    border: 1px solid rgba(0, 0, 0, .1)!important;
+    border-radius: 4px;
+}
+.forgotcont label {
+    font-size: 0.897rem!important;
+}
+.submitchange{
+    border-top: 1px solid rgba(0, 0, 0, .1);
+}
+.submitchange button{
+    background-color: #202125;
+    border: 1px solid #202125;
+    color: white;
+    border-radius: 2px;
+}

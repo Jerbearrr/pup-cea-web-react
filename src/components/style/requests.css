@@ -1,0 +1,247 @@
+.declinebtn{
+    margin-right: -43px;
+    z-index: 2;
+    filter: drop-shadow(0px 1px 1px rgb(0 0 0 / 0.3));
+}
+.declinebtn2{
+    margin-right: -43px;
+    z-index: 2;
+    fill:grey;
+    filter: drop-shadow(0px 1px 1px rgb(0 0 0 / 0.3));
+}
+.declinebtn2:hover{
+    fill: rgb(102, 102, 102);
+}
+.declinedbtn{
+    z-index: 1;
+    fill: #A43033;
+    filter: drop-shadow(0px 1px 1px rgb(0 0 0 / 0.3));
+}
+.acceptbtn{
+    z-index: 1;
+    filter: drop-shadow(0px 1px 1px rgb(0 0 0 / 0.3));
+}
+.acceptbtn{
+    fill:#3da450 ;
+    filter: drop-shadow(0px 1px 1px rgb(0 0 0 / 0.3));
+}
+.declinebtn{
+    fill:#A43033;
+    filter: drop-shadow(0px 1px 1px rgb(0 0 0 / 0.3));
+}
+.acceptbtn:not([disabled]):hover {
+    fill: #307f3e;
+    
+}
+.declinebtn:not([disabled]):hover {
+    fill: #86272a;
+}
+.returnbtn{
+    fill: #ffffff;
+    color: black!important;
+    filter: drop-shadow(0px 1px 1px rgb(0 0 0 / 0.3));
+}
+.rcvdbtn{
+    fill: rgb(51, 34, 200);
+    filter: drop-shadow(0px 1px 1px rgb(0 0 0 / 0.3));
+}
+.rcvdbtn:hover{
+    fill: rgb(42, 28, 167);
+}
+.rtrndbtn{
+    fill: #bd3ba3;
+    filter: drop-shadow(0px 1px 1px rgb(0 0 0 / 0.3));
+}
+.rtrndbtn:hover {
+    fill: #9e3189;
+}
+
+.ReactModal__Overlay{
+    z-index: 5!important;
+    background-color: #00000056!important;
+   
+   
+  
+}
+.ReactModal__Content{
+   
+   border: 2px solid #0648A1;
+    position: absolute;
+   
+    align-self: center;
+  
+    inset: 15px;
+  
+  
+  
+}
+.requestsmodal{
+    
+    max-width: 400px!important;
+    min-height: 400px!important;
+    max-height: 500px;
+  
+    overflow-y:auto ;
+    padding-bottom: 2rem;
+    margin: auto!important;
+    border-radius: 5px!important;
+    background-color: #19191cf5 !important;
+}
+.controlmodal {
+
+    max-width: 600px !important;
+    min-height: 200px !important;
+    max-height: 300px;
+
+    overflow-y: auto;
+    overflow-x: hidden;
+    padding-bottom: 2rem;
+    margin: auto !important;
+    border-radius: 5px !important;
+background-color: #19191cf5 !important;
+}
+.seecontribute{
+           
+                max-width: 700px !important;
+                min-height: 500px !important;
+                max-height: 550px;
+    
+                overflow-y: auto;
+     
+                margin: auto !important;
+                border-radius: 5px !important;
+            background-color: #19191cf5 !important;
+
+}
+.editmodal{
+    max-width: 400px !important;
+     
+        max-height: 270px;
+    
+    
+        overflow-y: auto;
+  
+        margin: auto !important;
+        border-radius: 5px !important;
+    background-color: #19191cf5 !important;
+
+}
+.openbookmodal {
+    max-width: 400px !important;
+    min-height: 200px !important;
+    max-height: 180px;
+
+
+    overflow-y: auto;
+
+    margin: auto !important;
+    border-radius: 5px !important;
+    background-color: #19191cf5 !important;
+
+}
+.seecontribute h4{
+
+    font-size: 0.9rem;
+
+}
+.borrowermoredetailscont{
+    
+    height: 100%;
+    padding: 1rem 1rem;
+    overflow-x: hidden;
+    overflow-y: auto;
+    width: 100%;
+    font-size: 0.9rem
+}
+.closeModal{
+    position: absolute;
+    top: 0;
+    right: 0;
+    background-color: #202125;
+    padding: 10px;
+    z-index: 3;
+    border-radius: 5px 0 5px 10px;
+}
+.closeModal:hover{
+  background-color: #A43033;
+}
+.modaltext{
+    font-size: 0.896rem;
+    font-weight: 400;
+  
+}
+.imgdivider{
+    height: 0.5rem;
+    color: #202125;
+ 
+    background-color: #202125;
+    width: 100%!important;
+}
+.buttonsbelowmodal{
+    bottom :0;
+    height: 3em;
+
+
+
+}
+.modalabsolute{
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+}
+.modalmaincontcont{
+    overflow-y: auto;
+    overflow-x: hidden;
+}
+.modalacceptbtn{
+    background-color: #41a654;
+    color: white;
+}
+.modalacceptbtn:hover {
+    background-color: #327f40;
+    color: white;
+}
+.modaldeclinebtn{
+    background-color: #a43033;
+    color: white;
+}
+.modaldeclinebtn:hover {
+    background-color: #88292d;
+    color: white;
+}
+
+#ResumeContainer {
+    margin: auto;
+    width: 90%;
+  
+    flex-direction: column;
+    align-items: center;
+}
+
+.PDFDocument {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.PDFPage {
+    box-shadow: 0 0 8px rgba(0, 0, 0, 0.5);
+ 
+}
+
+.PDFPageOne {
+    margin-bottom: 25px;
+}
+
+.PDFPage>canvas {
+    max-width: 100%;
+    height: auto !important;
+}
+.latewarn{
+    background-color: #A43033;
+    width: 15px!important;
+    height: 15px!important;
+    border-radius: 100%;
+    color: white;
+}
