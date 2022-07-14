@@ -29,6 +29,12 @@ const Topnav = () => {
 
   }
 
+  useEffect(()=>{
+    if(isError){
+      dispatch(reset())
+    }
+  },[isError])
+
   const getCookieValue = (name) => (
     document.cookie.match('(^|;)\\s*' + name + '\\s*=\\s*([^;]+)')?.pop() || ''
   )
@@ -157,7 +163,71 @@ const Topnav = () => {
 
 
   },[user])
+  
+function isFunction(functionToCheck) {
+  return functionToCheck && {}.toString.call(functionToCheck) === '[object Function]';
+}
+function debounce(func, wait) {
+    var timeout;
+    var waitFunc;
+    
+    return function() {
+        if (isFunction(wait)) {
+            waitFunc = wait;
+        }
+        else {
+            waitFunc = function() { return wait };
+        }
+        
+        var context = this, args = arguments;
+        var later = function() {
+            timeout = null;
+            func.apply(context, args);
+        };
+        clearTimeout(timeout);
+        timeout = setTimeout(later, waitFunc());
+    };
+}
 
+var reconnectFrequencySeconds = 1;
+
+const usereventsource= () =>{
+
+      var fetcheddate = new Date().toISOString()
+      const eventSource = new EventSource(`${SSEURL?SSEURL:'http://localhost:8080'}/realtimeuser?date=${fetcheddate}&user=${user._id}&accessToken=${user.accessToken}`,{
+       
+      headers: {
+          Accept: "text/event-stream",
+          
+        },
+      });
+      eventSource.onmessage = (e) => {
+        let userObj = JSON.parse(e.data, (key, value) => {
+        
+        return value;
+        });
+
+        if(userObj?.length > 0){
+           setnewlyfetchednotif(userObj)
+          
+        }
+        }
+      eventSource.onerror = err => {
+        eventSource.close();
+        reconnectusersource();
+     
+      };
+   
+}
+var reconnectusersource = debounce(function() {
+    usereventsource();
+    // Double every attempt to avoid overwhelming server
+    reconnectFrequencySeconds *= 2;
+    // Max out at ~1 minute as a compromise between user experience and server load
+    if (reconnectFrequencySeconds >= 64) {
+        reconnectFrequencySeconds = 64;
+    }
+}, function() { return reconnectFrequencySeconds * 1000 });
   
   useEffect(async()=>{
 
@@ -165,53 +235,19 @@ const Topnav = () => {
 
       console.log('iam i here')
 
-      if(!newlyfetchednotif && fetchnotification[0]?.dateAdded){
-        var fetcheddate = fetchnotification[0].dateAdded
-      }else if(newlyfetchednotif && newlyfetchednotif[0]?.dateAdded){
-        var fetcheddate = newlyfetchednotif[0].dateAdded
-        
-      }else if(!newlyfetchednotif && !fetchnotification[0]?.dateAdded){
-        var fetcheddate = new Date().toISOString()
-      }
-      
-      const eventSource = new EventSource(`${SSEURL?SSEURL:'http://localhost:8080'}/realtimeuser?date=${fetcheddate}&user=${user._id}`,{
-       headers: {
-          Accept: "text/event-stream",
-        },
-      });
-      eventSource.onmessage = (e) => {
-        let userObj = JSON.parse(e.data, (key, value) => {
-        
-        return value;
-        });
+  
 
-        if(userObj?.length > 0){
-           setnewlyfetchednotif(userObj)
-           eventSource.close()
-        }
-        }
-      eventSource.onerror = err => {
-        console.log(err)
-     
-      };
-      return () => {
-      eventSource.close();
-      };
+      usereventsource()
      
     
    
     }else if( user?.accessToken && user?.role === 'b521c' && startfetching )
     { 
-       if(!newlyfetchednotif && fetchnotification[0]?.dateAdded){
-        var fetcheddate = fetchnotification[0].dateAdded
-      }else if(newlyfetchednotif && newlyfetchednotif[0]?.dateAdded){
-        var fetcheddate = newlyfetchednotif[0].dateAdded
-        
-      }else if(!newlyfetchednotif && !fetchnotification[0]?.dateAdded){
+   
         var fetcheddate = new Date().toISOString()
-      }
       
-      const eventSource = new EventSource(`${SSEURL?SSEURL:'http://localhost:8080'}/realtime?date=${fetcheddate}`,{
+      
+      const eventSource = new EventSource(`${SSEURL?SSEURL:'http://localhost:8080'}/realtime?date=${fetcheddate}&accessToken=${user.accessToken}`,{
        headers: {
           Accept: "text/event-stream",
         },
@@ -224,22 +260,19 @@ const Topnav = () => {
 
         if(userObj?.length > 0){
            setnewlyfetchednotif(userObj)
-           eventSource.close()
         }
         }
       eventSource.onerror = err => {
-        console.log(err)
+          console.log(err)
      
       };
-      return () => {
-      eventSource.close();
-      };
+    
        
     }else{
 
     }
 
-  },[user, startfetching, newlyfetchednotif])
+  },[startfetching])
 
   useEffect(()=>{
   
@@ -420,31 +453,38 @@ const Topnav = () => {
 
 
    const toggleNotif = () => {
+    
    
     setnotifActive(!notifActive)
     
     if(notifActive){
      document.removeEventListener("click", onClickOutsideNotifListener)
      
-     if(user.role !== '4d3b'){
+     if(user.role === 'b521c'){
+console.log('wkwkw1')
+      
            const readids = fetchnotification.map(bookids => {
       return bookids._id
      })
 
      for (var i = 0; i < readids.length; i++) { 
      document.getElementById(readids[i]).style.backgroundColor = "transparent";
+     document.getElementById(`567${readids[i]}`).style.backgroundColor = "transparent";
      }
 
+   
      const readnotif = fetchnotification.map((obj, i) => ({ ...obj, status: 'read' }));
      setfetchnotification(readnotif)
      setunreadnotifs(unreadnotifs - readnotif.length)
-     }else{
+     }else if(user.role === '4d3b'){
+      console.log('wkwkw2')
       const readids = fetchnotification.map(bookids => {
       return bookids.id
      })
 
      for (var i = 0; i < readids.length; i++) { 
      document.getElementById(readids[i]).style.backgroundColor = "transparent";
+     document.getElementById(`567${readids[i]}`).style.backgroundColor = "transparent";
      }
 
      const readnotif = fetchnotification.map((obj, i) => ({ ...obj, status: 'read' }));
@@ -489,7 +529,8 @@ if(currentloc === '/'){
     if (!userexist) {
 
     return (
-      <>
+      <div className='hometopnavdivcont'>
+ <div className='relative'>
         <div className='topnavcont phone:hidden laptop:block '> </div>
 
         <div className='navcont z-10 ' >
@@ -530,12 +571,14 @@ if(currentloc === '/'){
               </ul>
             </div>
           </div>
-        </div>
-      </>
+        </div> </div>
+      </div>
     );
   } else {
     return (
-      <>
+      <div className='hometopnavdivcont'>
+        <div className='relative'>
+      
         <div className='topnavcont phone:hidden laptop:block '> </div>
 
         <div className='navcont z-10 ' >
@@ -597,7 +640,8 @@ if(currentloc === '/'){
             </div>
           </div>
         </div>
-      </>
+       </div>
+     </div>
     );
   }
 
@@ -749,7 +793,7 @@ if(currentloc === '/'){
                      !notifloading && user?.role === '4d3b'?
                        fetchnotification?.length > 0  ? 
                         fetchnotification.map((notifs) =>(
-                      <div className="resultcontainer2 w-full flex flex-col grid grid-cols-12 " style={{backgroundColor:`${notifs.status === 'unread'? '#353840':null}`}} id={notifs.id}  key={notifs.id}>
+                      <div className="resultcontainer2 w-full flex flex-col grid grid-cols-12 " style={{backgroundColor:`${notifs.status === 'unread'? '#353840':null}`}} id={`567${notifs.id}`}  key={notifs.id}>
                       <div  className=' resultdetails relative col-span-12 flex flex-col '  >
                              <div  className=' resultdetails relative flex flex-col ' >
                             <p className="resultdetailstitle2 ">{notifs.title} </p>
@@ -773,7 +817,7 @@ if(currentloc === '/'){
                       !notifloading && user?.role === 'b521c'?
                        fetchnotification?.length > 0  ? 
                         fetchnotification.map((notifs) =>(
-                      <div className="resultcontainer2 w-full flex flex-col grid grid-cols-12 " style={{backgroundColor:`${notifs.status === 'unread'? '#353840':null}`}} id={notifs._id} key={notifs._id}>
+                      <div className="resultcontainer2 w-full flex flex-col grid grid-cols-12 " style={{backgroundColor:`${notifs.status === 'unread'? '#353840':null}`}} id={`567${notifs._id}`} key={notifs._id}>
                       <div  className=' resultdetails relative col-span-12 flex flex-col '  >
                              <div  className=' resultdetails relative flex flex-col ' >
                             <p className="resultdetailstitle2 ">{notifs.description} </p>

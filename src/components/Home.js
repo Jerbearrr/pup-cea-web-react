@@ -16,6 +16,7 @@ import { getFeaturedBook, getRecentlyAdded, resetBook } from '../features/book/b
 import Hometopnav from './Hometopnav';
 import bookService from '../features/book/bookService';
 import Renderonview from './Renderonview';
+import Topnav from './Topnav';
 
 const Home = () => {
   const { recentlyAdded, bookfeatured, isLoading } = useSelector(state => state.book);
@@ -173,7 +174,10 @@ const Home = () => {
   return (
     <>
     
+       <div className='hometopnavdiv'>
 
+
+       </div>
       <div className='searchCont flex '>
 
         <div className='centerCont '>

@@ -877,9 +877,10 @@ width: 60%;
 }
 .searchbartop form input{
     height: 100%;
-        background-color: rgb(28, 28, 28) !important;
+        background-color: rgb(23, 23, 23) !important;
         color: white !important;
         border-radius: 20px;
+    
 }
 .toploginbtn{
     background-color: #b7353a;

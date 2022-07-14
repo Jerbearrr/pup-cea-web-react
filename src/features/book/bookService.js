@@ -71,6 +71,20 @@ const declineContri = async(id) => {
     }
 
 }
+const delContribute = async(id) => {
+    try {
+        const res = await apiClientBook.post(`/${id}/delcontribute`);
+        return res.data;
+    }
+    catch (error) {
+        const message =
+            (error.response && error.response.data && error.response.data.message) ||
+            error.message ||
+            error.toString()
+        throw new Error(message);
+    }
+
+}
 const contributeBook = async(bookData) => {
     try {
         const res = await apiClientBook.post('/createcontribute', bookData);
@@ -330,6 +344,7 @@ const bookService = {
     delallborrow,
     cancelreq,
     notifylate,
+    delContribute,
 
 }
 

@@ -94,10 +94,6 @@ const Signup = () => {
     window.scrollTo(0, 0);
     const message = localStorage.getItem('successMessage');
 
-    if (message) {
-      localStorage.removeItem('successMessage');
-      toast.success(message);
-    }
   }, [])
 
   useEffect(() => {

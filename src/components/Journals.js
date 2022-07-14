@@ -24,14 +24,20 @@ import SeemorePagination from './SeemorePagination';
 
 
 const Journals = () => {
+      const queryString = window.location.search;
+  const urlParams = new URLSearchParams(queryString);
   const { seemore, isLoading, getjournals } = useSelector(state => state.book);
 
   
-  const pageNumber = 1;
+
   const limiter = null;
 
+  const pageNumber = 1;
 
-  const [page, setPage] = useState(pageNumber);
+  const [page, setPage] = useState(urlParams.get('page') ?urlParams.get('page'): pageNumber);
+  
+
+
   const [pages, setPages] = useState(1);
 
   const dispatch = useDispatch()
@@ -51,12 +57,15 @@ const Journals = () => {
   },[getjournals])
 
 
-
+  useEffect(()=>{
+     
+     window.history.replaceState(null, null, `?page=${ page}`);
+    
+  },[page])
   return (
     <>
       <div className='advancedsearchcont  '>
-        <div className='relative advancedsearchcont2  w-full  pt-7 pb-10 px-1'>
-          <div className='blurthis2 absolute ' style={{ backgroundImage: 'url(' + require('.//style/images/bg.png') + ')', zIndex: "1", backgroundAttachment: 'fixed' }}></div>
+        <div className='relative advancedsearchcont2  w-full  pt-7 pb-16 px-1'>
 
           <h1 className='advancetext mt-5 mb-3' style={{ zIndex: "2" }}>Recently Added Journals</h1>
            <div style={{ zIndex: "2" }} className='searchresultcont w-full grid grid-row-2 desktop:grid-cols-6 laptop:grid-cols-6 tabletlg:grid-cols-4 tablet:grid-cols-4 phone:grid-cols-3 phone:gap-1 tablet:gap-1 tabletlg:gap-3 '>
@@ -84,198 +93,127 @@ const Journals = () => {
                             </Link>
                         )
                     })):  <>
-              <div className='h-full '>
-                <div className="overflow-hidden recentcard ">
-
-                  <div className='imagecont ' style={{ zIndex: "2" }}>
-                    <img className=" imagecontcont" />
-                  </div>
-
-                  <div className="px-1 carddet " style={{ zIndex: "2" }}>
-                    <div className=" cardtitle "></div>
-                    <p className=" cardauthor  mb-1">
-
-                    </p>
-                  </div>
-
+                <div style={{ zIndex: "2" }} className="h-full my-2">
+                <div className="bg-zinc-800 recentcard">
+                    <div className="animate-pulse flex-1 flex-col space-y-2">
+                        <div className="rounded bg-zinc-600 h-52"></div>
+                        <div className="m-1 space-y-2 ">
+                            <div className="rounded bg-zinc-600 h-2"></div>
+                            <div className="rounded bg-zinc-600 w-20 h-2 self-center"></div>
+                        </div>
+                    </div>
                 </div>
-              </div>
-                <div className='h-full '>
-                <div className="overflow-hidden recentcard ">
-
-                  <div className='imagecont ' style={{ zIndex: "2" }}>
-                    <img className=" imagecontcont" />
-                  </div>
-
-                  <div className="px-1 carddet " style={{ zIndex: "2" }}>
-                    <div className=" cardtitle "></div>
-                    <p className=" cardauthor  mb-1">
-
-                    </p>
-                  </div>
-
+            </div>    <div style={{ zIndex: "2" }} className="h-full my-2">
+                <div className="bg-zinc-800 recentcard">
+                    <div className="animate-pulse flex-1 flex-col space-y-2">
+                        <div className="rounded bg-zinc-600 h-52"></div>
+                        <div className="m-1 space-y-2 ">
+                            <div className="rounded bg-zinc-600 h-2"></div>
+                            <div className="rounded bg-zinc-600 w-20 h-2 self-center"></div>
+                        </div>
+                    </div>
                 </div>
-              </div>
-                <div className='h-full '>
-                <div className="overflow-hidden recentcard ">
-
-                  <div className='imagecont ' style={{ zIndex: "2" }}>
-                    <img className=" imagecontcont" />
-                  </div>
-
-                  <div className="px-1 carddet " style={{ zIndex: "2" }}>
-                    <div className=" cardtitle "></div>
-                    <p className=" cardauthor  mb-1">
-
-                    </p>
-                  </div>
-
+            </div>    <div style={{ zIndex: "2" }} className="h-full my-2">
+                <div className="bg-zinc-800 recentcard">
+                    <div className="animate-pulse flex-1 flex-col space-y-2">
+                        <div className="rounded bg-zinc-600 h-52"></div>
+                        <div className="m-1 space-y-2 ">
+                            <div className="rounded bg-zinc-600 h-2"></div>
+                            <div className="rounded bg-zinc-600 w-20 h-2 self-center"></div>
+                        </div>
+                    </div>
                 </div>
-              </div>
-                <div className='h-full '>
-                <div className="overflow-hidden recentcard ">
-
-                  <div className='imagecont ' style={{ zIndex: "2" }}>
-                    <img className=" imagecontcont" />
-                  </div>
-
-                  <div className="px-1 carddet " style={{ zIndex: "2" }}>
-                    <div className=" cardtitle "></div>
-                    <p className=" cardauthor  mb-1">
-
-                    </p>
-                  </div>
-
+            </div>    <div style={{ zIndex: "2" }} className="h-full my-2">
+                <div className="bg-zinc-800 recentcard">
+                    <div className="animate-pulse flex-1 flex-col space-y-2">
+                        <div className="rounded bg-zinc-600 h-52"></div>
+                        <div className="m-1 space-y-2 ">
+                            <div className="rounded bg-zinc-600 h-2"></div>
+                            <div className="rounded bg-zinc-600 w-20 h-2 self-center"></div>
+                        </div>
+                    </div>
                 </div>
-              </div>
-                <div className='h-full '>
-                <div className="overflow-hidden recentcard ">
-
-                  <div className='imagecont ' style={{ zIndex: "2" }}>
-                    <img className=" imagecontcont" />
-                  </div>
-
-                  <div className="px-1 carddet " style={{ zIndex: "2" }}>
-                    <div className=" cardtitle "></div>
-                    <p className=" cardauthor  mb-1">
-
-                    </p>
-                  </div>
-
+            </div>    <div style={{ zIndex: "2" }} className="h-full my-2">
+                <div className="bg-zinc-800 recentcard">
+                    <div className="animate-pulse flex-1 flex-col space-y-2">
+                        <div className="rounded bg-zinc-600 h-52"></div>
+                        <div className="m-1 space-y-2 ">
+                            <div className="rounded bg-zinc-600 h-2"></div>
+                            <div className="rounded bg-zinc-600 w-20 h-2 self-center"></div>
+                        </div>
+                    </div>
                 </div>
-              </div>
-                <div className='h-full '>
-                <div className="overflow-hidden recentcard ">
-
-                  <div className='imagecont ' style={{ zIndex: "2" }}>
-                    <img className=" imagecontcont" />
-                  </div>
-
-                  <div className="px-1 carddet " style={{ zIndex: "2" }}>
-                    <div className=" cardtitle "></div>
-                    <p className=" cardauthor  mb-1">
-
-                    </p>
-                  </div>
-
+            </div>    <div style={{ zIndex: "2" }} className="h-full my-2">
+                <div className="bg-zinc-800 recentcard">
+                    <div className="animate-pulse flex-1 flex-col space-y-2">
+                        <div className="rounded bg-zinc-600 h-52"></div>
+                        <div className="m-1 space-y-2 ">
+                            <div className="rounded bg-zinc-600 h-2"></div>
+                            <div className="rounded bg-zinc-600 w-20 h-2 self-center"></div>
+                        </div>
+                    </div>
                 </div>
-              </div>
-                <div className='h-full '>
-                <div className="overflow-hidden recentcard ">
-
-                  <div className='imagecont ' style={{ zIndex: "2" }}>
-                    <img className=" imagecontcont" />
-                  </div>
-
-                  <div className="px-1 carddet " style={{ zIndex: "2" }}>
-                    <div className=" cardtitle "></div>
-                    <p className=" cardauthor  mb-1">
-
-                    </p>
-                  </div>
-
+            </div>    <div style={{ zIndex: "2" }} className="h-full my-2">
+                <div className="bg-zinc-800 recentcard">
+                    <div className="animate-pulse flex-1 flex-col space-y-2">
+                        <div className="rounded bg-zinc-600 h-52"></div>
+                        <div className="m-1 space-y-2 ">
+                            <div className="rounded bg-zinc-600 h-2"></div>
+                            <div className="rounded bg-zinc-600 w-20 h-2 self-center"></div>
+                        </div>
+                    </div>
                 </div>
-              </div>
-                <div className='h-full '>
-                <div className="overflow-hidden recentcard ">
-
-                  <div className='imagecont ' style={{ zIndex: "2" }}>
-                    <img className=" imagecontcont" />
-                  </div>
-
-                  <div className="px-1 carddet " style={{ zIndex: "2" }}>
-                    <div className=" cardtitle "></div>
-                    <p className=" cardauthor  mb-1">
-
-                    </p>
-                  </div>
-
+            </div>    <div style={{ zIndex: "2" }} className="h-full my-2">
+                <div className="bg-zinc-800 recentcard">
+                    <div className="animate-pulse flex-1 flex-col space-y-2">
+                        <div className="rounded bg-zinc-600 h-52"></div>
+                        <div className="m-1 space-y-2 ">
+                            <div className="rounded bg-zinc-600 h-2"></div>
+                            <div className="rounded bg-zinc-600 w-20 h-2 self-center"></div>
+                        </div>
+                    </div>
                 </div>
-              </div>
-                <div className='h-full '>
-                <div className="overflow-hidden recentcard ">
-
-                  <div className='imagecont ' style={{ zIndex: "2" }}>
-                    <img className=" imagecontcont" />
-                  </div>
-
-                  <div className="px-1 carddet " style={{ zIndex: "2" }}>
-                    <div className=" cardtitle "></div>
-                    <p className=" cardauthor  mb-1">
-
-                    </p>
-                  </div>
-
+            </div>    <div style={{ zIndex: "2" }} className="h-full my-2">
+                <div className="bg-zinc-800 recentcard">
+                    <div className="animate-pulse flex-1 flex-col space-y-2">
+                        <div className="rounded bg-zinc-600 h-52"></div>
+                        <div className="m-1 space-y-2 ">
+                            <div className="rounded bg-zinc-600 h-2"></div>
+                            <div className="rounded bg-zinc-600 w-20 h-2 self-center"></div>
+                        </div>
+                    </div>
                 </div>
-              </div>
-                <div className='h-full '>
-                <div className="overflow-hidden recentcard ">
-
-                  <div className='imagecont ' style={{ zIndex: "2" }}>
-                    <img className=" imagecontcont" />
-                  </div>
-
-                  <div className="px-1 carddet " style={{ zIndex: "2" }}>
-                    <div className=" cardtitle "></div>
-                    <p className=" cardauthor  mb-1">
-
-                    </p>
-                  </div>
-
+            </div>    <div style={{ zIndex: "2" }} className="h-full my-2">
+                <div className="bg-zinc-800 recentcard">
+                    <div className="animate-pulse flex-1 flex-col space-y-2">
+                        <div className="rounded bg-zinc-600 h-52"></div>
+                        <div className="m-1 space-y-2 ">
+                            <div className="rounded bg-zinc-600 h-2"></div>
+                            <div className="rounded bg-zinc-600 w-20 h-2 self-center"></div>
+                        </div>
+                    </div>
                 </div>
-              </div>
-                <div className='h-full '>
-                <div className="overflow-hidden recentcard ">
-
-                  <div className='imagecont ' style={{ zIndex: "2" }}>
-                    <img className=" imagecontcont" />
-                  </div>
-
-                  <div className="px-1 carddet " style={{ zIndex: "2" }}>
-                    <div className=" cardtitle "></div>
-                    <p className=" cardauthor  mb-1">
-
-                    </p>
-                  </div>
-
+            </div>    <div style={{ zIndex: "2" }} className="h-full my-2">
+                <div className="bg-zinc-800 recentcard">
+                    <div className="animate-pulse flex-1 flex-col space-y-2">
+                        <div className="rounded bg-zinc-600 h-52"></div>
+                        <div className="m-1 space-y-2 ">
+                            <div className="rounded bg-zinc-600 h-2"></div>
+                            <div className="rounded bg-zinc-600 w-20 h-2 self-center"></div>
+                        </div>
+                    </div>
                 </div>
-              </div>
-                <div className='h-full '>
-                <div className="overflow-hidden recentcard ">
-
-                  <div className='imagecont ' style={{ zIndex: "2" }}>
-                    <img className=" imagecontcont" />
-                  </div>
-
-                  <div className="px-1 carddet " style={{ zIndex: "2" }}>
-                    <div className=" cardtitle "></div>
-                    <p className=" cardauthor  mb-1">
-
-                    </p>
-                  </div>
-
+            </div>    <div style={{ zIndex: "2" }} className="h-full my-2">
+                <div className="bg-zinc-800 recentcard">
+                    <div className="animate-pulse flex-1 flex-col space-y-2">
+                        <div className="rounded bg-zinc-600 h-52"></div>
+                        <div className="m-1 space-y-2 ">
+                            <div className="rounded bg-zinc-600 h-2"></div>
+                            <div className="rounded bg-zinc-600 w-20 h-2 self-center"></div>
+                        </div>
+                    </div>
                 </div>
-              </div>
+            </div>
               </>
            
                 }

@@ -55,7 +55,7 @@ window.scrollTo(0, 0);
         if ( isSuccess) {
             setbuttonloading(false)
             dispatch(reset());
-            navigate('/')
+            navigate(-1)
             toast.success('Login successfully');
             
             

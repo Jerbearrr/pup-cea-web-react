@@ -19,6 +19,7 @@ import { TabSelector } from './TabSelector';
 import Select from 'react-select';
 import Modal from 'react-modal';
 import ButtonSpinner from './ButtonSpinner';
+import { resetBook } from "../features/book/bookSlice";
 const customStyles2 = {
   control: (base, state) => ({
     ...base,
@@ -83,7 +84,7 @@ const Contribute = () => {
   const queryString = window.location.search;
   const urlParams = new URLSearchParams(queryString);
 
-    const { isLoading, getcontributedbook } = useSelector(state => state.book);
+    const { isLoading, getcontributedbook, isError } = useSelector(state => state.book);
     const { user, isSuccess } = useSelector(state => state.auth);
   const [skipCount, setSkipCount] = useState(true);
    const [buttonloading, setbuttonloading]= useState(false)
@@ -103,6 +104,12 @@ const dispatch = useDispatch()
     'contributionrequest',
 
   ]);
+
+  useEffect(()=>{
+    if(isError){
+       dispatch(resetBook())
+    }
+  },[isError])
   useEffect(() => {
 
   
@@ -748,7 +755,7 @@ inputRef.current.style.height = scrollHeight + "px";
             </div>
           </form>
           </TabPanel>
-             {!istabLoading?
+        
            <TabPanel hidden={selectedTab !== 'contributionrequest'}>
           
             <div className='maxwidthopen  flex-row flex  grid grid-cols-12 self-center desktop:px-1'>
@@ -773,14 +780,14 @@ inputRef.current.style.height = scrollHeight + "px";
          </div>
             <div className='flex bg-transparent optionborrow text-black w-full justify-between  pb-2 pr-1'>
              {!isLoading?<> <p className='bg-transparent  text-white px-1 resulttext'>No of Results: {!isLoading && getcontributedbook?.total }</p> 
-              <Select options={options} value={selectedOptions} styles={customStyles} onChange={handleChange} menuPortalTarget={document.querySelector('body')} /></>: null} 
+              <Select options={options} value={selectedOptions} styles={customStyles} onChange={handleChange} menuPortalTarget={document.querySelector('body')} /></>:<> <p className='bg-transparent  text-white px-1 resulttext'>No of Results: ...loading</p> <Select   styles={customStyles} onChange={handleChange} menuPortalTarget={document.querySelector('body')} /></>} 
             </div>
                
 
                 <div className='phone:mx-0.5 mt-2 laptop:mx-0  grid laptop:grid-cols-2 tabletlg:grid-cols-1 tablet:grid-cols-1 tablet:gap-3 phone:gap-2 '>
 
                     {
-                    !isLoading ? (
+                    !istabLoading  ? (
                       getcontributedbook?.bookquery.length ?
                         (getcontributedbook?.bookquery.map((getborrowedbook, i) => (
 
@@ -823,6 +830,12 @@ inputRef.current.style.height = scrollHeight + "px";
                                       <path d="m 1 0 c 6 2 24 -1 30 11 c 3 5 5 13 13 13 h 105 V 0" stroke="#202125" />
                                     </svg>
                                   </div>
+                                    <div className='relative   declinebtn2' onClick={() => (cancelborrowreq(getborrowedbook._id))}  >
+                                      <h5 className=' stattext flex mx-2 flex-1  absolute'  >delete</h5>
+                                      <svg className='' width="150" height="25">
+                                        <path d="m 1 0 c 6 2 24 -1 30 11 c 3 5 5 13 13 13 h 106 C 143 21 143 18 140 12 C 133 0 127 2 109 -1" stroke="#202125" />
+                                      </svg>
+                                    </div>
 
                                   </> : null
                                 }
@@ -847,6 +860,12 @@ inputRef.current.style.height = scrollHeight + "px";
                                     </svg>
 
                                   </div>
+                                    <div className='relative   declinebtn2' onClick={() => (cancelborrowreq(getborrowedbook._id))}  >
+                                      <h5 className=' stattext flex mx-2 flex-1  absolute'  >delete</h5>
+                                      <svg className='' width="150" height="25">
+                                        <path d="m 1 0 c 6 2 24 -1 30 11 c 3 5 5 13 13 13 h 106 C 143 21 143 18 140 12 C 133 0 127 2 109 -1" stroke="#202125" />
+                                      </svg>
+                                    </div>
                                
                                   </> : null
                                 }
@@ -903,7 +922,7 @@ inputRef.current.style.height = scrollHeight + "px";
 
             </div>
          
-          </TabPanel>:null}
+          </TabPanel>
         </div>
 
       </div>

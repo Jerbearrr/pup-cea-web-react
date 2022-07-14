@@ -20,8 +20,17 @@
             0 1px 1px rgba(123, 123, 123, 0.226);
 }
 
+@media only screen and (max-width: 995px) {
+
+.hometopnavdiv {
+        min-height: 72px!important;
+    }
+
+}
 @media only screen and (max-width: 600px) {
-   
+.hometopnavdiv {
+        min-height: 52.8px !important;
+    }
     .newrandomizercontainer {
             height: 176px;
             color: white;
@@ -51,6 +60,16 @@
                     width: 60%;
                 }
 
+}
+.hometopnavdivcont{
+    position: absolute;
+    top:0;
+    left:0;
+    right:0;
+}
+.hometopnavdiv{
+    min-height: 123px;
+    background-color: #202125;
 }
 .newrandomizercontainer .slick-list{
     width: 100%!important;

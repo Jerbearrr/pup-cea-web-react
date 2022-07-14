@@ -16,13 +16,14 @@ import { useNavigate } from 'react-router-dom';
 import { likeBook, bookmarkBook } from "../features/book/bookSlice";
 import jwt_decode from "jwt-decode";
 import { openBook, getrelatedBooks, checkborrowBook, borrowBook } from '../features/book/bookSlice';
-import { reset, getUser, logoutUser } from '../features/auth/authSlice'
+import {  getUser, logoutUser } from '../features/auth/authSlice'
+import { resetBook } from '../features/book/bookSlice';
 import { digitalCopyApi } from '../features/auth/requests';
 import { toast } from 'react-toastify';
 import Modal from 'react-modal';
 import {IoCloseSharp, } from  "react-icons/io5";
 import Renderonview from './Renderonview';
-import { set } from 'date-fns';
+import { format } from 'date-fns';
 
 const Openbook = () => {
 
@@ -38,42 +39,71 @@ const ref = useRef()
   const [loadingFile, setLoadingFile] = useState(null);
   const [relatedloading, setrelatedloading] = useState(true)
   const [alreadyshown, setalreadyshown]= useState(false)
+  const [bookdispatched, setbookdispatched] = useState(false)
+  const [userchecker , setuserchecker] = useState(false)
+
+
   const getCookieValue = (name) => (
     document.cookie.match('(^|;)\\s*' + name + '\\s*=\\s*([^;]+)')?.pop() || ''
   )
-
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
   const { isLoading, openbook, relatedbook, borrowbook, sameseries, isError, message} = useSelector(state => state.book);
   const { user, userLoading } = useSelector(state => state.auth);
 
-  const isVisible =Renderonview(ref);
- 
-      useEffect(()=>{
-        setalreadyshown(false)
-  setrelatedloading(true)
-  },[id])
+  useEffect(() => {
+    setbookdispatched(false)
+    setalreadyshown(false)
+    setrelatedloading(true)
+    window.scrollTo(0, 0);
+    setpageloading(true)
+    const bookData = {
+      id: id
+    }
+    dispatch(openBook(bookData)).then((res)=>{
+      if(res){
+           setbookdispatched(true)
+      }
+   
+    })
+  }, [id])
+
 
   useEffect(()=>{
-     if(isVisible && id && !alreadyshown){
+   if(isError){ 
+    
+  
+   toast.error(message)
+   dispatch(resetBook())
+   navigate(-1)
+   
+  }
+  
+  },[isError])  
+  const isVisible =Renderonview(ref);
+ 
+
+
+  useEffect(()=>{
+     if(isVisible && id && !alreadyshown && bookdispatched){
       console.log(isVisible)
-      dispatch(getrelatedBooks(id)).then(res=>{
+    
+     dispatch(getrelatedBooks(id)).then(res=>{
       if(res){
         setalreadyshown(true)
         setrelatedloading(false)
+     
       }
      })
-
      }
-
-    
-  },[isVisible, openbook])
+  },[isVisible, openbook, bookdispatched])
    
 
 
   const userexist = getCookieValue('userpersist')
 
 
-  const dispatch = useDispatch();
-  const navigate = useNavigate();
+
 
     const [modalIsOpen, setIsOpen] = React.useState({ open: false, selectedBook: null });
    
@@ -85,24 +115,28 @@ const ref = useRef()
   }
 
 
-  useEffect(() => {
-    window.scrollTo(0, 0);
-    setpageloading(true)
-    const bookData = {
-      id: id
-    }
-    dispatch(openBook(bookData))
-  }, [id])
+
 
   useEffect(async () => {
-    const bookData = {
-      id: id
-    }
+    
 
-    if (userexist && user?.accessToken) {
-      if (Object.keys(user).length && Object.keys(openbook).length) {
+    if (userexist && user?.accessToken && bookdispatched) {
+
+      setuserchecker(true)
+
+    } else {
+      setlikecount(openbook.noOfLikes?.length)
+      sethasbookmarked(false)
+      sethasliked(false)
+
+    }
+  }, [ user, bookdispatched])
+
+  useEffect(async()=>{
+
+      if (bookdispatched && userchecker) {
         setlikecount(openbook.noOfLikes?.length)
-        dispatch(checkborrowBook(bookData.id))
+        dispatch(checkborrowBook(id))
         try {
           const { data } = await digitalCopyApi.post(`/${openbook._id}/isRequested`);
           setFileRequested(data)
@@ -129,19 +163,13 @@ const ref = useRef()
 
         }
       }
-    } else {
-      setlikecount(openbook.noOfLikes?.length)
-      sethasbookmarked(false)
-      sethasliked(false)
 
-    }
-  }, [openbook, user, id])
+  },[userchecker, bookdispatched])
 
   useEffect(() => {
 
     if (userexist && user?.accessToken) {
-      if (Object.keys(openbook).length && Object.keys(user).length && Object.keys(borrowbook).length) {
-
+      if (bookdispatched) {
         if (borrowbook.alreadyborrowed === true) {
           setborrowstatus(borrowbook.borrowstatus)
           setpageloading(false)
@@ -153,12 +181,12 @@ const ref = useRef()
 
       }
     }
-    if (Object.keys(openbook) && !userexist) {
+    if (bookdispatched && !userexist) {
       setborrowstatus(false)
       setpageloading(false)
     }
 
-  }, [pageloading && borrowbook, id])
+  }, [borrowbook, bookdispatched])
 
   const [isActive, setActive] = useState(false);
 
@@ -166,51 +194,6 @@ const ref = useRef()
     setActive(!isActive);
     document.removeEventListener("click", onClickOutsideListener)
   }
-
-  var Likes = () => {
-    return hasliked
-      ? (
-        <><FaHeart fontSize="small" />&nbsp;{likecount}</>
-      ) : (
-        <><FaRegHeart fontSize="small" fill='white' />&nbsp;{likecount} {likecount === 1 ? 'Like' : 'Likes'}</>
-      );
-  };
-  var Bookmarks = () => {
-    return hasbookmarked
-      ? (
-        <><BsFillBookmarkStarFill fontSize="small" fill='white' /></>
-      ) : (
-        <><FaRegBookmark fontSize="small" /></>
-      );
-  };
-  useEffect(()=>{
-   if(isError){ toast.error(message)
-   navigate('/')
-  }
-  
-   
-
-  },[isError])  
-
-
-
-
-    const Borrowstatus = () => {
-
-    if(openbook.noOfCopies >0){
-      if (borrowstatus === 'pending'  ) {
-        return (<><button className='px-2 my-4 mx-1' disabled={!userexist || isLoading || likeloading || !user.accessToken || userLoading} onClick={() => { borrowtheBook() }}>Cancel Request</button></>)
-      } else if (borrowstatus === 'confirmed' || borrowstatus === 'borrowed' || borrowstatus === 'received') {
-        return (<><button className='px-2 my-4 mx-1' disabled> {borrowstatus} </button></>)
-      } else if (borrowstatus === 'false') {
-        return (<><button className='px-2 my-4 mx-1' disabled={!userexist || isLoading || likeloading || !user.accessToken || userLoading} onClick={() => { borrowtheBook() }}>Borrow</button></>)
-      } else {
-        return (<><button className='px-2 my-4 mx-1' disabled={!userexist || isLoading || likeloading || !user.accessToken || userLoading} onClick={() => { borrowtheBook() }}>Borrow</button></>)
-      }}else{
-        return (<><button className='px-2 my-4 mx-1' disabled={true} onClick={() => { borrowtheBook() }}>No copies available</button></>)
-      }
-
-    };
 
     const borrowtheBook = () => {
       setlikeloading(true)
@@ -241,13 +224,13 @@ const ref = useRef()
       }
 
 
-      if (!isLoading && user.accessToken) {
+    
         dispatch(likeBook(openbook._id)).then((res) => {
           if (res) {
             setlikeloading(false)
           }
         })
-      }
+    
 
 
     }
@@ -261,7 +244,7 @@ const ref = useRef()
         sethasbookmarked(true)
       }
 
-      if (!isLoading && !likeloading && user.accessToken) {
+   
         dispatch(bookmarkBook(openbook._id)).then((res) => {
           if (res) {
             setlikeloading(false)
@@ -269,7 +252,7 @@ const ref = useRef()
         })
       }
 
-    }
+ 
 
     const requestFile = async () => {
       setLoadingFile(true)
@@ -290,7 +273,7 @@ const ref = useRef()
       }
     }
 
-    const cancelRequest = async () => {
+  const cancelRequest = async () => {
       setLoadingFile(true);
 
       digitalCopyApi.post(`${openbook._id}/cancelReq`)
@@ -344,10 +327,10 @@ const ref = useRef()
       <>
      
         <div style={{ backgroundColor: "#18191a" }}>
-         { Object.keys(openbook).length && pageloading === false && openbook._id === id ?
+         { bookdispatched ?
           <div className='relative  flex mainp ' >
 
-            <div className='w-full bookdetailcontainer  ' key={openbook._id}>
+            <div className='w-full bookdetailcontainer2  ' key={openbook._id}>
             
                  <div className='absolute parentabsoluter'>
               
@@ -427,12 +410,34 @@ const ref = useRef()
 
                   <div className='   flex flex-row openbookbuttons mt-1'>
 
-                    <Borrowstatus />
+          
+
+                    { openbook.noOfCopies >0? 
+                       borrowstatus === 'pending'?
+                       <><button className='px-2 my-4 mx-1' disabled={!userexist || isLoading || likeloading || !user.accessToken || userLoading} onClick={() => { borrowtheBook() }}>Cancel Request</button></>:
+                       borrowstatus === 'confirmed'?
+                       <><button className='px-2 my-4 mx-1' disabled> {borrowstatus} </button></>:
+                       borrowstatus === 'false' ?
+                       <><button className='px-2 my-4 mx-1' disabled={!userexist || isLoading || likeloading || !user.accessToken || userLoading} onClick={() => { borrowtheBook() }}>Borrow</button></>:
+                       <><button className='px-2 my-4 mx-1' disabled={!userexist || isLoading || likeloading || !user.accessToken || userLoading} onClick={() => { borrowtheBook() }}>Borrow</button></>:
+                       <><button className='px-2 my-4 mx-1' disabled={true} onClick={() => { borrowtheBook() }}>No copies available</button></>
+
+                      
+                 
+                    }
                     <button className='px-2 my-4   mx-1' disabled={!userexist || isLoading || likeloading || !user.accessToken || userLoading} onClick={() => { bookmarktheBook() }}>
-                      <Bookmarks />
+                      { hasbookmarked?
+<><BsFillBookmarkStarFill fontSize="small" fill='white' /></>:
+ <><FaRegBookmark fontSize="small" /></>
+                      }
+                
+  
                     </button>
                     <button className='px-2  my-4  mx-1' disabled={!userexist || isLoading || likeloading || !user.accessToken || userLoading} onClick={() => { liketheBook() }}>
-                      <Likes />
+                     { hasliked?
+                      <><FaHeart fontSize="small" />&nbsp;{likecount}</>:
+                       <><FaRegHeart fontSize="small" fill='white' />&nbsp;{likecount} {likecount === 1 ? 'Like' : 'Likes'}</>
+                     }
                     </button>
 
                   </div>
@@ -474,17 +479,17 @@ const ref = useRef()
                 </div>
                 <div className='moredetails py-4 tablet:py-6 desktop:py-8  desktop:col-span-3  phone:col-span-12 flex flex-col desktop:items-left tabletlg:px-7 phone:px-3'>
                   <div className='flex laptop:my-8 phone:my-2 flex-col  desktop:px-0 moredetcont'>
-                    {openbook.type ? (<p><span className='openbookclassname'>Material type: &nbsp; </span>{openbook.type}</p>) : (null)}
-                    {openbook.form ? (<p><span className='openbookclassname'>Literary Form: &nbsp; </span>  {openbook.form}</p>) : (null)}
+                    {openbook.type ? (<p><Link to={`/advancedsearch?title=&keyword=&author=&publisher=&form=&isbn=&type=${openbook.type}&startDate=&endDate=&genre=&sortType=`}><span className='openbookclassname'>Material type: &nbsp; </span>{openbook.type}</Link></p>) : (null)}
+                    {openbook.form ? (<p><Link to={`/advancedsearch?title=&keyword=&author=&publisher=&form=${openbook.form}&isbn=&type=&startDate=&endDate=&genre=&sortType=`}><span className='openbookclassname'>Literary Form: &nbsp; </span>  {openbook.form}</Link></p>) : (null)}
                     {openbook.genre?.length > 0 && openbook.genre[0] !== "" ? (<div className='genreneg'><span className='openbookclassname mr-1'>Genre:</span>  {
                       openbook.genre ?
                         (openbook.genre.map(openbook => (
-                          <div className='genrecircle inline-flex' key={openbook}> <a className='openbookgenre pr-0.5 mb-2 ' key={openbook}><span className='px-1 '>{openbook}</span></a></div>
+                          <div className='genrecircle inline-flex' key={openbook}> <Link className='openbookgenre pr-0.5 mb-2 ' to={`/advancedsearch?title=&keyword=&author=&publisher=&form=&isbn=&type=&startDate=&endDate=&genre=${openbook}&sortType=`} key={openbook}><span className='px-1 '>{openbook}</span></Link></div>
                         ))) : <a></a>
                     }</div>) : (null)}
-                    {openbook.publisher ? (<p><span className='openbookclassname'>Publisher: &nbsp; </span>{openbook.publisher}</p>) : (null)}
+                    {openbook.publisher ? (<p><Link to={`/advancedsearch?title=&keyword=&author=&publisher=${openbook.publisher}&form=&isbn=&type=&startDate=&endDate=&genre=&sortType=`} ><span className='openbookclassname'>Publisher: &nbsp; </span>{openbook.publisher}</Link></p>) : (null)}
                     {openbook.copyrightDate ? (<p><span className='openbookclassname'>Copyright date: &nbsp; </span>©{new Date(openbook.copyrightDate).getFullYear()}</p>) : (null)}
-                    {openbook.dateOfPublication ? (<p><span className='openbookclassname'>Publication date: &nbsp; </span>{new Date(openbook.dateOfPublication).getFullYear()}</p>) : (null)}
+                    {openbook.dateOfPublication ? (<p><span className='openbookclassname'>Publication date: &nbsp; </span> {format(new Date(openbook.dateOfPublication), 'LLL d, yyyy')}</p>) : (null)}
                     {openbook.volume ? (<p className='desktop:hidden'><span className='openbookclassname'>Volume: &nbsp; </span> {openbook.volume}</p>) : (null)}
                     {openbook.edition ? (<p className='desktop:hidden'><span className='openbookclassname'>Edition: &nbsp; </span> {openbook.edition}</p>) : (null)}
                     {openbook.isbn ? (<p><span className='openbookclassname'>ISBN: &nbsp; </span> {openbook.isbn}</p>) : (null)}
@@ -498,8 +503,8 @@ const ref = useRef()
               </div>
             </div>
 
-          </div>: <div className='relative  flex ' >
-          <div className='w-full  bookdetailcontainer  ' style={{ minHeight: '50vh' }}>
+          </div>: <div className='relative  flex mainp' >
+          <div className='w-full  bookdetailcontainer2  ' style={{ minHeight: '50vh' }}>
 
             <div className='maxwidthopen w-full flex-row flex  self-center items-center justify-center'>
            

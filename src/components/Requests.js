@@ -6,23 +6,20 @@ import "./style/requests.css";
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate, Link } from 'react-router-dom';
 import { reset, getUser, logoutUser } from '../features/auth/authSlice'
-import { FaSearch } from "react-icons/fa";
-import { FaChevronDown, FaUndo } from "react-icons/fa";
+
+import {  FaUndo } from "react-icons/fa";
 import { IoCloseSharp, } from "react-icons/io5";
-import { AiOutlineUndo } from "react-icons/ai"
-import Menu from "./Menu.js";
+
 import { resetBook, getlikedBook, getbookmarkBook, getborrowedBook, getallborrowedBook, manageBookRequests, manageundoBookRequests } from '../features/book/bookSlice';
 import { useTabs, TabPanel } from "react-headless-tabs"
 import { TabSelector } from './TabSelector';
 import Pagination from './Pagination';
-import Likepagination from './Likepagination';
-import Select from 'react-select'
 import Modal from 'react-modal';
 import jwt_decode from "jwt-decode";
 import bookService from '../features/book/bookService';
 import { toast } from 'react-toastify';
 import { format, compareAsc, formatDistance, subDays, addDays } from 'date-fns';
-var parse = require('date-fns/parse')
+
 
 
 Modal.setAppElement('#root');
@@ -78,7 +75,7 @@ const Requests = () => {
   const [userloaded, setuserloaded] = useState(null)
   const [canceledreq, setcanceledreq] =useState(null)
   const [fetchdaylimit, setfetchdaylimit] = useState(null)
-
+const [istabLoading, setistabLoading] = useState(false)
   const [selectedTab, setSelectedTab] = useTabs([
     'all',
     'pending',
@@ -89,67 +86,10 @@ const Requests = () => {
   ]);
 
 
-  const customStyles = {
 
-    control: (base, state) => ({
-      ...base,
-      /*border: state.isFocused ? 0 : 0,
-      // This line disable the blue border
-      boxShadow: state.isFocused ? 0 : 0,
-      '&:hover': {
-        border: state.isFocused ? 0 : 0
-      }*/
-      backgroundColor: 'rgba(255, 255, 255, 0.901)',
-      margin: '0',
-
-      minHeight: '30px',
-      height: '30px',
-      minWidth: '80px',
-
-
-
-    }),
-    valueContainer: (provided, state) => ({
-      ...provided,
-      height: '30px',
-      padding: '0 5px',
-      minWidth: '80px',
-
-
-    }),
-
-    input: (provided, state) => ({
-      ...provided,
-      margin: '0px',
-
-    }),
-    indicatorSeparator: state => ({
-      display: 'none',
-    }),
-    indicatorsContainer: (provided, state) => ({
-      ...provided,
-      height: '30px',
-      maxWidth: '270px',
-
-    }),
-    menuPortal: base => ({ ...base, zIndex: 9999 }),
-    menuList: base => ({
-      ...base,
-      minHeight: "10px",
-      minWidth: '80px',
-
-      padding: '0'
-
-    }),
-    option: styles => ({
-      ...styles,
-
-      lineHeight: '20px',
-
-    })
-
-  }
-
+ useEffect(()=>{
+  console.log(pageloading, isLoading)
+ },[pageloading, isLoading])
   const pageNumber = 1;
 
 
@@ -169,6 +109,8 @@ const Requests = () => {
 
 
   useEffect(async() => {
+
+     setpageloading(true)
        try {
     const featureddaylimit = await bookService.getdaylimit().then((res)=>{
 
@@ -185,29 +127,32 @@ const Requests = () => {
     }
     window.scrollTo(0, 0);
     setSelectedTab(urlParams.get('tab') ?urlParams.get('tab'): 'bookmarks')
-    setpageloading(true)
+   
 
   }, [isError])
 
+  useEffect(() => {
+
+    setPages(getborrowedbook.pages)
+    setpageloading(false)
+  }, [getborrowedbook])
+
 
   useEffect(() => {
+    setpageloading(true)
  window.scrollTo(0, 0);
     if (userexist) {
       if (user.length !== 0) {
         setuserloaded(user)
           console.log('did ig oghere agin')
         if(selectedTab === 'all' || selectedTab === 'pending' || selectedTab === 'confirmed'||selectedTab === 'received' || selectedTab === 'returned'){
-        dispatch(getallborrowedBook({ page: page, status: selectedTab ? selectedTab : urlParams.get('tab') ?urlParams.get('tab'): 'all' })).then((res)=>{
-          if(res){
-            setpageloading(false)
-          }
-        })
-
+        dispatch(getallborrowedBook({ page: page, status: selectedTab ? selectedTab : urlParams.get('tab') ?urlParams.get('tab'): 'all' }))   
        }
       }
     } else {
-      setpageloading(false)
+       setpageloading(false)
       if (!userloaded) {
+        setpageloading(false)
         navigate('/')
       }
     }
@@ -215,10 +160,7 @@ const Requests = () => {
 
   }, [user, page, selectedTab,borrowbook,canceledreq ])
 
-  useEffect(() => {
 
-    setPages(getborrowedbook.pages)
-  }, [getborrowedbook])
 
   const onLogout = () => {
     setuserloaded(null)
@@ -227,9 +169,9 @@ const Requests = () => {
     dispatch(reset())
 
   }
-  const [istabLoading, setistabLoading] = useState(false)
+  
   const manageRequests = (id, bookid) => {
-    setistabLoading(true)
+    setpageloading(true)
   
     var decoded = jwt_decode(user.accessToken);
     var now = new Date();
@@ -242,7 +184,7 @@ const Requests = () => {
         if (response.payload.accessToken) {
           dispatch(manageBookRequests(id)).then((res)=>{
             if(res){
-              setistabLoading(false)
+              setpageloading(false)
             }
           })
         }
@@ -252,7 +194,7 @@ const Requests = () => {
 
       dispatch(manageBookRequests(id)).then((res)=>{
             if(res){
-              setistabLoading(false)
+              setpageloading(false)
             }
           })
     }
@@ -261,7 +203,7 @@ const Requests = () => {
 
   const manageundoRequests = (id) => {
 
-    setistabLoading(true)
+    setpageloading(true)
 
     var decoded = jwt_decode(user.accessToken);
     var now = new Date();
@@ -274,7 +216,7 @@ const Requests = () => {
         if (response.payload.accessToken) {
           dispatch(manageundoBookRequests(id)).then((res)=>{
             if(res){
-              setistabLoading(false)
+               setpageloading(false)
             }
           })
         }
@@ -284,7 +226,7 @@ const Requests = () => {
 
       dispatch(manageundoBookRequests(id)).then((res)=>{
             if(res){
-              setistabLoading(false)
+              setpageloading(false)
             }
           })
       
@@ -294,18 +236,18 @@ const Requests = () => {
 
   const cancelrequest = async(id)=>{
 
-    setistabLoading(true)
+    setpageloading(true)
     try {
     const featuredalluser = await bookService.cancelreq(id).then((res)=>{
 
         if(res){
            setcanceledreq(res)
-           setistabLoading(false)
+          setpageloading(false)
         }
       })
       
     } catch (error) {
-        setistabLoading(false)
+         setpageloading(false)
        toast.error(error);
     }
   }
@@ -502,8 +444,8 @@ const notifylateuser = async(id)=>{
               <TabPanel hidden={selectedTab !== 'all'}>
                 <div className=' flex grid laptop:grid-cols-2 tabletlg:grid-cols-1 tablet:grid-cols-1 phone:grid-cols-1 tablet:gap-2 phone:gap-1  '>
                   {
-                      !isLoading? (
-                       getborrowedbook?.bookquery?.length  ?
+                      !pageloading ? (
+                      !pageloading &&  getborrowedbook?.bookquery &&  getborrowedbook?.bookquery?.length  ?
                         (getborrowedbook.bookquery.map((getborrowedbook, i) => (
 
 
@@ -643,10 +585,10 @@ const notifylateuser = async(id)=>{
               </TabPanel>
 
               <TabPanel hidden={selectedTab !== 'pending'}>
-                     <div className=' flex grid laptop:grid-cols-2 tabletlg:grid-cols-1 tablet:grid-cols-1 phone:grid-cols-1 tablet:gap-2 phone:gap-1  '>
+                         <div className=' flex grid laptop:grid-cols-2 tabletlg:grid-cols-1 tablet:grid-cols-1 phone:grid-cols-1 tablet:gap-2 phone:gap-1  '>
                   {
-                      !isLoading? (
-                       getborrowedbook?.bookquery?.length  ?
+                      !pageloading ? (
+                      !pageloading &&  getborrowedbook?.bookquery &&  getborrowedbook?.bookquery?.length  ?
                         (getborrowedbook.bookquery.map((getborrowedbook, i) => (
 
 
@@ -749,7 +691,7 @@ const notifylateuser = async(id)=>{
                                 <h4 className='removeunderline mb-1'>{getborrowedbook.bookTitle}</h4>
 
                                 <h6  ><span className='makethisbold mr-2'>Borrower Name:</span> {getborrowedbook.borrowerfName} &nbsp; {getborrowedbook.borrowerlName}</h6>
-                                <h6 ><span className='makethisbold mr-2'>Borrow Date:</span> {new Date(getborrowedbook.borrowDate).toISOString().split('T')[0].replace(/-/g, '/')} </h6>
+                                <h6 ><span className='makethisbold mr-2'>Borrow Date:</span> {format(new Date(getborrowedbook.borrowDate), 'yyyy-MM-dd')} </h6>
                                 <h6 className='flex flex-row items-center ' ><span className='makethisbold mr-2'>Status:</span>  {getborrowedbook.borrowStatus}      
                         {
                        getborrowedbook.borrowStatus === 'confirmed'?
@@ -784,10 +726,10 @@ const notifylateuser = async(id)=>{
                   <Pagination page={page} pages={pages} changePage={setPage} /> : null
                 }</TabPanel>
               <TabPanel hidden={selectedTab !== 'confirmed'}>
-                     <div className=' flex grid laptop:grid-cols-2 tabletlg:grid-cols-1 tablet:grid-cols-1 phone:grid-cols-1 tablet:gap-2 phone:gap-1  '>
+                         <div className=' flex grid laptop:grid-cols-2 tabletlg:grid-cols-1 tablet:grid-cols-1 phone:grid-cols-1 tablet:gap-2 phone:gap-1  '>
                   {
-                      !isLoading? (
-                       getborrowedbook?.bookquery?.length  ?
+                      !pageloading ? (
+                      !pageloading &&  getborrowedbook?.bookquery &&  getborrowedbook?.bookquery?.length  ?
                         (getborrowedbook.bookquery.map((getborrowedbook, i) => (
 
 
@@ -890,7 +832,7 @@ const notifylateuser = async(id)=>{
                                 <h4 className='removeunderline mb-1'>{getborrowedbook.bookTitle}</h4>
 
                                 <h6  ><span className='makethisbold mr-2'>Borrower Name:</span> {getborrowedbook.borrowerfName} &nbsp; {getborrowedbook.borrowerlName}</h6>
-                                <h6 ><span className='makethisbold mr-2'>Borrow Date:</span> {new Date(getborrowedbook.borrowDate).toISOString().split('T')[0].replace(/-/g, '/')} </h6>
+                                <h6 ><span className='makethisbold mr-2'>Borrow Date:</span> {format(new Date(getborrowedbook.borrowDate), 'yyyy-MM-dd')} </h6>
                                 <h6 className='flex flex-row items-center ' ><span className='makethisbold mr-2'>Status:</span>  {getborrowedbook.borrowStatus}      
                         {
                        getborrowedbook.borrowStatus === 'confirmed'?
@@ -926,10 +868,10 @@ const notifylateuser = async(id)=>{
                 }
               </TabPanel>
               <TabPanel hidden={selectedTab !== 'received'}>
-                          <div className=' flex grid laptop:grid-cols-2 tabletlg:grid-cols-1 tablet:grid-cols-1 phone:grid-cols-1 tablet:gap-2 phone:gap-1  '>
+                           <div className=' flex grid laptop:grid-cols-2 tabletlg:grid-cols-1 tablet:grid-cols-1 phone:grid-cols-1 tablet:gap-2 phone:gap-1  '>
                   {
-                      !isLoading? (
-                       getborrowedbook?.bookquery?.length  ?
+                      !pageloading ? (
+                      !pageloading &&  getborrowedbook?.bookquery &&  getborrowedbook?.bookquery?.length  ?
                         (getborrowedbook.bookquery.map((getborrowedbook, i) => (
 
 
@@ -1032,7 +974,7 @@ const notifylateuser = async(id)=>{
                                 <h4 className='removeunderline mb-1'>{getborrowedbook.bookTitle}</h4>
 
                                 <h6  ><span className='makethisbold mr-2'>Borrower Name:</span> {getborrowedbook.borrowerfName} &nbsp; {getborrowedbook.borrowerlName}</h6>
-                                <h6 ><span className='makethisbold mr-2'>Borrow Date:</span> {new Date(getborrowedbook.borrowDate).toISOString().split('T')[0].replace(/-/g, '/')} </h6>
+                                <h6 ><span className='makethisbold mr-2'>Borrow Date:</span> {format(new Date(getborrowedbook.borrowDate), 'yyyy-MM-dd')} </h6>
                                 <h6 className='flex flex-row items-center ' ><span className='makethisbold mr-2'>Status:</span>  {getborrowedbook.borrowStatus}      
                         {
                        getborrowedbook.borrowStatus === 'confirmed'?
@@ -1067,10 +1009,10 @@ const notifylateuser = async(id)=>{
                   <Pagination page={page} pages={pages} changePage={setPage} /> : null
                 }</TabPanel>
               <TabPanel hidden={selectedTab !== 'returned'}>
-                    <div className=' flex grid laptop:grid-cols-2 tabletlg:grid-cols-1 tablet:grid-cols-1 phone:grid-cols-1 tablet:gap-2 phone:gap-1  '>
+                       <div className=' flex grid laptop:grid-cols-2 tabletlg:grid-cols-1 tablet:grid-cols-1 phone:grid-cols-1 tablet:gap-2 phone:gap-1  '>
                   {
-                      !isLoading? (
-                       getborrowedbook?.bookquery?.length  ?
+                      !pageloading ? (
+                      !pageloading &&  getborrowedbook?.bookquery &&  getborrowedbook?.bookquery?.length  ?
                         (getborrowedbook.bookquery.map((getborrowedbook, i) => (
 
 
@@ -1173,7 +1115,7 @@ const notifylateuser = async(id)=>{
                                 <h4 className='removeunderline mb-1'>{getborrowedbook.bookTitle}</h4>
 
                                 <h6  ><span className='makethisbold mr-2'>Borrower Name:</span> {getborrowedbook.borrowerfName} &nbsp; {getborrowedbook.borrowerlName}</h6>
-                                <h6 ><span className='makethisbold mr-2'>Borrow Date:</span> {new Date(getborrowedbook.borrowDate).toISOString().split('T')[0].replace(/-/g, '/')} </h6>
+                                <h6 ><span className='makethisbold mr-2'>Borrow Date:</span> {format(new Date(getborrowedbook.borrowDate), 'yyyy-MM-dd')} </h6>
                                 <h6 className='flex flex-row items-center ' ><span className='makethisbold mr-2'>Status:</span>  {getborrowedbook.borrowStatus}      
                         {
                        getborrowedbook.borrowStatus === 'confirmed'?

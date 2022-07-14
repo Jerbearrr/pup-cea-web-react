@@ -13,6 +13,17 @@ background-color: #070b0d;
     
      
 }
+.bookdetailcontainer2 {
+    margin-top: 56px;
+    position: relative;
+    background-color: #202125;
+    overflow: hidden;
+    box-shadow: 0px 1px 1px 0px rgba(0, 0, 0, 0.3);
+
+    /*for older browsers*/
+
+
+}
 .mainp{
         will-change: transform;
         -webkit-backface-visibility: hidden;
@@ -28,12 +39,19 @@ background-color: #070b0d;
 .bookdetailcontainer::before{
    
 }
+.bookdetailcontainer2::before {}
 @media only screen and (max-width: 1200px) {
 .bookdetailcontainer{
     margin-top: 0 !important;
 }
+.bookdetailcontainer2 {
+    margin-top: 0 !important;
+}
 }
 @media only screen and (max-width: 600px) {
+    .mainp {
+        min-height: 100vh;
+    }
     .openbookimage {
         max-height: 230px!important;
         min-height: 150px !important;
@@ -50,7 +68,7 @@ background-color: #070b0d;
     max-height: 266px;
     min-height: 207px;
     width: 100%;
-    background-color: rgb(32 33 37);
+    background-color: rgb(27, 28, 31);
     animation-duration: 0.3s;
         /* the duration of the animation */
         animation-timing-function: ease-out;

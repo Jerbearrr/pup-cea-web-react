@@ -23,7 +23,7 @@ const checkIfExpired = () => {
     }
 }
 
-export const url = "https://pup-weblibrary.herokuapp.com";
+export const url = "http://localhost:3000";
 export const SSEURL = '';
 
 export const verifyApi = url + "/verify";

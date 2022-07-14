@@ -5,8 +5,7 @@ import { useLocation } from 'react-router-dom';
 import Footer from './Footer';
 import Topnav from './Topnav';
 import "./style/control.css";
-import ArrowBackIcon from '@mui/icons-material/ArrowBack';
-import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
+import { useNavigate } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import { useTabs, TabPanel } from "react-headless-tabs"
 import { TabSelector } from './TabSelector';
@@ -16,16 +15,44 @@ import { apiClientBookPublic, apiClient, apiClientBook } from '../features/auth/
 import Modal from 'react-modal';
 import { IoCloseSharp, } from "react-icons/io5";
 const Admincontrol = () => {
+  const { user, isLoading, isSuccess, isError, message,  justloggedin } = useSelector(state => state.auth);
+const [skipCount, setSkipCount] = useState(true);
+    const navigate = useNavigate()
+    const getCookieValue = (name) => (
+    document.cookie.match('(^|;)\\s*' + name + '\\s*=\\s*([^;]+)')?.pop() || ''
+  )
+
+  const userexist = getCookieValue('userpersist')
+  useEffect(()=>{
+  
+   if (skipCount){
+    
+    setSkipCount(false)
+ 
+  };
+   if (!skipCount){
+ 
+    
+   if (userexist && user.role ) {
+    
+       console.log(user.role)
+       if(user.role !== 'b521c'){
+        navigate(-1)
+       }
    
-    const { state } = useLocation();
-    const [pageNum, setPageNum] = useState(1);
-    const [lastPage, setLastPage] = useState(1);
-    const [iscodesender, setiscodesender] = useState(true)
-    const [iscodevalid, setiscodevalied] = useState(true)
+   }else if(!userexist ){
+   
+      navigate(-1)
+     
+   }}
+
+  },[  skipCount, user])
+   
+  
 
   const queryString = window.location.search;
   const urlParams = new URLSearchParams(queryString);
-  const { user, isLoading, isSuccess, isError, message,  justloggedin } = useSelector(state => state.auth);
+
   const [selectedTab, setSelectedTab] = useTabs([
     'Application Settings',
     'User Settings',

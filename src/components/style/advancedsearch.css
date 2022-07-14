@@ -44,6 +44,30 @@
 }
 
 }
+.advancedbox{
+    max-width: 1160px;
+    
+    background-color: #2a2c31;
+    border-radius: 10px;
+    color: white;
+        box-shadow: 0px 1px 1px 0px rgb(0 0 0 / 50%);
+           
+    
+    margin: 0 auto;
+}
+@media only screen and (max-width:600px){
+    .advancedbox {
+            max-width: 1160px;
+    
+            background-color: #2a2c31;
+            border-radius: 5px;
+            color: white;
+            box-shadow: 0px 1px 1px 0px rgb(0 0 0 / 50%);
+    
+    
+            margin: 0 auto;
+        }
+}
 .advancedsearchcont2{
 
 
@@ -69,17 +93,7 @@
 
 }
 
-.advancedbox{
-    max-width: 1160px;
-    
-    background-color: #2a2c31;
-    border-radius: 10px;
-    color: white;
-        box-shadow: 0px 1px 1px 0px rgb(0 0 0 / 50%);
-           
-    
-    margin: 0 auto;
-}
+
 .moredetcont{
     
 }
@@ -157,6 +171,13 @@
         
      
         margin: 0 auto;
+}
+.searchresultcont2 {
+    max-width: 1160px;
+    min-height: 100px;
+
+
+    margin: 0 auto;
 }
 .genreadvbox__menu{
     position: relative!important;

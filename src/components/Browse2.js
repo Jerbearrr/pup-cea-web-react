@@ -85,7 +85,7 @@ const Browse2 = () => {
    
     setrandomloading(true)
    
-     setTimeout(function () {
+   
       dispatch(getRandomBook()).then(res =>{
         if(res){
            
@@ -94,7 +94,7 @@ const Browse2 = () => {
       }
      
      })
-    }, 500);
+  
   
   }, [])
   
@@ -699,7 +699,7 @@ const Browse2 = () => {
 
           <div className='flex  mb-2  flex-row justify-between items-center mt-3'>
             <h3 className='mb-1 phone:ml-1 laptop:ml-0 tabletlg:text-xl phone:text-lg h2h'>Recent Journals</h3>
-            <button className='seemorebutton border-transparent flex items-center justify-between flex-row'><Link className='mr-1 text-white' to='/journals'> View more</Link><FaChevronRight color="white" /></button>
+            <Link to='/journals' className='seemorebutton border-transparent flex items-center justify-between flex-row'><p className='mr-1 text-white' > View more</p><FaChevronRight color="white" /></Link>
           </div>
           <div className='phone:px-0.5 desktop:px-0 grid laptop:grid-cols-2 tabletlg:grid-cols-1 tablet:grid-cols-1 phone:grid-cols-1 gap-3 mb-5 py-2'>
 

@@ -1,16 +1,13 @@
-import React, { useEffect, useState, useContext } from 'react';
+import React, { useEffect, useState } from 'react';
 import "./style/browse.css";
 import "./style/sidemenu.css";
 import "./style/bookmarks.css";
 import { useDispatch, useSelector } from 'react-redux';
-import { useNavigate, Link } from 'react-router-dom';
-import { getborrowedBook, signupRequests, verifySignuprequests, rejectSignuprequests, getallcontributedBook } from '../features/book/bookSlice';
+import { useNavigate } from 'react-router-dom';
+import {  signupRequests, verifySignuprequests, rejectSignuprequests, getallcontributedBook } from '../features/book/bookSlice';
 import { useTabs, TabPanel } from "react-headless-tabs"
 import { TabSelector } from './TabSelector';
-import { apiClientBase } from '../features/auth/requests';
 import Pagination from './Pagination';
-import Select from 'react-select';
-import { digitalCopyApi } from '../features/auth/requests';
 import {format} from 'date-fns'
 import jwt_decode from "jwt-decode";
 import { getUser } from '../features/auth/authSlice';
@@ -34,9 +31,8 @@ const Signuprequests = () => {
   const { user } = useSelector(state => state.auth);
   const [pageloading, setpageloading] = useState(true)
   const [userloaded, setuserloaded] = useState(null)
-    const [selecteditgenre, setselecteditgenre] = useState(null);
-    
-
+  const [selecteditgenre, setselecteditgenre] = useState(null);
+  const [istabLoading, setistabLoading] = useState(false)
   const [fileOptions, setFileOptions] = useState([
     { value: 'all', label: 'All' },
     { value: 'pending', label: 'Pending' },
@@ -62,6 +58,14 @@ const Signuprequests = () => {
  
  const [skipCount, setSkipCount] = useState(true);
 
+
+const tabClicked = (tabstatus) => {
+    setistabLoading(true)
+    setPage(1)
+    setSelectedTab(tabstatus);
+    
+
+}
   
    useEffect(()=>{
   
@@ -88,79 +92,15 @@ const Signuprequests = () => {
 
   },[  skipCount, user])
 
-  const customStyles = {
-    control: (base, state) => ({
-      ...base,
-      /*border: state.isFocused ? 0 : 0,
-      // This line disable the blue border
-      boxShadow: state.isFocused ? 0 : 0,
-      '&:hover': {
-        border: state.isFocused ? 0 : 0
-      }*/
-      backgroundColor: 'rgba(255, 255, 255, 0.901)',
-      margin: '0',
-
-      minHeight: '30px',
-      height: '30px',
-      minWidth: '80px',
-
-
-
-    }),
-    valueContainer: (provided, state) => ({
-      ...provided,
-      height: '30px',
-      padding: '0 5px',
-      minWidth: '80px',
-
-
-    }),
-
-    input: (provided, state) => ({
-      ...provided,
-      margin: '0px',
-
-    }),
-    indicatorSeparator: state => ({
-      display: 'none',
-    }),
-    indicatorsContainer: (provided, state) => ({
-      ...provided,
-      height: '30px',
-      maxWidth: '270px',
-
-    }),
-    menuPortal: base => ({ ...base, zIndex: 9999 }),
-    menuList: base => ({
-      ...base,
-      minHeight: "10px",
-      minWidth: '80px',
-
-      padding: '0'
-
-    }),
-    option: styles => ({
-      ...styles,
-
-      lineHeight: '20px',
-
-    })
-
-  }
-
   const getCookieValue = (name) => (
     document.cookie.match('(^|;)\\s*' + name + '\\s*=\\s*([^;]+)')?.pop() || ''
   )
-
-
-
-
-
 
   const userexist = getCookieValue('userpersist')
 
 
   useEffect(() => {
+    setistabLoading(true)
     window.scrollTo(0, 0);
     setpageloading(true)
     setSelectedTab(urlParams.get('tab')?urlParams.get('tab'):'Signuprequests' )
@@ -224,16 +164,9 @@ const Signuprequests = () => {
 
   
 
-  const tabClicked = (tabstatus) => {
-    
-    setPage(1)
-    setpageloading(true)
-    setSelectedTab(tabstatus);
-    
 
-  }
 
-  const [istabLoading, setistabLoading] = useState(false)
+
 
 
    const acceptRequest = async (id) => {
@@ -305,15 +238,11 @@ const Signuprequests = () => {
 
   const [isActive, setActive] = useState(false);
 
-  useEffect(()=>{
-     
-     window.history.replaceState(null, null, `?tab=${selectedTab}&page=${ page}`);
-    
-  },[page,selectedTab])
+
 
 
  
- const [genrearr, setgenrearr]= useState(null)
+
  useEffect(()=>{
   console.log(confirmbook)
  },[confirmbook])
@@ -419,6 +348,11 @@ const Signuprequests = () => {
 
   },[istabLoading, pageloading, getcontributedbook ])
 
+  useEffect(()=>{
+     
+     window.history.replaceState(null, null, `?tab=${selectedTab}&page=${ page}`);
+    
+  },[page,selectedTab])
 
   return (
   
@@ -516,8 +450,8 @@ const Signuprequests = () => {
           <TabPanel hidden={selectedTab !== 'Signuprequests'}>
             <div className=' flex grid laptop:grid-cols-2 tabletlg:grid-cols-1 tablet:grid-cols-1 phone:grid-cols-1 tablet:gap-2 phone:gap-1  '>
               {
-                !istabLoading && !isLoading ? (
-                  signrequests?.requests?.length ?
+                 !istabLoading && !isLoading?  (
+                  !istabLoading && signrequests?.requests &&  signrequests?.requests?.length ?
 
                     (signrequests.requests.map(post => (
                         <div className='bookmarkcontainer text-white flex flex-row px-2 relative w-100 h-52'  key={post._id}>
@@ -593,8 +527,8 @@ const Signuprequests = () => {
           <TabPanel hidden={selectedTab !== 'Contributionrequests'}>
               <div className=' flex grid laptop:grid-cols-2 tabletlg:grid-cols-1 tablet:grid-cols-1 phone:grid-cols-1 tablet:gap-2 phone:gap-1  '>
                   {
-                   !istabLoading &&  !isLoading ? (
-                      getcontributedbook?.bookquery?.length ?
+                   !istabLoading && !isLoading?  (
+                   !istabLoading &&  getcontributedbook?.bookquery  && getcontributedbook?.bookquery?.length ?
                         (getcontributedbook?.bookquery?.map((getborrowedbook, i) => (
 
 
