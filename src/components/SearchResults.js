@@ -12,11 +12,10 @@ const SearchResults = ({ searchQuery }) => {
     const NUM_PER_PAGE = 18;
     const [isLoading, setIsLoading] = useState(false);
     const [justloaded, setisloaded] = useState(true)
-    const [buttonloading, setbuttonloading]= useState(false)
-
+    const [buttonloading, setbuttonloading] = useState(false)
 
     const handleNextData = async () => {
-       
+
         if (isLoading) {
             return;
         }
@@ -39,22 +38,22 @@ const SearchResults = ({ searchQuery }) => {
     // ON RENDER EVENT
     // SEARCH BOOKS FROM URL PARAM
     useEffect(() => {
-        
+
         setQuery(searchQuery);
     }, [searchQuery]);
 
     useEffect(() => {
-    
+
     }, [data, query])
 
     useEffect(async () => {
-        if (query) { 
+        if (query) {
             setbuttonloading(true)
             setisloaded(false)
             bookService.searchBook(query)
                 .then(results => {
-                    if(results){
-                         setbuttonloading(false)
+                    if (results) {
+                        setbuttonloading(false)
                     }
                     if (results.length === NUM_PER_PAGE) {
                         setHasMore(true);
@@ -66,7 +65,7 @@ const SearchResults = ({ searchQuery }) => {
 
     return (
         <>
-            {data.length > 0  && !buttonloading?  (
+            {data.length > 0 && !buttonloading ? (
                 <InfiniteScroll
                     dataLength={data.length}
                     style={{ overflow: "hidden" }}
@@ -102,20 +101,20 @@ const SearchResults = ({ searchQuery }) => {
                     </div>
                 </InfiniteScroll>
             ) : (<>
-               
-                {data?.length <= 0 && !buttonloading?
-                <div style={{ zIndex: "2", backgroundColor: "#2a2c31" }} className={` ${justloaded?'hidden': 'flex'}  searchresultcont2  w-full justify-center items-center p-2 rounded-lg`}>
-                    <p className='text-bold text-white text-center h-full  justify-center items-center'>No Results Found :(</p>
-                </div>:null
+
+                {data?.length <= 0 && !buttonloading ?
+                    <div style={{ zIndex: "2", backgroundColor: "#2a2c31" }} className={` ${justloaded ? 'hidden' : 'flex'}  searchresultcont2  w-full justify-center items-center p-2 rounded-lg`}>
+                        <p className='text-bold text-white text-center h-full  justify-center items-center'>No Results Found :(</p>
+                    </div> : null
 
 
                 }
-                </>
+            </>
             )}
-            {buttonloading?<div style={{ zIndex: "2", backgroundColor: "#2a2c31" }} className={` ${justloaded?'hidden': 'flex'}  searchresultcont2  w-full justify-center items-center p-2 rounded-lg`}>
-                    <div className='text-bold text-white text-center h-full  justify-center items-center'><ButtonSpinner/></div>
-                </div>:null
-           }
+            {buttonloading ? <div style={{ zIndex: "2", backgroundColor: "#2a2c31" }} className={` ${justloaded ? 'hidden' : 'flex'}  searchresultcont2  w-full justify-center items-center p-2 rounded-lg`}>
+                <div className='text-bold text-white text-center h-full  justify-center items-center'><ButtonSpinner /></div>
+            </div> : null
+            }
         </>
 
 

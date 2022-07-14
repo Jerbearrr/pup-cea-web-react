@@ -23,7 +23,7 @@ const checkIfExpired = () => {
     }
 }
 
-export const url = "https://pup-weblibrary.herokuapp.com";
+export const url = process.env.NODE_ENV === "development" ? "http://localhost:3000" : "https://pup-weblibrary.herokuapp.com";
 export const SSEURL = '';
 
 export const verifyApi = url + "/verify";

@@ -61,11 +61,13 @@ const Advancedsearch = () => {
   }
 
   const sortOptions = [
-    { label: 'Default', value: '0' },
-    { label: 'Publish Date: Ascending', value: '1' },
-    { label: 'Publish Date: Descending', value: '2' },
-    { label: 'Acquisition Date: Ascending', value: '3' },
-    { label: 'Acquisition Date: Descending', value: '4' },
+    { label: 'Default', value: 'default' },
+    { label: 'Publish Date: Ascending', value: 'dateOfPublication' },
+    { label: 'Publish Date: Descending', value: '-dateOfPublication' },
+    { label: 'Acquisition Date: Ascending', value: 'dateAdded' },
+    { label: 'Acquisition Date: Descending', value: '-dateAdded' },
+    { label: 'Alphabetical: A-Z', value: '-title' },
+    { label: 'Alphabetical: Z-A', value: 'title' }
   ];
 
   const customStyles = {
@@ -268,8 +270,6 @@ const Advancedsearch = () => {
     // GET ALL UNIQUE GENRES FROM DATABASE
     let { genres, types, forms } = await bookService.getUniqueFields();
 
-  
-
     setGenreOptions(makeLabels(genres));
     setFormOptions(makeLabels(forms));
     setTypeOptions(makeLabels(types));
@@ -284,7 +284,7 @@ const Advancedsearch = () => {
 
     for (var entry of searchParams.entries()) {
       const [key, value] = entry;
-    
+
 
       // ADD ALL VALUES TO KEYS EXCEPT THE GENRE PARAMS
       if (key !== 'genre' && value !== '') {
@@ -309,7 +309,7 @@ const Advancedsearch = () => {
     setIsLoading(false);
     setpageLoading(false)
 
-  
+
 
   }, [ispageLoading])
 
@@ -324,14 +324,11 @@ const Advancedsearch = () => {
     const asString = data
       .map(x => `${encodeURIComponent(x[0])}=${encodeURIComponent(x[1])}`)
       .join('&');
-  
+
     window.history.replaceState(null, null, `advancedsearch?${asString}`);
     setsearchparams(asString)
 
     setpageLoading(true)
-
-
-
 
   }
 
@@ -361,15 +358,15 @@ const Advancedsearch = () => {
               <div className='flex-row flex mt-2 grid grid-cols-12 gap-3'>
                 <div className="advform-group  py-2 px-3 flex flex-row  col-span-12 desktop:col-span-3 tablet:col-span-6 ">
                   <label className='mr-2 '>Author:</label>
-                  <input type="text" name="author" className="form-control py-0 w-full px-0 " autoComplete="off" defaultValue={urlParams.get('author') ?urlParams.get('author'): null}></input>
+                  <input type="text" name="author" className="form-control py-0 w-full px-0 " autoComplete="off" defaultValue={urlParams.get('author') ? urlParams.get('author') : null}></input>
                 </div>
                 <div className="advform-group  py-2 px-2 flex flex-row col-span-12 desktop:col-span-3 tablet:col-span-6 ">
                   <label className='mr-2 '>Publisher:</label>
-                  <input type="text" name="publisher" className="form-control py-0 px-0 w-full " autoComplete="off" defaultValue={urlParams.get('publisher') ?urlParams.get('publisher'): null}></input>
+                  <input type="text" name="publisher" className="form-control py-0 px-0 w-full " autoComplete="off" defaultValue={urlParams.get('publisher') ? urlParams.get('publisher') : null}></input>
                 </div>
                 <div className="advform-group  py-2 px-3 flex flex-row  col-span-12 desktop:col-span-3 tablet:col-span-6 " style={{ zIndex: '99' }}>
                   <label className='mr-2 whitespace-nowrap '>Literary Form:</label>
-                  <Select name='form' isClearable options={formOptions} className='selectadv' style={{ zIndex: '99' }} styles={customStyles3} classNamePrefix="itemtypeselect2 " defaultValue={{ label: urlParams.get('form') ?urlParams.get('form'): '', value: urlParams.get('form') ?urlParams.get('form'): '' }} />
+                  <Select name='form' isClearable options={formOptions} className='selectadv' style={{ zIndex: '99' }} styles={customStyles3} classNamePrefix="itemtypeselect2 " defaultValue={{ label: urlParams.get('form') ? urlParams.get('form') : '', value: urlParams.get('form') ? urlParams.get('form') : '' }} />
                 </div>
                 <div className="advform-group  py-2 px-2 flex flex-row col-span-12 desktop:col-span-3 tablet:col-span-6  ">
                   <label className='mr-2 '>ISBN:</label>
@@ -379,7 +376,7 @@ const Advancedsearch = () => {
               <div className='flex-row flex mt-2 grid grid-cols-12 gap-3'>
                 <div style={{ zIndex: '99' }} className="advform-group  py-2 px-3 flex flex-row  col-span-12 desktop:col-span-4 tablet:col-span-6 ">
                   <label className='mr-2 whitespace-nowrap '>Item Type:</label>
-                  <Select style={{ zIndex: '99' }} name='type' isClearable options={typeOptions} className='selectadv' styles={customStyles3} classNamePrefix="itemtypeselect2 " defaultValue={{ label: urlParams.get('type') ?urlParams.get('type'): '', value: urlParams.get('type') ?urlParams.get('type'): '' }}  />
+                  <Select style={{ zIndex: '99' }} name='type' isClearable options={typeOptions} className='selectadv' styles={customStyles3} classNamePrefix="itemtypeselect2 " defaultValue={{ label: urlParams.get('type') ? urlParams.get('type') : '', value: urlParams.get('type') ? urlParams.get('type') : '' }} />
                 </div>
                 <div className="advform-group py-2 px-2 flex flex-row col-span-12 desktop:col-span-8 tablet:col-span-6 ">
                   <label className='mr-2 whitespace-nowrap '>Publication Date:</label>
@@ -399,7 +396,7 @@ const Advancedsearch = () => {
                   menuIsOpen={true}
                   hideSelectedOptions={false}
 
-                 defaultValue={{ label: urlParams.get('genre') ?urlParams.get('genre'): '', value: urlParams.get('genre') ?urlParams.get('genre'): '' }}
+                  defaultValue={{ label: urlParams.get('genre') ? urlParams.get('genre') : '', value: urlParams.get('genre') ? urlParams.get('genre') : '' }}
 
                   isClearable
                   options={genreOptions}

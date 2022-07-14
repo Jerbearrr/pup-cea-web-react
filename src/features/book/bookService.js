@@ -4,7 +4,6 @@ import { apiClientBook, apiClientBookPublic } from '../auth/requests';
 const searchBook = async (searchFilters, offset) => {
     try {
         const res = await apiClientBookPublic.post('/search', { ...searchFilters, offset: offset })
-        console.log(res);
         return res.data;
     } catch (err) {
         console.log(err);
