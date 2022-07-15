@@ -66,8 +66,8 @@ const Advancedsearch = () => {
     { label: 'Publish Date: Descending', value: '-dateOfPublication' },
     { label: 'Acquisition Date: Ascending', value: 'dateAdded' },
     { label: 'Acquisition Date: Descending', value: '-dateAdded' },
-    { label: 'Alphabetical: A-Z', value: '-title' },
-    { label: 'Alphabetical: Z-A', value: 'title' }
+    { label: 'Alphabetical: A-Z', value: 'title' },
+    { label: 'Alphabetical: Z-A', value: '-title' }
   ];
 
   const customStyles = {

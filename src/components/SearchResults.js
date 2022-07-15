@@ -22,9 +22,9 @@ const SearchResults = ({ searchQuery }) => {
 
         setIsLoading(true);
         bookService.searchBook(query, data.length)
-            .then(results => {
+            .then(({noOfBooks, results}) => {
 
-                if (results.length < NUM_PER_PAGE) {
+                if (noOfBooks < NUM_PER_PAGE) {
                     // Last Results 
                     setHasMore(false);
                 }
@@ -51,11 +51,12 @@ const SearchResults = ({ searchQuery }) => {
             setbuttonloading(true)
             setisloaded(false)
             bookService.searchBook(query)
-                .then(results => {
+                .then(({noOfBooks, results}) => {
+                    
                     if (results) {
                         setbuttonloading(false)
                     }
-                    if (results.length === NUM_PER_PAGE) {
+                    if (noOfBooks > NUM_PER_PAGE) {
                         setHasMore(true);
                     }
                     setData(results);

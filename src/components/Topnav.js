@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useContext, useRef } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import { FaSearch } from "react-icons/fa";
 import { FaChevronDown,FaUserCircle } from "react-icons/fa";
 import { IoMdNotificationsOutline, IoMdKey} from "react-icons/io"
@@ -10,7 +10,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate, Link, useLocation } from 'react-router-dom';
 import { reset, getUser, logoutUser } from '../features/auth/authSlice'
 import { apiClientBookPublic, apiClient, apiClientBook, SSEURL } from '../features/auth/requests';
-import { getNotifs } from '../features/book/bookSlice';
+
 import InfiniteScroll from 'react-infinite-scroll-component';
 import { format, compareAsc, formatDistance, subDays } from 'date-fns';
 
@@ -164,40 +164,30 @@ const Topnav = () => {
 
   },[user])
   
-function isFunction(functionToCheck) {
-  return functionToCheck && {}.toString.call(functionToCheck) === '[object Function]';
-}
-function debounce(func, wait) {
-    var timeout;
-    var waitFunc;
-    
-    return function() {
-        if (isFunction(wait)) {
-            waitFunc = wait;
-        }
-        else {
-            waitFunc = function() { return wait };
-        }
-        
-        var context = this, args = arguments;
-        var later = function() {
-            timeout = null;
-            func.apply(context, args);
-        };
-        clearTimeout(timeout);
-        timeout = setTimeout(later, waitFunc());
-    };
-}
 
-var reconnectFrequencySeconds = 1;
+  
+  useEffect(async()=>{
 
-const usereventsource= () =>{
+    const headers = {
+    'Content-Type': 'text/event-stream',
+    'Connection': 'keep-alive',
+    'Cache-Control': 'no-cache',
+    'X-Accel-Buffering': 'no',
+    'Access-Control-Allow-Origin': '*'
+   };
+
+    if( user?.accessToken && user?.role === '4d3b' && startfetching ){
+
+      console.log('iam i here')
+
+  
 
       var fetcheddate = new Date().toISOString()
       const eventSource = new EventSource(`${SSEURL?SSEURL:'http://localhost:8080'}/realtimeuser?date=${fetcheddate}&user=${user._id}&accessToken=${user.accessToken}`,{
-       
+
+      
       headers: {
-          Accept: "text/event-stream",
+        headers
           
         },
       });
@@ -213,31 +203,11 @@ const usereventsource= () =>{
         }
         }
       eventSource.onerror = err => {
-        eventSource.close();
-        reconnectusersource();
+         console.log(err)
+     
+        
      
       };
-   
-}
-var reconnectusersource = debounce(function() {
-    usereventsource();
-    // Double every attempt to avoid overwhelming server
-    reconnectFrequencySeconds *= 2;
-    // Max out at ~1 minute as a compromise between user experience and server load
-    if (reconnectFrequencySeconds >= 64) {
-        reconnectFrequencySeconds = 64;
-    }
-}, function() { return reconnectFrequencySeconds * 1000 });
-  
-  useEffect(async()=>{
-
-    if( user?.accessToken && user?.role === '4d3b' && startfetching ){
-
-      console.log('iam i here')
-
-  
-
-      usereventsource()
      
     
    
@@ -249,7 +219,8 @@ var reconnectusersource = debounce(function() {
       
       const eventSource = new EventSource(`${SSEURL?SSEURL:'http://localhost:8080'}/realtime?date=${fetcheddate}&accessToken=${user.accessToken}`,{
        headers: {
-          Accept: "text/event-stream",
+        
+        headers
         },
       });
       eventSource.onmessage = (e) => {
