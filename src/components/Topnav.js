@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useRef } from 'react';
 import { FaSearch } from "react-icons/fa";
 import { FaChevronDown,FaUserCircle } from "react-icons/fa";
-import { IoMdNotificationsOutline, IoMdKey} from "react-icons/io"
+import { IoMdNotificationsOutline,IoMdNotifications, IoMdKey} from "react-icons/io"
 import { IoLogOutOutline} from "react-icons/io5"
 import "./style/browse.css";
 import "./style/sidemenu.css";
@@ -168,13 +168,7 @@ const Topnav = () => {
   
   useEffect(async()=>{
 
-    const headers = {
-    'Content-Type': 'text/event-stream',
-    'Connection': 'keep-alive',
-    'Cache-Control': 'no-cache',
-    'X-Accel-Buffering': 'no',
-    'Access-Control-Allow-Origin': '*'
-   };
+
 
     if( user?.accessToken && user?.role === '4d3b' && startfetching ){
 
@@ -187,7 +181,9 @@ const Topnav = () => {
 
       
       headers: {
-        headers
+         headers: {
+          Accept: "text/event-stream",
+        },
           
         },
       });
@@ -220,7 +216,9 @@ const Topnav = () => {
       const eventSource = new EventSource(`${SSEURL?SSEURL:'http://localhost:8080'}/realtime?date=${fetcheddate}&accessToken=${user.accessToken}`,{
        headers: {
         
-        headers
+         headers: {
+          Accept: "text/event-stream",
+        },
         },
       });
       eventSource.onmessage = (e) => {
@@ -504,7 +502,7 @@ if(currentloc === '/'){
  <div className='relative'>
         <div className='topnavcont phone:hidden laptop:block '> </div>
 
-        <div className='navcont z-10 ' >
+        <div className='navcont  ' >
           <div className='navcontlist '>
             <div className='navcontul phone:py-3 tablet:py-5 laptop:py-6' >
 
@@ -620,9 +618,9 @@ if(currentloc === '/'){
     return (
     <>
   
-      <div className='topnavcont2 z-100 '>
+      <div className='topnavcont2  '>
           <div className='initialtop' > </div>
-        <div className='navcont navcont2 z-10' >
+        <div className='navcont navcont2 ' >
           <div className='navcontlist2 '>
             <div className='navcontul2 ' >
 
@@ -764,15 +762,16 @@ if(currentloc === '/'){
                      !notifloading && user?.role === '4d3b'?
                        fetchnotification?.length > 0  ? 
                         fetchnotification.map((notifs) =>(
-                      <div className="resultcontainer2 w-full flex flex-col grid grid-cols-12 " style={{backgroundColor:`${notifs.status === 'unread'? '#353840':null}`}} id={`567${notifs.id}`}  key={notifs.id}>
+                      <Link to={notifs.typer === 'borrow'? '/borrow':notifs.typer === 'contribution'? '/contribute?tab=contributionrequest&page=1&option=all':notifs.typer === 'digital'? '/borrow?tab=FileRequests&page=null&option=all':'/' } className="resultcontainer2 w-full flex flex-col grid grid-cols-12 " style={{backgroundColor:`${notifs.status === 'unread'? '#353840':null}`}} id={`567${notifs.id}`}  key={notifs.id}>
+                   
                       <div  className=' resultdetails relative col-span-12 flex flex-col '  >
                              <div  className=' resultdetails relative flex flex-col ' >
                             <p className="resultdetailstitle2 ">{notifs.title} </p>
                              <p className="resultdetailsauthor2 mt-1">{formatDistance(subDays(new Date(notifs.dateAdded), 0), new Date(), { addSuffix: true })}</p>
                        </div>  
                        </div> 
-                      </div>
-
+                  
+                      </Link>
 
                          )):  
                          <div className="resultcontainer2 items-center justify-center h-full w-full flex flex-col grid grid-cols-12 pointer-events-none" >
@@ -788,15 +787,16 @@ if(currentloc === '/'){
                       !notifloading && user?.role === 'b521c'?
                        fetchnotification?.length > 0  ? 
                         fetchnotification.map((notifs) =>(
-                      <div className="resultcontainer2 w-full flex flex-col grid grid-cols-12 " style={{backgroundColor:`${notifs.status === 'unread'? '#353840':null}`}} id={`567${notifs._id}`} key={notifs._id}>
+                      <Link to={notifs.typer === 'borrow'? '/requests':notifs.typer === 'contribution'? '/signuprequests?tab=Contributionrequests&page=1':notifs.typer === 'digital'? '/filerequests':notifs.typer === 'signup'? '/signuprequests':'/' }  className="resultcontainer2 w-full flex flex-col grid grid-cols-12 " style={{backgroundColor:`${notifs.status === 'unread'? '#353840':null}`}} id={`567${notifs._id}`} key={notifs._id}>
+                   
                       <div  className=' resultdetails relative col-span-12 flex flex-col '  >
                              <div  className=' resultdetails relative flex flex-col ' >
                             <p className="resultdetailstitle2 ">{notifs.description} </p>
                              <p className="resultdetailsauthor2 mt-1">{formatDistance(subDays(new Date(notifs.dateAdded), 0), new Date(), { addSuffix: true })}</p>
                        </div>  
                        </div> 
-                      </div>
-
+                 
+                     </Link>
 
                          )):  
                          <div className="resultcontainer2 items-center justify-center h-full w-full flex flex-col grid grid-cols-12 pointer-events-none" >
@@ -835,10 +835,10 @@ if(currentloc === '/'){
                     <div className='flex flex-row '>
                    <li className=' loginbtnnav laptop:ml-5 phone:ml-1 relative flex flex-col '  style={{boxShadow:'none'}}>
 
-                     <button className='userProfile h-full phone:mr-1 phone:ml-1 tablet:ml-0  laptop:mr-3' onMouseLeave={() => {
+                     <button className='notifprofile  phone:mr-1 phone:ml-1 tablet:ml-0  laptop:mr-3' onMouseLeave={() => {
                    if(notifActive){ document.addEventListener("click", onClickOutsideNotifListener)}
                   
-                  }} onClick={()=>{toggleNotif(); readnotif()}} ><IoMdNotificationsOutline color="white" size="1.5em"/></button>
+                  }} onClick={()=>{toggleNotif(); readnotif()}} > {notifActive? <IoMdNotifications color="white"  size="1.3em"/>:<IoMdNotificationsOutline color="white"  size="1.3em"/> } </button>
                       { unreadnotifs > 0?
                       <div className='unreadcounts absolute' onClick={()=> toggleNotif()}> <p>{unreadnotifs}</p></div>:null
                        } 
@@ -877,15 +877,17 @@ if(currentloc === '/'){
                      !notifloading && user?.role === '4d3b' ?
                        fetchnotification?.length > 0? 
                         fetchnotification.map((notifs) =>(
-                      <div className="resultcontainer2 w-full flex flex-col grid grid-cols-12 " style={{backgroundColor:`${notifs.status === 'unread'? '#353840':null}`}} id={notifs.id}  key={notifs.id}>
+
+                      <Link  to={notifs.typer === 'borrow'? '/borrow':notifs.typer === 'contribution'? '/contribute?tab=contributionrequest&page=1&option=all':notifs.typer === 'digital'? '/borrow?tab=FileRequests&page=null&option=all':'/' }  className=" whitespace-normal resultcontainer2 w-full flex flex-col grid grid-cols-12 " style={{backgroundColor:`${notifs.status === 'unread'? '#353840':null}`}} id={notifs.id}  key={notifs.id}>
+             
                       <div  className=' resultdetails relative col-span-12 flex flex-col '  >
                              <div  className=' resultdetails relative flex flex-col ' >
                             <p className="resultdetailstitle2 ">{notifs.title} </p>
                              <p className="resultdetailsauthor2 mt-1">{formatDistance(subDays(new Date(notifs.dateAdded), 0), new Date(), { addSuffix: true })}</p>
                        </div>  
                        </div> 
-                      </div>
-
+                 
+                      </Link> 
 
                          )):  <div className="resultcontainer2 items-center justify-center h-full w-full flex flex-col grid grid-cols-12 pointer-events-none " >
                          <div  className=' resultdetails items-center justify-center relative col-span-12 flex flex-col pointer-events-none '  >
@@ -900,15 +902,16 @@ if(currentloc === '/'){
                       !notifloading && user?.role === 'b521c'?
                        fetchnotification?.length > 0  ? 
                         fetchnotification.map((notifs) =>(
-                      <div className="resultcontainer2 w-full flex flex-col grid grid-cols-12 " style={{backgroundColor:`${notifs.status === 'unread'? '#353840':null}`}} id={notifs._id}  key={notifs._id}>
+                      <Link to={notifs.typer === 'borrow'? '/requests':notifs.typer === 'contribution'? '/signuprequests?tab=Contributionrequests&page=1':notifs.typer === 'digital'? '/filerequests':notifs.typer === 'signup'? '/signuprequests':'/' }  className=" whitespace-normal resultcontainer2 w-full flex flex-col grid grid-cols-12 " style={{backgroundColor:`${notifs.status === 'unread'? '#353840':null}`}} id={notifs._id}  key={notifs._id}>
+                     
                       <div  className=' resultdetails relative col-span-12 flex flex-col '  >
                              <div  className=' resultdetails relative flex flex-col ' >
                             <p className="resultdetailstitle2 ">{notifs.description} </p>
                              <p className="resultdetailsauthor2 mt-1">{formatDistance(subDays(new Date(notifs.dateAdded), 0), new Date(), { addSuffix: true })}</p>
                        </div>  
                        </div> 
-                      </div>
-
+            
+                      </Link>
 
                          )):  
                          <div className="resultcontainer2 items-center justify-center h-full w-full flex flex-col grid grid-cols-12 pointer-events-none" >

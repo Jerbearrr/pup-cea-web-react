@@ -7,13 +7,21 @@ import "./style/newbrowsecss.css";
 import "./style/sidemenu.css";
 
 
-import "swiper/css";
-import "swiper/css/pagination";
+
 import Carousel from 'react-material-ui-carousel'
-import { Pagination } from "swiper";
+
 import { useDispatch, useSelector } from 'react-redux';
 import { getFeaturedBook, getRecentlyAdded, resetBook, getlikedbooks, getJournals, getRandomBook } from '../features/book/bookSlice';
+import { Swiper, SwiperSlide,  Autoplay, } from "swiper/react";
+import "swiper/css";
+import "swiper/css/effect-fade";
+import "swiper/css/navigation";
+import "swiper/css/pagination";
 
+
+
+// import required modules
+import { EffectFade,  Pagination } from "swiper";
 import { format } from 'date-fns';
 import Renderonview from './Renderonview';
 const Browse2 = () => {
@@ -146,24 +154,31 @@ const Browse2 = () => {
     <div className='phone:col-span-12 laptop:col-span-9 newrandomizerparentcont'>
     <div className='newrandomizercontainer relative flex flex-row  w-full   '>
     <p className='absolute laptop:mt-5  phone:mt-3 tablet:ml-3 laptop:ml-5 phone:ml-1 tablet:text-2xl phone:text-base font-bold newrandtext'>Random Books</p>
+
+
+       <Swiper
+        spaceBetween={30}
+        effect={"fade"}
+        autoplay={{
+          delay: 2500,
+          disableOnInteraction: false,
+        }}
        
-      <Carousel className={`w-full h-full ${randombooks? '':'hidden h-full'}`}
-       height={'320px'}
-
-        indicatorContainerProps={{
-        style: {
-            position: 'absolute',
-            bottom: '0.5em' ,
-            zIndex: '3',
-        }
-
-    }}>
-       {
+        
+        pagination={{
+          clickable: true,
+        }}
+        modules={[EffectFade, Pagination]}
+        className="mySwiper"
+      >
+               {
         !randomloading ?
        (randombooks && randombooks?.map(bookfeatured => (
-       <Link to={`/openbook/${bookfeatured._id}`} key={bookfeatured._id} draggable='true' onDragStart={(e) => {e.preventDefault()}} >
+       
+       <SwiperSlide key={bookfeatured._id}>
+                 <Link to={`/openbook/${bookfeatured._id}`} key={bookfeatured._id} draggable='true' onDragStart={(e) => {e.preventDefault()}} >
   <div className='w-full  setmin h-full phone:flex tablet:hidden relative  flex-row  laptop:pt-5 phone:pt-3 laptop:pl-5 phone:pl-3 phone:pr-3 laptop:pr-5 '  draggable='true' onDragStart={(e) => {e.preventDefault()}} >
-         <div className='absolute parentabsoluter'>
+    <div className='absolute parentabsoluter'>
               
                  <div className={'absolute ' +  (bookfeatured && bookfeatured.imgUri ? 'blurcontainer' : 'blurcontainer2') } style={{ backgroundImage: 'url(' + `${bookfeatured ? bookfeatured.imgUri ? bookfeatured.imgUri : require('.//style/images/bg3.png') : null}` + ')'}} > </div>   
                 
@@ -179,7 +194,7 @@ const Browse2 = () => {
  </div>
 
  <div className='w-full h-full phone:hidden relative tablet:flex flex-row  pt-5 pl-5 pr-5 ' onMouseDown={()=> {return false;}}   onDragStart={(e) => {e.preventDefault()}} >
-        <div className='absolute parentabsoluter'>
+           <div className='absolute parentabsoluter'>
               
                  <div className={'absolute ' +  (bookfeatured && bookfeatured.imgUri ? 'blurcontainer' : 'blurcontainer2') } style={{ backgroundImage: 'url(' + `${bookfeatured ? bookfeatured.imgUri ? bookfeatured.imgUri : require('.//style/images/bg3.png') : null}` + ')'}} > </div>   
                 
@@ -202,16 +217,16 @@ const Browse2 = () => {
     </div>
     </div>
    </Link>
- 
-
-     ))) :
+        </SwiperSlide>
+    
+       ))):
        
      <>       
      <div className='w-full setmin h-full phone:flex tablet:hidden relative  flex-row  laptop:pt-5 phone:pt-3 laptop:pl-5 phone:pl-3 phone:pr-3 laptop:pr-5 '  draggable='true' onDragStart={(e) => {e.preventDefault()}} >
   
     
  </div>  
-     <div className='w-full h-full phone:hidden relative tablet:flex flex-row  pt-5 pl-5 pr-5 ' onMouseDown={()=> {return false;}}   onDragStart={(e) => {e.preventDefault()}} >
+     <div className='w-full h-full phone:hidden absolute tablet:flex flex-row  pt-5 pl-5 pr-5 ' onMouseDown={()=> {return false;}}   onDragStart={(e) => {e.preventDefault()}} >
      
     
        <div className='newrandTitlecont basis-3/5 flex flex-col items-center '  onDragStart={(e) => {e.preventDefault()}}>
@@ -244,10 +259,10 @@ const Browse2 = () => {
             
             }
   
-    </Carousel>
+    </Swiper>
 
           <>       
-     <div className={`${randombooks? 'hidden ':'phone:flex tablet:hidden'}  w-full setmin h-full  relative  flex-row  laptop:pt-5 phone:pt-3 laptop:pl-5 phone:pl-3 phone:pr-3 laptop:pr-5 `}  draggable='true' onDragStart={(e) => {e.preventDefault()}} >
+     <div className={`${randombooks? 'hidden ':'phone:flex tablet:hidden'}  w-full setmin h-full  absolute  flex-row  laptop:pt-5 phone:pt-3 laptop:pl-5 phone:pl-3 phone:pr-3 laptop:pr-5 `}  draggable='true' onDragStart={(e) => {e.preventDefault()}} >
          <div className='absolute parentabsoluter'>
               
                  <div className={'absolute '} > </div>   
@@ -297,6 +312,11 @@ const Browse2 = () => {
     </div>
     </div>
      </> 
+
+
+
+
+
 
 
      <div className='absolute newimgimgholder w-full flex flex-row tablet:flex phone:hidden'>

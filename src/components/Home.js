@@ -83,7 +83,7 @@ const Home = () => {
 
   useEffect(async() => {
 
-    window.scrollTo(0, 0);
+
 
     
     try {

@@ -355,7 +355,7 @@ const Advancedsearch = () => {
                   <input type="text" name="keyword" className="form-control py-0 px-0 w-full " autoComplete="off" defaultValue={searchQuery?.keyword}></input>
                 </div>
               </div>
-              <div className='flex-row flex mt-2 grid grid-cols-12 gap-3'>
+              <div className='flex-row flex mt-2 grid grid-cols-12 gap-3 ' style={{zIndex:'100'}}>
                 <div className="advform-group  py-2 px-3 flex flex-row  col-span-12 desktop:col-span-3 tablet:col-span-6 ">
                   <label className='mr-2 '>Author:</label>
                   <input type="text" name="author" className="form-control py-0 w-full px-0 " autoComplete="off" defaultValue={urlParams.get('author') ? urlParams.get('author') : null}></input>
@@ -366,7 +366,7 @@ const Advancedsearch = () => {
                 </div>
                 <div className="advform-group  py-2 px-3 flex flex-row  col-span-12 desktop:col-span-3 tablet:col-span-6 " style={{ zIndex: '99' }}>
                   <label className='mr-2 whitespace-nowrap '>Literary Form:</label>
-                  <Select name='form' isClearable options={formOptions} className='selectadv' style={{ zIndex: '99' }} styles={customStyles3} classNamePrefix="itemtypeselect2 " defaultValue={{ label: urlParams.get('form') ? urlParams.get('form') : '', value: urlParams.get('form') ? urlParams.get('form') : '' }} />
+                  <Select name='form' isClearable options={formOptions} className='selectadv' style={{ zIndex: '999' }} styles={customStyles3} classNamePrefix="itemtypeselect2 " defaultValue={{ label: urlParams.get('form') ? urlParams.get('form') : '', value: urlParams.get('form') ? urlParams.get('form') : '' }} />
                 </div>
                 <div className="advform-group  py-2 px-2 flex flex-row col-span-12 desktop:col-span-3 tablet:col-span-6  ">
                   <label className='mr-2 '>ISBN:</label>

@@ -1,17 +1,19 @@
 .newpuplogo{
     background-color: #202125;
     color: white;
-    border-radius: 10px;
+    border-radius: 5px;
 }
 .newrandomizercontainer{
        
             color: white;
-            border-radius: 10px;
+            border-radius: 5px;
             min-height:100% ;
             border-bottom: 1px solid rgba(255, 255, 255, 0.783);
             height: 320px;
            
            
+}.swiper-slide:not(.swiper-slide-active) {
+    opacity: 0 !important;
 }
 .likedsmall{
     background-color: #fffffff7;
@@ -34,7 +36,7 @@
     .newrandomizercontainer {
             height: 176px;
             color: white;
-            border-radius: 10px;
+            border-radius: 5px;
             border-bottom: 1px solid rgba(255, 255, 255, 0.783);
     
     
@@ -74,7 +76,7 @@
 .newrandomizercontainer .slick-list{
     width: 100%!important;
     overflow: hidden;
-    border-radius: 10px;
+    border-radius: 5px;
     height: 100%;
     
 }
@@ -220,12 +222,10 @@
     z-index: 3;
    
 }
-.newrandimagecont{
-    z-index: 2;
-}
+
 .newrandomizerparentcont{
     overflow: hidden;
-    border-radius: 10px;
+    border-radius: 5px;
 }
 .willtrans{
     will-change: transform;
