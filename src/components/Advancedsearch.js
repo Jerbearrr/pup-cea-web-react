@@ -17,6 +17,7 @@ const SearchResults = React.lazy(() => import('./SearchResults'));
 
 const Advancedsearch = () => {
   let params;
+ const ref = useRef(null);
 
   const queryString = window.location.search;
   const urlParams = new URLSearchParams(queryString);
@@ -327,7 +328,7 @@ const Advancedsearch = () => {
 
     window.history.replaceState(null, null, `advancedsearch?${asString}`);
     setsearchparams(asString)
-
+    ref.current?.scrollIntoView({behavior: 'smooth'});
     setpageLoading(true)
 
   }
@@ -418,9 +419,9 @@ const Advancedsearch = () => {
 
 
           </div>
-          <h1 className='advancetext mt-5' style={{ zIndex: "2" }}> Search Results</h1>
+          <h1 ref={ref} className='advancetext mt-5' style={{ zIndex: "2" }}> Search Results</h1>
 
-          <Suspense fallback={<div style={{ color: "white" }}></div>}>
+          <Suspense  fallback={<div style={{ color: "white" }}></div>}>
             <SearchResults searchQuery={searchQuery} pageisLoading={ispageLoading} />
           </Suspense>
 

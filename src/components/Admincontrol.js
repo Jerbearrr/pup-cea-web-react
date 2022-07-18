@@ -423,7 +423,7 @@ const setdayFormSubmit = async(event) => {
     await bookService.setdaylimit(form)
       .then(async(res) => {
        if(res){
-        toast.success('day limit changed successfully')
+        toast.success('Borrow Settings changed successfully')
               try {
     const featureddaylimit = await bookService.getdaylimit().then((res)=>{
 
@@ -533,7 +533,7 @@ const setdayFormSubmit = async(event) => {
   }
     return (
       
-        <div className='text-white ' style={{  overflow:'hidden', backgroundColor:'#18191a' }}>
+        <div className='text-white ' style={{  overflow:'hidden' }}>
                  <Modal
                 isOpen={modalIsOpen.open}
                 shouldCloseOnOverlayClick={true}
@@ -651,13 +651,13 @@ const setdayFormSubmit = async(event) => {
                         <div className='mt-5 flex grid grid-cols-12 laptop:gap-12 phone:gap2'>
 
                             <div className='flex tabletlg:col-span-5 phone:col-span-12 flex-col'>
-                                <h6>Featured Books</h6>
+                                <h6 className='text-black'>Featured Books</h6>
                                 <p>
                                     Set Books that will be featured in the homepage
                                 </p>
                             </div>
 
-                            <div className='flex tabletlg:col-span-6 phone:col-span-12 flex-col searchuserscont'>
+                            <div className='flex tabletlg:col-span-6 phone:col-span-12 flex-col searchuserscont mt-2' style={{   backgroundColor:'#18191a', color:'white' }}>
                                 
                                 <div className='controlusercont flex flex-col laptop:p-6 tablet:p-4 phone:p-1'>
                                
@@ -672,6 +672,7 @@ const setdayFormSubmit = async(event) => {
                           <div className="relative w-full text-white self-end px-0 topsearchcont " style={{display:'flex'}}>
                         <div className='absolute inset-o w-full flex flex-col'>
                           <div className={`absolute searchresultbar searchresultbartop `  + ( searchresultdiv ? 'block' : 'hidden') } >
+                            <div className='relative flex w-full flex-col' style={{overflow:'auto', height:'200px'}}>
                   
                   {searchloading?
                       <div className="resultcontainer w-full pointer-events-none flex flex-row grid grid-cols-12 loadingcont" >
@@ -714,15 +715,16 @@ const setdayFormSubmit = async(event) => {
                           </div> 
                   </div>
                   </div>
+                  </div>
                                               </div>
                                         </div>
-                                        <div className='controlsubmit flex items-center justify-center col-span-2'>
+                                        <div className='controlsubmit flex items-center justify-center col-span-2 border'>
                                            <button onClick={()=>addfeatured()} > Add </button>
                                         </div>
                                        
                                     </div>
                                
-                                   <div className='controluercontentcont mt-3 flex flex-col w-full'>
+                                   <div className='controluercontentcont mt-3 flex flex-col w-full '>
 
                                     {
                                       !isfeaturedloading && fetchfeaturedbooks ?
@@ -766,14 +768,14 @@ const setdayFormSubmit = async(event) => {
                          <div className='mt-5 flex grid grid-cols-12 laptop:gap-12 phone:gap2 mt-6 '>
 
                             <div className='flex tabletlg:col-span-5 phone:col-span-12 flex-col mt-6'>
-                                <h6>Custom quote</h6>
+                                <h6 className='text-black'>Custom quote</h6>
                                 <p>
                                     Set quote that will be seen on the home page
                                 </p>
                             </div>
 
                             <div className='flex tabletlg:col-span-6 phone:col-span-12 flex-col searchuserscont tabletlg:mt-6 phone:mt-2'>
-                                 <h6 className='text-sm font-normal'> Enter quote here (no need for quotations marks)</h6>
+                                 <h6 className='text-sm font-normal text-black'> Enter quote here (no need for quotation marks)</h6>
                                  <form   onSubmit={onFormSubmit} >
                                   <textarea defaultValue={fetchquote? fetchquote: ''} rows="1" name="quote" 
                              className='textareadesc w-full text-black' 
@@ -805,7 +807,7 @@ const setdayFormSubmit = async(event) => {
                           <div className='mt-5 flex grid grid-cols-12 laptop:gap-12 phone:gap2 mt-6 '>
 
                             <div className='flex tabletlg:col-span-5 phone:col-span-12 flex-col mt-6'>
-                                <h6>Borrow Settings</h6>
+                                <h6 className='text-black'>Borrow Settings</h6>
                                 <p>
                                    Set the duration (in days)  when borrowing books, digital files, before it is declared as late. Limit the duration of borrowed private digital files and manage the borrow records  
                                 </p>
@@ -863,19 +865,19 @@ period to view the file . (Default: 7 days)</p>
                        <div className='mt-5 flex grid grid-cols-12 laptop:gap-12 phone:gap2 '>
 
                             <div className='flex tabletlg:col-span-5 phone:col-span-12 flex-col'>
-                                <h6>Manage Users</h6>
+                                <h6 className='text-black'>Manage Users</h6>
                                 <p>
                                     Viewing and deleting user information 
                                 </p>
                             </div>
 
-                            <div className='flex tabletlg:col-span-6 phone:col-span-12 flex-col searchuserscont'>
+                            <div className='flex tabletlg:col-span-6 phone:col-span-12 flex-col searchuserscont mt-2' style={{   backgroundColor:'#18191a', color:'white', overflow:'hidden' }}>
                                 
                                 <div className='controlusercont flex flex-col laptop:p-6 tablet:p-4 phone:p-1'>
                                
                                     <div className='controlsearcher w-full flex flex-row grid grid-cols-12 gap-2'>
                                         
-                                        <div className='controlsearchersearcher col-span-11'>
+                                        <div className='controlsearchersearcher tablet:col-span-11 phone:col-span-10 '>
                                               <div className="form-groupaddbook  flex flex-col ">
                                    
                                               <input type="text " autoComplete='off'  className='py-1 px-1 controlsearcherins font-normal ' name="searchbook" placeholder="Search user..." 
@@ -885,8 +887,8 @@ period to view the file . (Default: 7 days)</p>
                        
                                               </div>
                                         </div>
-                                         <div className='flex col-span-1 items-center justify-center'>
-                                          <button className='bg-gray-900 h-full w-full flex items-center justify-center' onClick={reloaduser}><FiRefreshCcw color='white'/></button> 
+                                         <div className='flex tablet:col-span-1 phone:col-span-2 items-center justify-center'>
+                                          <button className='bg-gray-900 h-full w-full flex items-center justify-center border '  onClick={reloaduser}><FiRefreshCcw color='white'/></button> 
 
                                          </div>
                                      
@@ -946,14 +948,14 @@ period to view the file . (Default: 7 days)</p>
                          <div className='mt-5 flex grid grid-cols-12 laptop:gap-12 phone:gap2 mt-6 '>
 
                             <div className='flex tabletlg:col-span-5 phone:col-span-12 flex-col mt-6'>
-                                <h6>Add Admin Account</h6>
+                                <h6 className='text-black'>Add Admin Account</h6>
                                 <p>
                                     Adding another admin account to manage the library
                                 </p>
                             </div>
 
                             <div className='flex tabletlg:col-span-6 phone:col-span-12 flex-col searchuserscont tabletlg:mt-6 phone:mt-2'>
-                                 <h6 className='text-sm font-normal'> Enter new admin account details here </h6>
+                                 <h6 className='text-sm font-normal text-black'> Enter new admin account details here </h6>
                                  <form   onSubmit={onadminFormSubmit} >
                                 <h6 className='mt-3 text-sm font-normal'> Enter Admin Email</h6>
                           <input  className='w-full text-black' name='email' required  type='text'></input>

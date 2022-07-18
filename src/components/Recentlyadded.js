@@ -58,7 +58,7 @@ const Recentlyadded = () => {
         <div className='relative advancedsearchcont2  w-full  pt-7 pb-16 px-1'>
         
           <h1 className='advancetext mt-5 mb-3' style={{ zIndex: "2" }}> Recently Added </h1>
-           <div style={{ zIndex: "2" }} className='searchresultcont w-full grid grid-row-2 desktop:grid-cols-6 laptop:grid-cols-6 tabletlg:grid-cols-4 tablet:grid-cols-4 phone:grid-cols-3 phone:gap-1 tablet:gap-1 tabletlg:gap-3 '>
+           <div style={{ zIndex: "2" }} className='searchresultcont w-full grid grid-row-2 desktop:grid-cols-6 laptop:grid-cols-6 tabletlg:grid-cols-4 tablet:grid-cols-4 phone:grid-cols-3 phone:gap-2 tablet:gap-2 tabletlg:gap-3 '>
          
             {
                 seemore.bookquery?.length && !isLoading > 0 ?

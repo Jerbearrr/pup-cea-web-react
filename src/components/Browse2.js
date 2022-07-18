@@ -12,7 +12,8 @@ import Carousel from 'react-material-ui-carousel'
 
 import { useDispatch, useSelector } from 'react-redux';
 import { getFeaturedBook, getRecentlyAdded, resetBook, getlikedbooks, getJournals, getRandomBook } from '../features/book/bookSlice';
-import { Swiper, SwiperSlide,  Autoplay, } from "swiper/react";
+import { Swiper, SwiperSlide } from "swiper/react";
+import SwiperCore, { EffectFade ,  Autoplay} from 'swiper';
 import "swiper/css";
 import "swiper/css/effect-fade";
 import "swiper/css/navigation";
@@ -21,7 +22,7 @@ import "swiper/css/pagination";
 
 
 // import required modules
-import { EffectFade,  Pagination } from "swiper";
+import {  Pagination } from "swiper";
 import { format } from 'date-fns';
 import Renderonview from './Renderonview';
 const Browse2 = () => {
@@ -152,23 +153,28 @@ const Browse2 = () => {
        <p className='text-2xl font-bold'>Web Library</p>
     </div>
     <div className='phone:col-span-12 laptop:col-span-9 newrandomizerparentcont'>
-    <div className='newrandomizercontainer relative flex flex-row  w-full   '>
+    <div className='newrandomizercontainer relative flex flex-row  w-full  phone:border-0 tablet:border-b'>
     <p className='absolute laptop:mt-5  phone:mt-3 tablet:ml-3 laptop:ml-5 phone:ml-1 tablet:text-2xl phone:text-base font-bold newrandtext'>Random Books</p>
 
 
        <Swiper
-        spaceBetween={30}
-        effect={"fade"}
-        autoplay={{
-          delay: 2500,
-          disableOnInteraction: false,
+       fadeEffect= {{ crossFade: true }}
+   loop= {true}
+    autoplay= {{
+        delay: 3000,
         }}
+    effect= "fade"
+
+
+
+     
+   
        
         
         pagination={{
           clickable: true,
         }}
-        modules={[EffectFade, Pagination]}
+        modules={[EffectFade, Pagination, Autoplay]}
         className="mySwiper"
       >
                {
@@ -483,14 +489,14 @@ const Browse2 = () => {
 
     
 
-     <div className='newmostrecentcontainer laptop:col-span-9 phone:col-span-12 flex flex-col  w-full desktop:p-5 laptop:p-3 phone:p-1 phone:pt-5 desktop:pt-0 phone:mt-1 laptop:mt-0'>
-    <div className='newtitleheader flex flex-row justify-between w-full mb-5 laptop:mt-5 phone:mt-0'>
+     <div className='newmostrecentcontainer laptop:col-span-9 phone:col-span-12 flex flex-col  w-full desktop:p-5 laptop:p-3 phone:p-1 phone:pt-2 tablet:pt-4 desktop:pt-0 phone:mt-0 tablet:mt-2 laptop:mt-0'>
+    <div className='newtitleheader flex flex-row justify-between w-full tablet:mb-3 laptop:mb-5 phone:mb-2  laptop:mt-5 phone:mt-0'>
       <p className='tabletlg:text-xl phone:text-lg font-bold'>Most Recent</p>
       <button className=' seemorebutton border-transparent flex items-center justify-between flex-row'><Link className='mr-1 text-white' to='/recentlyadded'> View more</Link><FaChevronRight color="white" /></button>
     </div>
     
 
-    <div  className='newrecentcont grid tablet:grid-cols-4 phone:grid-cols-3 tablet:gap-2 laptop:gap-3 phone:gap-1 pb-2'>
+    <div  className='newrecentcont grid tablet:grid-cols-4 phone:grid-cols-3 tablet:gap-2 laptop:gap-3 phone:gap-2 pb-2'>
         { !recentlyloaded  ?
               (recentlyAdded?.map(book => (
                 <Link to={`/openbook/${book._id}`} key={book._id}>
@@ -606,14 +612,14 @@ const Browse2 = () => {
     
  
     </div>
-    <div ref={ref2} className='newmostrecentcontainer laptop:col-span-9 phone:col-span-12 flex flex-col  w-full desktop:p-5 laptop:p-3 phone:p-1 phone:pt-5 desktop:pt-0 phone:mt-5 laptop:mt-0 phone:flex laptop:hidden'>
-    <div className='newtitleheader flex flex-row justify-between w-full mb-5'>
+    <div ref={ref2} className='newmostrecentcontainer laptop:col-span-9 phone:col-span-12 flex flex-col  w-full desktop:p-5 laptop:p-3 phone:p-1 phone:pt-2 tablet:pt-4 desktop:pt-0 phone:mt-3  laptop:mt-0 phone:flex  laptop:hidden'>
+    <div className='newtitleheader flex flex-row justify-between w-full tablet:mb-3 laptop:mb-5 phone:mb-2'>
       <p className='tabletlg:text-xl phone:text-lg font-bold'>Most Liked</p>
       <button className=' seemorebutton border-transparent flex items-center justify-between flex-row'><a className='mr-1 text-white' href='/recentlyadded'> View more</a><FaChevronRight color="white" /></button>
     </div>
     
 
-    <div  className='newrecentcont grid tablet:grid-cols-4 phone:grid-cols-3 tablet:gap-2 laptop:gap-3 phone:gap-1 pb-2'>
+    <div  className='newrecentcont grid tablet:grid-cols-4 phone:grid-cols-3 tablet:gap-2 laptop:gap-3 phone:gap-2 pb-2'>
        { !likeloading   ?
               (likedbooks?.map(book => (
                 <Link to={`/openbook/${book._id}`} key={book._id}>
@@ -717,11 +723,11 @@ const Browse2 = () => {
         <div className='homefeaturedcont recentjournbg laptop:px-5 tablet:px-3 phone:px-0.5'>
      
 
-          <div className='flex  mb-2  flex-row justify-between items-center mt-3'>
-            <h3 className='mb-1 phone:ml-1 laptop:ml-0 tabletlg:text-xl phone:text-lg h2h'>Recent Journals</h3>
+          <div className='flex  tablet:mb-3 laptop:mb-2 phone:mb-2  flex-row justify-between items-center mt-3'>
+            <h3 className=' phone:ml-1 laptop:ml-0 tabletlg:text-xl phone:text-lg h2h'>Recent Journals</h3>
             <Link to='/journals' className='seemorebutton border-transparent flex items-center justify-between flex-row'><p className='mr-1 text-white' > View more</p><FaChevronRight color="white" /></Link>
           </div>
-          <div className='phone:px-0.5 desktop:px-0 grid laptop:grid-cols-2 tabletlg:grid-cols-1 tablet:grid-cols-1 phone:grid-cols-1 gap-3 mb-5 py-2'>
+          <div className='phone:px-0.5 desktop:px-0 grid laptop:grid-cols-2 tabletlg:grid-cols-1 tablet:grid-cols-1 phone:grid-cols-1 tablet:gap-3 phone:gap-2 mb-5 py-2'>
 
            {!journalloading   ?
               (getjournals?.bookquery?.map((book) => (

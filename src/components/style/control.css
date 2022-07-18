@@ -1,104 +1,139 @@
-.controlcont{
-  
+.controlcont {
+
     max-width: 1160px;
     width: 100%;
-   
-  
-    
-}
-.controlheadercont{
-    border-bottom: 1px solid #7070707f;
-}
-.controlheadercont .tabactive{
-    background-color: transparent;
-    border-bottom: 2px solid #ffffff;
-color: white;
+
+
 
 }
+
+.controlheadercont {
+    border-bottom: 1px solid #7070707f;
+}
+
+.controlheadercont .tabactive {
+    background-color: transparent;
+    border-bottom: 2px solid #454545;
+    color: black;
+
+}
+
 .controlheadercont .tabinactive {
     background-color: transparent;
 
-color: white;
+    color: black;
 
 }
+
 .controlheadercont button:first-child {
     margin-right: 1.3em !important;
     margin-left: 0px !important;
     padding: 1px 0px !important;
-    padding-right: 10px!important ;
+    padding-right: 10px !important;
     font-weight: 600;
     letter-spacing: normal;
 }
-.controlheadercont button{
-    margin-right: 1.5em!important;
-    margin-left: 0px!important;
-    padding: 1px 10px!important;
+
+.controlheadercont button {
+    margin-right: 1.5em !important;
+    margin-left: 0px !important;
+    padding: 1px 10px !important;
     font-weight: 600;
     letter-spacing: normal;
 }
-.controlcont h6{
+
+.controlcont h6 {
     font-size: 1rem;
     font-weight: 500;
     letter-spacing: normal;
 }
-.controlcont p{
+
+.controlcont p {
     font-size: 0.8rem;
     letter-spacing: normal;
-    color: rgb(163, 163, 163);
+    color: rgb(84, 84, 84);
 }
-.controlusercont{
-    border: 1px solid rgb(163, 163, 163);
+
+.controlusercont {
+    border: 1px solid #7070707f;
     height: 300px;
+ 
+    overflow: hidden;
+}
+.controluercontentcont{
     overflow-y: auto;
-    overflow-x: hidden;
+        overflow-x: hidden;
 }
-.controlsearcherins{
+
+.controlsearcherins {
     border: 1px solid #454545;
-    border-radius: 0!important;
+    border-radius: 0 !important;
 }
-.controlsubmit{
+
+.controlsubmit {
     background-color: #202125;
     border-radius: 2px;
     color: white;
 }
-.controlusercontent p{
+
+.controlusercontent p {
     font-size: 0.9rem;
-    color: rgb(163, 163, 163);
+    color: rgb(255, 255, 255);
 
 }
-.controlremover p{
-font-size: 0.8rem;
-color: rgb(84, 84, 84) ;
+
+.controlremover p {
+    font-size: 0.8rem;
+    color: rgb(138, 138, 138);
 }
-.controlusercontent{
-border-bottom: 1px solid #7070707f;
+
+.controlusercontent {
+    border-bottom: 1px solid #7070707f;
 }
-.controltitle{
+
+.controltitle {
     display: -webkit-box;
-        -webkit-line-clamp: 2;
-        -webkit-box-orient: vertical;
-        overflow: hidden;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
 }
-.searchuserscont form textarea{
-    border:1px solid #7070707f;
+
+.searchuserscont form textarea {
+    border: 1px solid #7070707f;
 
 }
+
 .searchuserscont form input {
     border: 1px solid #7070707f;
 
 }
-.deletewarningbtn{
-    background-color: rgb(235, 34, 34);
-    color:white;
+.searchuserscont form h6{
+    color: black;
 }
-.rolebox{
-    color:white;
+
+.deletewarningbtn {
+    background-color: rgb(235, 34, 34);
+    color: white;
+}
+
+
+.rolebox {
+    color: white;
     border: 1px solid rgba(0, 0, 0, 0.437);
     border-radius: 5px;
 }
-.twolineonly{
+
+.twolineonly {
     display: -webkit-box;
-        -webkit-line-clamp: 2!important;
-        -webkit-box-orient: vertical;
-        overflow: hidden;
+    -webkit-line-clamp: 2 !important;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+
+.recentcard:hover{
+   
+    margin-top: -5px;
+    transition: 0.3s;
+
+
 }

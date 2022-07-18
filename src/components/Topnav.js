@@ -425,9 +425,13 @@ const Topnav = () => {
     
    
     setnotifActive(!notifActive)
+
+   
+  
     
     if(notifActive){
-     document.removeEventListener("click", onClickOutsideNotifListener)
+     
+    
      
      if(user.role === 'b521c'){
 console.log('wkwkw1')
@@ -467,10 +471,20 @@ console.log('wkwkw1')
   };
 
   const onClickOutsideNotifListener = () => {
+    
+    if(notifActive){
+      setnotifActive(!notifActive)
+       document.removeEventListener("click", onClickOutsideNotifListener)
+    }else{
+       document.addEventListener("click", onClickOutsideNotifListener)
+    }
+    
+
   
-    setnotifActive(false)
-    document.removeEventListener("click", onClickOutsideNotifListener)
+   
   
+ 
+   
   }
 
 
@@ -500,9 +514,9 @@ if(currentloc === '/'){
     return (
       <div className='hometopnavdivcont'>
  <div className='relative'>
-        <div className='topnavcont phone:hidden laptop:block '> </div>
+        <div className='topnavcont phone:hidden laptop:block z-10'> </div>
 
-        <div className='navcont  ' >
+        <div className='navcont z-10 ' >
           <div className='navcontlist '>
             <div className='navcontul phone:py-3 tablet:py-5 laptop:py-6' >
 
@@ -644,7 +658,7 @@ if(currentloc === '/'){
                   
 
                 </div>
-                <div className='searchbartop phone:justify-end '>
+                <div className='searchbartop phone:justify-end mr-1'>
 
                   <form className='relative flex tablet:pl-0 flex-col phone:pl-8 tablet:ml-0 phone:mr-0 tablet:mr-1 tabletlg:mr-0 ' action='/advancedsearch'>
                     <input  autoComplete='off' className='w-full   searchfield2  pr-10 phone:mr-1 tablet:mr-0' type="text" name="title" placeholder="Search book..." ref={elementRef} onChange={e => setDebouncedTerm(e.target.value)}  
@@ -654,7 +668,7 @@ if(currentloc === '/'){
                     <button type="submit" title="Search" aria-label="Submit Search" className='searchbtn2 ml-2 phone:mr-1.5 tablet:mr-0.5'><div><FaSearch /></div></button>
                        <div className="relative self-end px-0 topsearchcont " style={{display:'flex'}}>
                         <div className='absolute inset-o w-full phone:hidden tablet:flex flex-col'>
-                          <div className={`absolute searchresultbar2 searchresultbartop `  + ( searchresultdiv ? 'block' : 'hidden') } >
+                          <div className={`absolute searchresultbar2 searchresultbartop  `  + ( searchresultdiv ? 'block' : 'hidden')  } >
                   
                   {searchloading?
                       <div className="resultcontainer w-full pointer-events-none flex flex-row grid grid-cols-12 loadingcont" >
@@ -694,7 +708,8 @@ if(currentloc === '/'){
 
                 </div>
                 <div className='mt-8 phone:block tablet:hidden w-full absolute inset-0'>
-                     <div className={`absolute searchresultbar2 searchresultbartop flex-col `  + ( searchresultdiv ? 'flex' : 'hidden')  } >
+                     <div className={`absolute phone:h-screen tablet:h-fit searchresultbar2 searchresultbartop flex-col `  + ( searchresultdiv ? 'flex' : 'hidden')  } >
+                      <div className='w-full flex justify-end pr-3 text-xs my-1 mb-2' onClick={() =>{divElement.value = ''} }><Link style={{color:'#007aff'}} className='mr-4 ' to={'/advancedsearch'}>advanced search</Link><button className='' style={{color:'#007aff'}}>close</button></div>
                   
                   {searchloading?
                       <div className="resultcontainer  pointer-events-none w-full flex mt-5 flex-row grid grid-cols-12 loadingcont" >
@@ -728,7 +743,7 @@ if(currentloc === '/'){
                   </div> 
                   </div>
               <div className='mt-9 phone:block tablet:hidden w-full absolute inset-0'>
-              <div className='notifCont phone:flex tablet:hidden' onClick={()=>  toggleNotif()}>
+              <div className='notifCont phone:flex tablet:hidden'   >
                 </div>  
                        
                     <InfiniteScroll
@@ -833,12 +848,30 @@ if(currentloc === '/'){
 
                   userexist && user ? (
                     <div className='flex flex-row '>
-                   <li className=' loginbtnnav laptop:ml-5 phone:ml-1 relative flex flex-col '  style={{boxShadow:'none'}}>
+                   <li className={` loginbtnnav laptop:ml-2 phone:-ml-1 relative flex flex-col ` + (searchresultdiv ? ' phone:hidden tablet:flex' : '')}  style={{boxShadow:'none'}}>
 
-                     <button className='notifprofile  phone:mr-1 phone:ml-1 tablet:ml-0  laptop:mr-3' onMouseLeave={() => {
-                   if(notifActive){ document.addEventListener("click", onClickOutsideNotifListener)}
+                     <button className='notifprofile  phone:mr-1 phone:ml-1 tablet:ml-0  laptop:mr-3' 
+                     
+                 
                   
-                  }} onClick={()=>{toggleNotif(); readnotif()}} > {notifActive? <IoMdNotifications color="white"  size="1.3em"/>:<IoMdNotificationsOutline color="white"  size="1.3em"/> } </button>
+                  onClick={()=>{
+                    toggleNotif()
+                    readnotif()
+                    if(notifActive === true){
+                    document.removeEventListener("click", onClickOutsideNotifListener)
+                    }
+                  }  
+                }
+                  
+                  onMouseLeave={() => {
+                    document.addEventListener("click", onClickOutsideNotifListener)
+                  
+                  }} > {notifActive? <IoMdNotifications color="white"  size="1.3em"
+                  
+                  
+                  />:<IoMdNotificationsOutline color="white"  size="1.3em"/> } 
+                 
+                  </button>
                       { unreadnotifs > 0?
                       <div className='unreadcounts absolute' onClick={()=> toggleNotif()}> <p>{unreadnotifs}</p></div>:null
                        } 
