@@ -704,7 +704,7 @@ const setdayFormSubmit = async(event) => {
                        </div>
                        <div  className=' resultdetails relative col-span-9 flex flex-col ' >
                          <p className="resultdetailstitle text-white ">{book.title}</p>
-                         <p className="resultdetailsauthor text-white mt-1">-{book.author}</p>
+                         <p className="resultdetailsauthor text-white mt-1">-{book.author.toString()}</p>
                        </div>                             
                       </div>
 

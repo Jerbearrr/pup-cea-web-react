@@ -2,6 +2,7 @@
     background-color: #202125;
     color: white;
     border-radius: 5px;
+    box-shadow: 0 1px 2px rgb(0 0 0 / 20%);
 }
 .newrandomizercontainer{
        
@@ -80,6 +81,11 @@
     height: 100%;
     
 }
+.bgset{
+    background-color: #313238;
+    color:white;
+    border-radius: 3px;
+}
 .newrandomizercontainer .slick-dots{
     bottom: 0!important;
     z-index: 4;
@@ -91,15 +97,18 @@
     background-color: #202125;
         color: white;
         overflow: hidden;
+        box-shadow: 0 1px 2px rgb(0 0 0 / 20%);
 }
 .newmostlikedtext{
-    background-color: #2A2C31;
+    background-color: #484b54;
     color: white;
 }
 .newmostrecentcontainer{
     background-color: #202125;
         color: white;
         border-radius: 5px;
+        box-shadow: 0 1px 2px rgb(0 0 0 / 20%);
+
 }
 .recentjournbg{
     background-color: #202125;
@@ -114,7 +123,7 @@
 }
 .newmostlikedimg{
     max-height: 70px ;
-    max-width: 40px!important;
+    max-width: 40px;
     background-color: #2A2C31;
 }
 .newmostlikedcontent{
@@ -226,6 +235,7 @@
 .newrandomizerparentcont{
     overflow: hidden;
     border-radius: 5px;
+    box-shadow: 0 1px 2px rgb(0 0 0 / 20%);
 }
 .willtrans{
     will-change: transform;
@@ -262,20 +272,22 @@
 .newrandomizerparentcont {
     overflow: hidden;
     border-radius: 0px;
+    box-shadow: 0 1px 2px rgb(0 0 0 / 20%);
 }
 }
 .initialtop{
     background-color: #202125;
     z-index: 3;
     display: flex;
-    animation: reducesize 0.3s;
-    -webkit-animation:reducesize 0.3s;
-        /* Safari, Chrome and Opera > 12.1 */
-        -moz-animation: reducesize 0.3s;
-        /* Firefox < 16 */
-        -ms-animation: reducesize 0.3s;
-        /* Internet Explorer */
-        -o-animation: reducesize 0.3s;
+        animation: reducesize 0.3s;
+            -webkit-animation: reducesize 0.3s;
+            /* Safari, Chrome and Opera > 12.1 */
+            -moz-animation: reducesize 0.3s;
+            /* Firefox < 16 */
+            -ms-animation: reducesize 0.3s;
+            /* Internet Explorer */
+            -o-animation: reducesize 0.3s;
+
 }
 
 @keyframes reducesize {
@@ -293,13 +305,13 @@
 }
 @-moz-keyframes reducesize {
     0% {
-            height: 53px;
+           
             display: flex;
         }
     
     
         100% {
-            height: 0px;
+        
             display: none;
         }
 }

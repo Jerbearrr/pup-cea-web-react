@@ -25,6 +25,7 @@ const Borrow = () => {
   const [pageloading, setpageloading] = useState(true)
   const [userloaded, setuserloaded] = useState(null)
     const [fetchdaylimit, setfetchdaylimit] = useState(null)
+      const [refresh ,setrefresh] = useState(false)
   const [options, setOptions] = useState([
     { value: 'all', label: 'All' },
     { value: 'pending', label: 'Pending' },
@@ -195,7 +196,7 @@ const Borrow = () => {
       }
     }
 
-  }, [page, selectedOptions, selectedTab, user, selectedfileOptions])
+  }, [page, selectedOptions, selectedTab, user, selectedfileOptions, refresh])
 
   useEffect(() => {
     setPages(getborrowedbook.pages)
@@ -207,6 +208,10 @@ const Borrow = () => {
   }, [fileRequests])
 
   const tabClicked = (tabstatus) => {
+    if(tabstatus === selectedTab){
+    setrefresh(!refresh)
+    }
+    setTabLoading(true)
     setSelectedTab(tabstatus);
     setPage(1);
 
@@ -294,7 +299,7 @@ const Borrow = () => {
 
                             </div>
                             <h4 className='removeunderline mt-1'  >{getborrowedbook.bookTitle}</h4>
-                            <h5 className='pt-0 phone:mt-0 tablet:mt-1 hide'>-{getborrowedbook.bookAuthor}</h5>
+                            <h5 className='pt-0 phone:mt-0 tablet:mt-1 hide'>-{getborrowedbook.bookAuthor.toString()}</h5>
                             <h6 className='phone:mt-1 tablet:mt-2 flex flex-row items-center'><span className='makethisbold mr-2 '>Borrow Date:</span> {new Date(getborrowedbook.borrowDate).toISOString().split('T')[0].replace(/-/g, '/')} 
                              {
                        getborrowedbook.borrowStatus === 'confirmed'?
@@ -366,7 +371,7 @@ const Borrow = () => {
                               </div>
                             </div>
                             <h4 className='removeunderline mt-1'  >{fileRequest.book_id?.title}</h4>
-                            <h5 className='pt-0'>-{fileRequest.book_id?.author}</h5>
+                            <h5 className='pt-0'>-{fileRequest.book_id?.author.toString()}</h5>
                             <h6><span className='makethisbold mr-2'>Approval Date:</span>{fileRequest.approveDate && format(new Date(fileRequest.approveDate), 'MMMM d, yyyy (h:mm aa)')}</h6>
                             <h6><span className='makethisbold mr-2'>Expiration Date:</span>{fileRequest.expirationDate && format(new Date(fileRequest.expirationDate), 'MMMM d, yyyy (h:mm aa)')}</h6>
                           </div>

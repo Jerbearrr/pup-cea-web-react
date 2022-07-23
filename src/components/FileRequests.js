@@ -15,7 +15,7 @@ import axios from 'axios';
 import Pagination from './Pagination';
 import { toast } from 'react-toastify';
 import { digitalCopyApi } from '../features/auth/requests';
-
+import {BsCheckCircleFill, BsXCircleFill} from 'react-icons/bs'
 const FileRequests = () => {
 
   const queryString = window.location.search;
@@ -29,6 +29,7 @@ const FileRequests = () => {
   const [entries, setEntries] = useState(null);
   const [page, setPage] = useState(urlParams.get('page') ?urlParams.get('page'): pageNumber);
   const [dataloader, setDataloader]= useState(false)
+  const [refresh ,setrefresh] = useState(false)
   const navigate = useNavigate()
   const dispatch = useDispatch()
 
@@ -92,7 +93,7 @@ const FileRequests = () => {
       }
     }
 
-  }, [user, page,dataloader ])
+  }, [user, page,dataloader, refresh ])
 
   const onLogout = () => {
     setuserloaded(null)
@@ -168,7 +169,7 @@ const FileRequests = () => {
             <div className='text-black recenthead recentContCont '>
 
               <div className='overflow-x-auto overflow-y-hidden flex bookmarkshead  mt-3 mb-2 flex-row  items-center'>
-                <button className="mr-0.5 group whitespace-nowrap  items-center px-2 py-1  tabactive">Digital Copy Requests</button>
+                <button className="mr-0.5 group whitespace-nowrap  items-center px-2 py-1  tabactive" onClick={()=> setrefresh(!refresh)}>Digital Copy Requests</button>
               </div>
 
               <div className='mb-24  grid laptop:grid-cols-2 tabletlg:grid-cols-1 tablet:grid-cols-1 phone:grid-cols-1 gap-1 '>
@@ -178,25 +179,24 @@ const FileRequests = () => {
                        entries?.fileRequests?.map(fileRequest => (
                         <div className='bookmarkcontainer text-white flex flex-row px-2 relative w-100 ' key={fileRequest?._id}>
                           <div className=' relative removeshadow text-white flex flex-col pl-2 w-100 ' style={{ zIndex: "2" }}>
-                            <div className='statusbar w-full flex  flex-row-reverse w-100'>
-                              <button type='button' onClick={() => (handleRequest(fileRequest?._id, true))} className='relative acceptbtn disabled:opacity-50' disabled={waitingResponse}>
-                                <h5 className=' stattext flex mx-3 flex-1  absolute'>Accept</h5>
-                                <svg className='' width="150" height="25">
-                                  <path d="m 1 0 c 6 2 24 -1 30 11 c 3 5 5 13 13 13 h 105 V 0" stroke="#202125" />
-                                </svg>
+                       
+                             <div className='absolute right-0 bottom-2 z-10 flex flex-row'>
+                              <button className='checkbuttonconf relative bg-gray mr-1 rounded-full '  onClick={() => (handleRequest(fileRequest?._id, false))} disabled={waitingResponse}>
+                                 <div className='absolute bg-white inset-2'></div>
+                                <BsXCircleFill fill='#A43033' size="2.0em" color='white' />
+                              </button>
+                               <button className='checkbuttonconf relative mr-1 bg-gray   rounded-full'  onClick={() => (handleRequest(fileRequest?._id, true))} disabled={waitingResponse}>
+
+                                <div className='absolute bg-white inset-2'></div>
+
+                                <BsCheckCircleFill fill='#3da450' size="2.0em" color='white'/>
                               </button>
 
-                              <button type='button' onClick={() => (handleRequest(fileRequest?._id, false))} className='relative declinebtn disabled:opacity-50' disabled={waitingResponse}>
-                                <h5 className=' stattext flex mx-2 flex-1  absolute'>Decline</h5>
-                                <svg className='' width="150" height="25">
-                                  <path d="m 1 0 c 6 2 24 -1 30 11 c 3 5 5 13 13 13 h 106 C 143 21 143 18 140 12 C 133 0 127 2 109 -1" stroke="#202125" />
-                                </svg>
-                              </button>
 
                             </div>
 
 
-                            <h4 className='removeunderline my-1'>{fileRequest?.book_id?.title}</h4>
+                            <h4 className='removeunderline twolineonly my-1 mt-3'>{fileRequest?.book_id?.title}</h4>
                             <h6 className='onelineonly'><span className='makethisbold mr-2'>Requested by:</span>{`${fileRequest?.borrower_id?.firstName} ${fileRequest?.borrower_id.lastName}`}</h6>
                             <h6 className='onelineonly'><span className='makethisbold mr-2'>Department:</span>{fileRequest?.borrower_id?.department}</h6>
                           </div>

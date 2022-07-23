@@ -376,6 +376,17 @@ border: 1px solid rgba(255, 255, 255, .3);
         filter: blur(20px);
         opacity: .35;
 }
+.blurcontainer2 {
+    position: absolute;
+    top: -20px;
+    left: -20px;
+    right: -20px;
+    bottom: -20px;
+    background-size: cover;
+    background-position: center center;
+
+    opacity: .35;
+}
 .blurcontainer2{
     position: absolute;
         top: -20px;

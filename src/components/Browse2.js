@@ -19,7 +19,7 @@ import "swiper/css/effect-fade";
 import "swiper/css/navigation";
 import "swiper/css/pagination";
 
-
+import bookService from '../features/book/bookService';
 
 // import required modules
 import {  Pagination } from "swiper";
@@ -36,6 +36,8 @@ const Browse2 = () => {
   const [likeloading, setlikeloading] = useState(true)
   const [journalloading, setjournalloading] =useState(true)
   const [recentlyloaded, setrecentlyloaded]=useState(true)
+  const [topcontri, settopcontri] = useState(null)
+   const [toploading, settoploading] = useState(true)
 
   const ref = useRef()
   const ref2 = useRef()
@@ -48,9 +50,26 @@ const Browse2 = () => {
   useEffect(()=>{
      window.scrollTo(0, 0);
   },[])
-  useEffect(()=>{
-
+  useEffect(async()=>{
+    
     if(isVisible && journalloading){
+
+       
+    try {
+    const topcontri = await bookService.topcontributor().then((res)=>{
+
+        if(res){
+          settopcontri(res)
+          settoploading(false)
+         
+   
+      
+        }
+      })
+      
+    } catch (error) { 
+       console.log(error);
+    }
         
       dispatch(getJournals({ page:page, limiter:limiter })).then(res=>{
         if(res){
@@ -186,14 +205,14 @@ const Browse2 = () => {
   <div className='w-full  setmin h-full phone:flex tablet:hidden relative  flex-row  laptop:pt-5 phone:pt-3 laptop:pl-5 phone:pl-3 phone:pr-3 laptop:pr-5 '  draggable='true' onDragStart={(e) => {e.preventDefault()}} >
     <div className='absolute parentabsoluter'>
               
-                 <div className={'absolute ' +  (bookfeatured && bookfeatured.imgUri ? 'blurcontainer' : 'blurcontainer2') } style={{ backgroundImage: 'url(' + `${bookfeatured ? bookfeatured.imgUri ? bookfeatured.imgUri : require('.//style/images/bg3.png') : null}` + ')'}} > </div>   
+                 <div className={'absolute ' +  (bookfeatured && bookfeatured.imgUri ? 'blurcontainer2' : 'blurcontainer2') } style={{ backgroundImage: 'url(' + `${bookfeatured ? bookfeatured.imgUri ? bookfeatured.imgUri : require('.//style/images/bg3.png') : null}` + ')'}} > </div>   
                 
     </div>
     <div className='newrandTitlecont tablet:basis-3/5 phone:basis-5/5 flex flex-col items-center ' draggable='true' onDragStart={(e) => {e.preventDefault()}}>
       <div className='newrandTitlecontins tablet:mt-10 phone:mt-5 flex flex-col mb-5 pt-5 tablet:pl-5 phone:pl-0' draggable='true' onDragStart={(e) => {e.preventDefault()}}>
 
         <h1 className='tablet:text-2xl laptop:text-3xl phone:text-xl font-bold newrandtitle' draggable='true' onDragStart={(e) => {e.preventDefault()}}>{bookfeatured.title}</h1>
-        <p className='laptop:text-lg tablet:text-base phone:text-sm tablet:mt-3 phone:mt-1 newrandauthor' draggable='true' onDragStart={(e) => {e.preventDefault()}}>-{bookfeatured.author}</p>
+        <p className='laptop:text-lg tablet:text-base phone:text-sm tablet:mt-3 phone:mt-1 newrandauthor' draggable='true' onDragStart={(e) => {e.preventDefault()}}>-{bookfeatured.author.toString()}</p>
       </div>
      
     </div>
@@ -202,7 +221,7 @@ const Browse2 = () => {
  <div className='w-full h-full phone:hidden relative tablet:flex flex-row  pt-5 pl-5 pr-5 ' onMouseDown={()=> {return false;}}   onDragStart={(e) => {e.preventDefault()}} >
            <div className='absolute parentabsoluter'>
               
-                 <div className={'absolute ' +  (bookfeatured && bookfeatured.imgUri ? 'blurcontainer' : 'blurcontainer2') } style={{ backgroundImage: 'url(' + `${bookfeatured ? bookfeatured.imgUri ? bookfeatured.imgUri : require('.//style/images/bg3.png') : null}` + ')'}} > </div>   
+                 <div className={'absolute ' +  (bookfeatured && bookfeatured.imgUri ? 'blurcontainer2' : 'blurcontainer2') } style={{ backgroundImage: 'url(' + `${bookfeatured ? bookfeatured.imgUri ? bookfeatured.imgUri : require('.//style/images/bg3.png') : null}` + ')'}} > </div>   
                 
     </div>
     
@@ -210,7 +229,7 @@ const Browse2 = () => {
       <div className='newrandTitlecontins mt-10 flex flex-col mb-5 pt-5 pl-5'>
 
         <h1 className='text-3xl font-bold newrandtitle' draggable='true' onDragStart={(e) => {e.preventDefault()}}>{bookfeatured.title}</h1>
-        <p className='text-lg mt-3 newrandauthor' draggable='true' onDragStart={(e) => {e.preventDefault()}}>-{bookfeatured.author}</p>
+        <p className='text-lg mt-3 newrandauthor' draggable='true' onDragStart={(e) => {e.preventDefault()}}>-{bookfeatured.author.toString()}</p>
         <p className='mt-5 newranddescription ' draggable='true' onDragStart={(e) => {e.preventDefault()}}>{bookfeatured.description}</p>
       </div>
      
@@ -343,13 +362,13 @@ const Browse2 = () => {
           
 
     <div ref={ref3} className='laptop:flex newmostliked flex-col  laptop:col-span-3  phone:col-span-12 phone:mt-5 laptop:mt-0  phone:hidden laptop:flex '>
-      <p className='w-full newmostlikedtext tablet:p-3 phone:p-1 text-lg font-bold mb-2'>Most Liked</p> 
+      <p className='w-full newmostlikedtext tablet:p-3 phone:p-1 tablet:text-lg phone:text-base font-bold mb-2'>Most Liked</p> 
          
           {!likeloading ?
               (likedbooks?.map((book,i) => (
                 <Link to={`/openbook/${book._id}`} key={book._id}>
                   <div className='newmostlikedcontent flex flex-row w-full items-center py-12   '>
-                <p className='topnumbers mx-3'>{String(i+1).padStart(2, '0')}</p>
+                <p className='topnumbers font-bold mx-3'>{String(i+1).padStart(2, '0')}</p>
       
                 <img className='newmostlikedimg ' src={book.imgUri ? book.imgUri : require('.//style/images/placeholder_book1.png')} />
                 <div className='flex flex-col newmostlikedtext2 justify-center'>
@@ -490,9 +509,9 @@ const Browse2 = () => {
     
 
      <div className='newmostrecentcontainer laptop:col-span-9 phone:col-span-12 flex flex-col  w-full desktop:p-5 laptop:p-3 phone:p-1 phone:pt-2 tablet:pt-4 desktop:pt-0 phone:mt-0 tablet:mt-2 laptop:mt-0'>
-    <div className='newtitleheader flex flex-row justify-between w-full tablet:mb-3 laptop:mb-5 phone:mb-2  laptop:mt-5 phone:mt-0'>
-      <p className='tabletlg:text-xl phone:text-lg font-bold'>Most Recent</p>
-      <button className=' seemorebutton border-transparent flex items-center justify-between flex-row'><Link className='mr-1 text-white' to='/recentlyadded'> View more</Link><FaChevronRight color="white" /></button>
+    <div className='newtitleheader flex flex-row justify-between w-full tablet:mb-3 laptop:mb-3 phone:mb-2  laptop:mt-4 phone:mt-0'>
+      <p className='tabletlg:text-xl tablet:text-lg phone:text-base font-bold'>Most Recent</p>
+      <Link to='/recentlyadded' className=' seemorebutton border-transparent flex items-center justify-between flex-row'><span className='mr-1 text-white' > View more</span><FaChevronRight color="white" /></Link>
     </div>
     
 
@@ -504,14 +523,14 @@ const Browse2 = () => {
                     <div className='h-full '>
                       <div className="overflow-hidden recentcard ">
 
-                        <div className='imagecont ' style={{ zIndex: "2" }}>
+                        <div className='imagecont ' style={{ zIndex: "2", backgroundColor:'#2f3136' }}>
                           <img className=" imagecontcont" src={book.imgUri ? book.imgUri : require('.//style/images/placeholder_book1.png')} alt="Mountain" />
                         </div>
 
                         <div className="px-1 carddet " style={{ zIndex: "2" }}>
                           <div className=" cardtitle ">{book.title}</div>
                           <p className=" cardauthor  mb-1">
-                            -{book.author}
+                            -{book.author.toString()}
                           </p>
                         </div>
 
@@ -607,15 +626,17 @@ const Browse2 = () => {
             
               </>}
     </div>
+
+    <Link to='/recentlyadded' className='w-full mt-3 rounded items-center justify-center phone:hidden laptop:flex font-semibold text-base journalcontainer' style={{ height:'38px', boxShadow:'0 1px 2px rgb(0 0 0 / 20%)'}}>+ See More</Link>
     
 
     
  
     </div>
-    <div ref={ref2} className='newmostrecentcontainer laptop:col-span-9 phone:col-span-12 flex flex-col  w-full desktop:p-5 laptop:p-3 phone:p-1 phone:pt-2 tablet:pt-4 desktop:pt-0 phone:mt-3  laptop:mt-0 phone:flex  laptop:hidden'>
-    <div className='newtitleheader flex flex-row justify-between w-full tablet:mb-3 laptop:mb-5 phone:mb-2'>
-      <p className='tabletlg:text-xl phone:text-lg font-bold'>Most Liked</p>
-      <button className=' seemorebutton border-transparent flex items-center justify-between flex-row'><a className='mr-1 text-white' href='/recentlyadded'> View more</a><FaChevronRight color="white" /></button>
+    <div ref={ref2} className='newmostrecentcontainer laptop:col-span-9 phone:col-span-12 flex flex-col  w-full desktop:p-5 laptop:p-3 phone:p-1 phone:pt-2 tablet:pt-4 desktop:pt-0 phone:mt-3  laptop:mt-0 phone:flex  laptop:hidden heightsetter' >
+    <div className='newtitleheader flex flex-row justify-between w-full tablet:mb-3 laptop:mb-3 phone:mb-2'>
+      <p className='tabletlg:text-xl tablet:text-lg phone:text-base font-bold'>Most Liked</p>
+      <Link to='/recentlyadded'  className=' seemorebutton border-transparent flex items-center justify-between flex-row'><span className='mr-1 text-white' > View more</span><FaChevronRight color="white" /></Link>
     </div>
     
 
@@ -630,14 +651,14 @@ const Browse2 = () => {
                       </div>
                       <div className="overflow-hidden recentcard ">
 
-                        <div className='imagecont ' style={{ zIndex: "2" }}>
+                        <div className='imagecont ' style={{ zIndex: "2", backgroundColor:'#2f3136' }}>
                           <img className=" imagecontcont" src={book.imgUri ? book.imgUri : require('.//style/images/placeholder_book1.png')} alt="Mountain" />
                         </div>
 
                         <div className="px-1 carddet " style={{ zIndex: "2" }}>
                           <div className=" cardtitle ">{book.title}</div>
                           <p className=" cardauthor  mb-1">
-                            -{book.author}
+                            -{book.author.toString()}
                           </p>
                         </div>
 
@@ -718,16 +739,109 @@ const Browse2 = () => {
  
     </div>
     </div>
+    <div ref={ref} className="flex  grid grid-cols-12 tabletlg:gap-4 phone:gap-1 mt-4">
+{!journalloading   ?
+              (getjournals?.bookquery?.length > 0?
+                <>
+    
+          
 
-      <div className='text-white homefeaturedbox2 mt-5 pb-10' ref={ref}>
-        <div className='homefeaturedcont recentjournbg laptop:px-5 tablet:px-3 phone:px-0.5'>
+    <div  className='laptop:flex newmostliked flex-col  laptop:col-span-3  phone:col-span-12 phone:mt-5 laptop:mt-0  phone:hidden  ' style={{backgroundColor:'#202125',color:'white', maxHeight:'432px', overflow:'hidden'}}>
      
+              <p className='w-full newmostlikedtext tablet:p-3 phone:p-1  tablet:text-lg phone:text-base font-bold mb-2'>Top Contributors</p> 
+         
+          {!toploading ?
+              (topcontri?.map((book,i) => (
+                <Link to={`/advancedsearch?title=&keyword=&author=${book.firstName} ${book.lastName}&publisher=&form=&isbn=&type=&startDate=&endDate=&genre=&sortType=`} key={book._id}>
+                  <div className='newmostlikedcontent px-2 flex flex-row w-full items-center    '>
+                { i === 0?
+                      
+                <img className='newmostlikedimg bg-transparent' src={require('.//style/images/goldmedal.png')} style={{maxHeight:'80px', maxWidth:'43px'}}/>:
+                 i=== 1?
+                <img className='newmostlikedimg bg-transparent' src={require('.//style/images/silvermedal.png')} />:   
+                 i=== 2?
+                <img className='newmostlikedimg bg-transparent' src={require('.//style/images/bronzemedal.png')} />:
+                <>
+                      <p className='topnumbers font-bold mx-3 border-0'>{String(i+1)}.</p>
+                
+                 </>
+                }
+ 
+               
+                <div className='flex flex-col newmostlikedtext2 justify-center'>
+                <p className='newmostlikedtiked px-2 font-bold   '>{book.firstName} {book.lastName}</p>
+                </div>
+                 </div>
+                </Link>
+              ))):<>
 
-          <div className='flex  tablet:mb-3 laptop:mb-2 phone:mb-2  flex-row justify-between items-center mt-3'>
-            <h3 className=' phone:ml-1 laptop:ml-0 tabletlg:text-xl phone:text-lg h2h'>Recent Journals</h3>
-            <Link to='/journals' className='seemorebutton border-transparent flex items-center justify-between flex-row'><p className='mr-1 text-white' > View more</p><FaChevronRight color="white" /></Link>
-          </div>
-          <div className='phone:px-0.5 desktop:px-0 grid laptop:grid-cols-2 tabletlg:grid-cols-1 tablet:grid-cols-1 phone:grid-cols-1 tablet:gap-3 phone:gap-2 mb-5 py-2'>
+              <div className='newmostlikedcontent  flex flex-row w-full items-center pt-4  pb-6 '>
+                
+              
+              
+                <div className='flex flex-col animate-pulse newmostlikedtext2 justify-center px-5 w-full'>
+                  <p className='w-full h-3 bg-zinc-600 rounded-2xl'></p>
+
+                 <h5 className='w-40 mt-2 h-2 bg-zinc-600 rounded-2xl'></h5>
+               
+                 </div>
+                
+               
+                </div>
+                  <div className='newmostlikedcontent  flex flex-row w-full items-center pt-4  pb-6 '>
+                
+              
+              
+                <div className='flex flex-col animate-pulse newmostlikedtext2 justify-center px-5 w-full'>
+                  <p className='w-full h-3 bg-zinc-600 rounded-2xl'></p>
+
+                 <h5 className='w-40 mt-2 h-2 bg-zinc-600 rounded-2xl'></h5>
+               
+                 </div>
+                
+               
+                </div>
+                  <div className='newmostlikedcontent  flex flex-row w-full items-center pt-4  pb-6 '>
+                
+              
+              
+                <div className='flex flex-col animate-pulse newmostlikedtext2 justify-center px-5 w-full'>
+                  <p className='w-full h-3 bg-zinc-600 rounded-2xl'></p>
+
+                 <h5 className='w-40 mt-2 h-2 bg-zinc-600 rounded-2xl'></h5>
+               
+                 </div>
+                
+               
+                </div>
+       
+       
+         
+      
+        
+              
+              
+              </>}
+  
+
+          
+               
+              
+
+   </div>
+
+    
+
+    
+
+    <div className='newmostrecentcontainer laptop:col-span-9 phone:col-span-12 flex flex-col  w-full desktop:p-5 laptop:p-3 phone:p-1 phone:pt-2 tablet:pt-4 desktop:pt-0 phone:mt-0 tablet:mt-2 laptop:mt-0'>
+    <div className='newtitleheader flex flex-row justify-between w-full tablet:mb-3 laptop:mb-1 phone:mb-1  laptop:mt-4 phone:mt-0'>
+      <p className=' tablet:text-lg phone:text-base font-bold'>Recent Journals</p>
+    <Link  to='/journals' className=' seemorebutton border-transparent flex items-center justify-between flex-row'><span className='mr-1 text-white' > View more</span><FaChevronRight color="white" /></Link>
+      </div>
+    
+
+    <div  className='phone:px-0.5 desktop:px-0 grid laptop:grid-cols-2 tabletlg:grid-cols-1 tablet:grid-cols-1 phone:grid-cols-1 tablet:gap-3 phone:gap-2 mb-5 py-2'>
 
            {!journalloading   ?
               (getjournals?.bookquery?.map((book) => (
@@ -735,15 +849,16 @@ const Browse2 = () => {
                    <div className='journalcontainer text-white flex flex-col p-3'>
                    <h4 className='text-justify align-middle'>{book.title}</h4>
                    <p>Date Published: {format(new Date(book.dateOfPublication), 'yyyy-MM-dd')}</p>
-                   <h5>{book.author}</h5>
-                   <h6 className='text-justify'>{book.description?book.description:'There are no descriptions for this book'}</h6>
+                   <h5>{book.author.toString()}</h5>
+                   <h6 className='text-justify'>{book.description?book.description:'There is no description for this journal'}</h6>
 
 
                   </div>
 
 
                 </Link>
-              ))):<>
+              ))):
+              <>
                          <div className='journalcontainer text-white animate-pulse w-full flex flex-col p-3 pt-6 pb-12'>
            
                    <p className='w-full h-4 bg-zinc-600 rounded-2xl'></p>
@@ -783,13 +898,86 @@ const Browse2 = () => {
          
 
           </div>
+    
+
+    
+ 
+    </div></>
+   :null):   <>
+    
+          
+
+    <div  className='laptop:flex  flex-col  laptop:col-span-3  phone:col-span-12 phone:mt-5 laptop:mt-0  phone:hidden  '>
+     
+         
+  
+
+          
+               
+              
+
+   </div>
+
+    
+
+    
+
+    <div className='newmostrecentcontainer laptop:col-span-9 phone:col-span-12 flex flex-col  w-full desktop:p-5 laptop:p-3 phone:p-1 phone:pt-2 tablet:pt-4 desktop:pt-0 phone:mt-0 tablet:mt-2 laptop:mt-0'>
+    <div className='newtitleheader flex flex-row justify-between w-full tablet:mb-3 laptop:mb-1 phone:mb-1  laptop:mt-4 phone:mt-0'>
+      <p className=' tablet:text-lg phone:text-base font-bold'>Recent Journals</p>
+      <Link to='/journals' className=' seemorebutton border-transparent flex items-center justify-between flex-row'><span className='mr-1 text-white' > View more</span><FaChevronRight color="white" /></Link>
+    </div>
+    
+
+    <div  className='phone:px-0.5 desktop:px-0 grid laptop:grid-cols-2 tabletlg:grid-cols-1 tablet:grid-cols-1 phone:grid-cols-1 tablet:gap-3 phone:gap-2 mb-5 py-2'>
+
+          
+                         <div className='journalcontainer text-white animate-pulse w-full flex flex-col p-3 pt-6 pb-12'>
+           
+                   <p className='w-full h-4 bg-zinc-600 rounded-2xl'></p>
+                   <h5 className='w-60 mt-5 h-3 bg-zinc-600 rounded-2xl'></h5>
+                   <h6 className='text-justify mt-3 h-3 w-60 bg-zinc-600 rounded-2xl'></h6>
 
 
+                  </div>
+                        <div className='journalcontainer text-white animate-pulse w-full flex flex-col p-3 pt-6 pb-12'>
+           
+                   <p className='w-full h-4 bg-zinc-600 rounded-2xl'></p>
+                   <h5 className='w-60 mt-5 h-3 bg-zinc-600 rounded-2xl'></h5>
+                   <h6 className='text-justify mt-3 h-3 w-60 bg-zinc-600 rounded-2xl'></h6>
 
 
+                  </div>
+                         <div className='journalcontainer text-white animate-pulse w-full flex flex-col p-3 pt-6 pb-12'>
+           
+                   <p className='w-full h-4 bg-zinc-600 rounded-2xl'></p>
+                   <h5 className='w-60 mt-5 h-3 bg-zinc-600 rounded-2xl'></h5>
+                   <h6 className='text-justify mt-3 h-3 w-60 bg-zinc-600 rounded-2xl'></h6>
 
-        </div>
-      </div>
+
+                  </div>
+                     <div className='journalcontainer text-white animate-pulse w-full flex flex-col p-3 pt-6 pb-12'>
+           
+                   <p className='w-full h-4 bg-zinc-600 rounded-2xl'></p>
+                   <h5 className='w-60 mt-5 h-3 bg-zinc-600 rounded-2xl'></h5>
+                   <h6 className='text-justify mt-3 h-3 w-60 bg-zinc-600 rounded-2xl'></h6>
+
+
+                  </div>
+                
+                  
+                
+           
+         
+
+          </div>
+    
+
+    
+ 
+    </div></>}
+
+     </div>
 
       </div>
     </div>

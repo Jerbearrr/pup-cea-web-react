@@ -62,7 +62,7 @@ document.cookie.match('(^|;)\\s*' + name + '\\s*=\\s*([^;]+)')?.pop() || ''
       
       <div className='my-class' onClick={handleMenu}></div>
       <div className={'app-menu ' + (isMenuOpen ? 'menu-open' : '')}>
-        <div className='menuheader py-4 px-4 ' style={{ backgroundImage: 'url(' + require('.//style/images/bg.png') + ')', backgroundPosition:'center' }} onClick={handleMenu} ><FaChevronLeft /> PUP WEB Library</div>
+        <div className='menuheader py-4 px-4 ' style={{ backgroundImage: 'url(' + require('.//style/images/bg.png') + ')', backgroundPosition:'center' }} onClick={handleMenu} ><FaChevronLeft /><p className='font-semibold'>PUP CEA WEB Library</p> </div>
         <ul className='mt-3 sidemenus flex flex-col '>
            
           <li className='sidemenu py-4'>
@@ -125,7 +125,7 @@ document.cookie.match('(^|;)\\s*' + name + '\\s*=\\s*([^;]+)')?.pop() || ''
            }
 
             <li className='sidemenu py-4'>
-                  <a href='/changepassword'> <h2>Change Password</h2></a>
+                  <Link to='/changepassword'> <h2>Change Password</h2></Link>
             </li>
          { user?.role === 'b521c' || user.role === '4d3b' ? 
            

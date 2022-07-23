@@ -1,4 +1,4 @@
-import React, { useState, useCallback, useRef, useEffect } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import { FaChevronDown, FaFileImage, FaSearch } from "react-icons/fa";
 import "./style/browse.css";
 import "./style/sidemenu.css";
@@ -9,16 +9,16 @@ import bookService from '../features/book/bookService';
 import { toast } from "react-toastify";
 import { useDispatch, useSelector } from "react-redux";
 import { getUser, reset, logoutUser } from "../features/auth/authSlice";
-import Menu from "./Menu";
+
 import { useNavigate } from "react-router-dom";
-import { IoMdNotificationsOutline} from "react-icons/io"
+
 import { IoCloseSharp} from "react-icons/io5"
-import { FaUserCircle } from "react-icons/fa";
+
 import { useTabs, TabPanel } from "react-headless-tabs"
 import { TabSelector } from './TabSelector';
-import jwt_decode from "jwt-decode";
+
 import { apiClientBook } from "../features/auth/requests";
-import { isFulfilled } from "@reduxjs/toolkit";
+
 import Modal from 'react-modal';
 import ButtonSpinner from './ButtonSpinner';
 const customStyles = {
@@ -184,9 +184,10 @@ const Addbook = () => {
 
   const [typeOptions, setTypeOptions] = useState();
   const [genreOptions, setGenreOptions] = useState();
+  const [authorOptions, setAuthorOptions] = useState();
   const [seriesOptions, setSeriesOptions] = useState();
   const [formOptions, setFormOptions] = useState();
-  const [imgData, setImgData] = useState(require('.//style/images/placeholder_book1.png'));
+  const [imgData, setImgData] = useState();
   const [editimgData, seteditImgData] = useState(require('.//style/images/placeholder_book1.png'));
   const inputRef = useRef(null);
   const dispatch = useDispatch();
@@ -198,6 +199,7 @@ const Addbook = () => {
   const [debouncedTerm, setDebouncedTerm] = useState(bookSearch);
   const [editbook, seteditBook] =useState(null);
   const [selecteditgenre, setselecteditgenre] = useState(null);
+   const [selecteditauthor, setselecteditauthor] = useState(null);
   const [selecteditseries, setselecteditseries] = useState(null);
   const [selecteditmaterial, setselecteditmaterial] = useState(null);
   const [selecteditform, setselecteditform] = useState(null);
@@ -228,11 +230,31 @@ const Addbook = () => {
     setselecteditgenre(options)
     return options;
 }
-
-
-
-
 }
+
+ const selectedauthoroptions = (author) => {
+ if(author){
+  let options = [];
+    // MAKE A LABEL FOR EACH GENRE VALUE
+    author.forEach(value => {
+
+      let label = value.split('_');
+      let formattedLabel = [];
+      //FORMAT LABEL INTO PROPER UPPERCASE AND CHANGE _ TO SPACE
+      label.forEach(word => {
+        formattedLabel.push(word.charAt(0).toUpperCase() + word.slice(1))
+      })
+
+      options = [...options, { value: value, label: formattedLabel.join(' ') }];
+
+    })
+    console.log(options)
+    setselecteditauthor(options)
+    return options;
+}
+}
+
+
  const selectedseriesoptions = (series) => {
 
  if(series){
@@ -320,6 +342,7 @@ const Addbook = () => {
       }
     }, [bookSearch]);
 
+
  const makeLabels = (values) => {
     let options = [];
     // MAKE A LABEL FOR EACH GENRE VALUE
@@ -367,9 +390,10 @@ const Addbook = () => {
   useEffect(async () => {
     window.scrollTo(0, 0);
     console.log('whyreq')
-    const { genres, types, forms, series } = await bookService.getUniqueFields();
+    const { genres, types, forms, series, author } = await bookService.getUniqueFields();
   
     setGenreOptions(makeLabels(genres));
+    setAuthorOptions(makeLabels(author))
     setSeriesOptions(makeLabels(series));
     setTypeOptions(makeLabels(types));
     setFormOptions(makeLabels(forms));
@@ -571,7 +595,7 @@ const onChangeeditPicture = e => {
    
   },[selectedTab])
 
-  if(user && user.role){
+
   return (
     <>
 
@@ -614,13 +638,13 @@ const onChangeeditPicture = e => {
               </Modal>
    
 
-      <div className='relative  flex '>
+      <div className='relative  flex ' style={{minHeight:'100vh', backgroundColor:'#202125'}}>
         <div className='w-full pb-12 bookdetailcontainer  '>
              
 
                  <div className='absolute parentabsoluter'>
               
-                 <div className={'absolute ' + (imgData? 'blurcontainer' : 'blurcontainer2')} style={{ backgroundImage: 'url(' + `${imgData?imgData:require('.//style/images/placeholder_book1.png')  }` + ')'}} > </div>   
+                 <div className={'absolute ' + (imgData? 'blurcontainer' : 'blurcontainer2')} style={{ backgroundImage: 'url(' + `${imgData?imgData:''}` + ')'}} > </div>   
                 
                  </div>
          
@@ -682,7 +706,16 @@ const onChangeeditPicture = e => {
                 </div>
                 <div className="form-groupaddbook mt-2 flex flex-col ">
                   <label className='addbooklabel'><span style={{ color: 'red' }}></span>Author: </label>
-                  <input name="author" type="text" style={customStyles2} required></input>
+                  <Creatable
+                    isClearable
+                    options={authorOptions}
+                    isMulti
+                    classNamePrefix="materialtype"
+                    styles={customStyles2}
+                    name="author"
+                    required
+                  />
+                 
                 </div>
                 <div className="form-groupaddbook mt-2 flex flex-col ">
                   <label className='addbooklabel'>Genre: </label>
@@ -890,6 +923,7 @@ const onChangeeditPicture = e => {
                         seteditBook(fetchedbook[i]); 
                         divElement.value = book.title;
                         selectedgenreoptions(book.genre && book.genre[0] !== ''? book.genre: '');
+                        selectedauthoroptions(book.author && book.author[0] !== ''? book.author: '')
                         selectedseriesoptions(book.series);
                         selectedmaterialoptions(book.type);
                         selectedformoptions(book.form);
@@ -906,7 +940,7 @@ const onChangeeditPicture = e => {
                        </div>
                        <div  className=' resultdetails relative col-span-9 ' >
                          <p className="resultdetailstitle ">{book.title}</p>
-                         <p className="resultdetailsauthor mt-1">-{book.author}</p>
+                         <p className="resultdetailsauthor mt-1">-{book.author.join(",")}</p>
                        </div>                             
                       </div>
 
@@ -976,8 +1010,21 @@ const onChangeeditPicture = e => {
                 </div>
                 <div className="form-groupaddbook mt-2 flex flex-col ">
                   <label className='addbooklabel'><span style={{ color: 'red' }}></span>Author: </label>
-                  <input name="author" type="text" defaultValue={editbook? editbook.author: ''} style={customStyles2} required></input>
-                </div>
+                    <Creatable
+                    isClearable
+                    options={authorOptions}
+                   
+                     value={selecteditauthor}
+                     onChange={(value) => {             
+                     setselecteditauthor(value);
+                     }}
+                    isMulti
+                    classNamePrefix="materialtype"
+                    styles={customStyles2}
+                    name="author"
+                    required
+                  />
+               </div>
                 <div className="form-groupaddbook mt-2 flex flex-col ">
                   <label className='addbooklabel'>Genre: </label>
                   <Creatable
@@ -1208,10 +1255,7 @@ const onChangeeditPicture = e => {
 
 
     </>
-  );}else{
-    return(null)
-  }
-
+  )
 };
 
 export default Addbook;

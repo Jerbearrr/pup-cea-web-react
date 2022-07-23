@@ -16,7 +16,7 @@ import { useNavigate } from 'react-router-dom';
 import { likeBook, bookmarkBook } from "../features/book/bookSlice";
 import jwt_decode from "jwt-decode";
 import { openBook, getrelatedBooks, checkborrowBook, borrowBook } from '../features/book/bookSlice';
-import {  getUser, logoutUser } from '../features/auth/authSlice'
+import {  getUser, logoutUser, reset } from '../features/auth/authSlice'
 import { resetBook } from '../features/book/bookSlice';
 import { digitalCopyApi } from '../features/auth/requests';
 import { toast } from 'react-toastify';
@@ -71,12 +71,16 @@ const ref = useRef()
 
   useEffect(()=>{
    if(isError){ 
+
+    if(message === 'Book not found'){
+      navigate('/404')
+    }
     
   
    toast.error(message)
    dispatch(resetBook())
-   navigate(-1)
-   
+   dispatch(reset())
+ 
   }
   
   },[isError])  
@@ -343,7 +347,7 @@ const ref = useRef()
               <div className='maxwidthopen  flex-row flex  grid grid-cols-12 self-center'>
                 <div className='bookimge laptop:my-8 phone:my-0 phone:pb-0 pt-8 tablet:py-6 desktop:py-8  col-span-12 desktop:col-span-2 tablet:col-span-4 '>
                   <div className='flex flex-col'>
-                    <img className='openbookimage bg-transparent' src={openbook?.imgUri ? openbook.imgUri : require('.//style/images/placeholder_book.png')} alt="No Image Preview" />
+                    <img className='openbookimage bg-transparent' src={openbook?.imgUri ? openbook.imgUri : require('.//style/images/placeholder_book.png')} alt={openbook.title} />
                     {user && userexist && openbook.digitalCopy && !fileRequested?.isRequested &&
                       <button onClick={requestFile} className='digitalFile justify-center text-center disabled:opacity-75' disabled={loadingFile}>
                         {loadingFile ? <ButtonSpinner /> : <p>Request for Digital Copy</p>}
@@ -406,7 +410,18 @@ const ref = useRef()
                 <div className='titledescription laptop:my-8 phone:mb-2 phone:mt-0 pb-2 tablet:py-4 desktop:py-8 col-span-12 desktop:col-span-7 tablet:col-span-8  tablet:px-6 phone:px-2 '>
                   <h2 className='px-1 mt-1 openbooktitle phone:justify-center tablet:justify-start
           flex phone:text-center tablet:text-left'>{openbook.title}</h2>
-                  <h3 className='openbookauthor py-2'><span className='openbookclassname'>Author: &nbsp; </span> {openbook.author}</h3>
+                 {openbook.author? 
+                 <h3 className='openbookauthor py-2'><span className='openbookclassname'>Author: &nbsp; </span> 
+                 {openbook.author.map((x, index) =>
+                 
+                 <Link to={`/advancedsearch?title=&keyword=&author=${x}&publisher=&form=&isbn=&type=&startDate=&endDate=&genre=&sortType=`} key={x+index}>{ (index ? ', ' : '') + x }</Link>
+                  )
+                 }
+                 
+                 </h3>
+              :null  
+              
+              }
 
                   <div className='   flex flex-row openbookbuttons mt-1'>
 
@@ -443,7 +458,7 @@ const ref = useRef()
                   </div>
                   {openbook.description?
                   <h4 className='openbooksummary mb-2 mt-2 '><p className='openbookclassname mb-2'>Overview:</p></h4>:null}
-                  {openbook.description? <h4 className='openbooksummarycont mb-2 mt-2 '>{openbook.description}</h4>:null}
+                  {openbook.description? <h4 className='openbooksummarycont mb-2 mt-2 '>{openbook.description}</h4>:<h4 className='openbooksummarycont mb-2 mt-2 '>There is no description for this book</h4>}
                   
                   {openbook.volume || openbook.edition ? 
                   <div className=' flex-row phone:hidden desktop:flex mt-5'>
@@ -523,7 +538,7 @@ const ref = useRef()
 
           <div ref={ref} className='youmaylike pb-24 pt-3'>
             <div className='flex recenthead mt-5 flex-row justify-between items-center'>
-              <h3 className='mb-3 text-xl text-white font-semibold '>Recommended For You
+              <h3 className='mb-3 text-xl text-white tablet:text-lg phone:text-base font-bold '>Recommended For You
               </h3>
 
             </div>
@@ -544,7 +559,7 @@ const ref = useRef()
                         <div className="px-1 carddet " style={{ zIndex: "2" }}>
                           <div className=" cardtitle ">{book.title}</div>
                           <p className=" cardauthor  mb-1">
-                            {book.author}
+                            {book.author.toString()}
                           </p>
                         </div>
 

@@ -10,6 +10,24 @@ const searchBook = async (searchFilters, offset) => {
     }
 }
 
+const getbookcount= async (searchFilters, offset) => {
+    try {
+        const res = await apiClientBookPublic.get('/getcountbook')
+        return res.data;
+    } catch (err) {
+        console.log(err);
+    }
+}
+
+const topcontributor = async() => {
+    try {
+        const res = await apiClientBookPublic.get('/topcontributes')
+        return res.data;
+    } catch (err) {
+        console.log(err);
+    }
+}
+
 const fetchnotifs = async(offset) =>{
    try {
         const res = await apiClientBook.get('/userNotifications', { offset: offset })
@@ -344,6 +362,8 @@ const bookService = {
     cancelreq,
     notifylate,
     delContribute,
+    getbookcount,
+    topcontributor,
 
 }
 

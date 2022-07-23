@@ -49,7 +49,7 @@ const getuser = async () => {
 
     setTimeout(function () {
       delToken(response.data.refreshToken)
-    }, 3000);
+    }, 8000);
   }
 
   return response.data

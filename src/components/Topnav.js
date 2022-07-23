@@ -117,6 +117,8 @@ const Topnav = () => {
   const [unreadnotifs, setunreadnotifs] = useState(0)
   const [startfetching, setstartfetching] =useState(false)
   const [newlyfetchednotif, setnewlyfetchednotif] = useState(null)
+  const [setaccesstoken, setuseraccess] = useState(null)
+  const [fetchaccess, setfetchaccess] = useState(true)
 
 
   useEffect(async()=>{
@@ -128,7 +130,7 @@ const Topnav = () => {
         setfetchnotification(query.data.findUser) 
         setnotifloading(false);
         setunreadnotifs(query.data.unreadcounts)
-
+        setfetchaccess(false)
         setstartfetching(true)
       }
      })
@@ -140,7 +142,7 @@ const Topnav = () => {
         setfetchnotification(query.data.findnotifs) 
         setnotifloading(false);
         setunreadnotifs(query.data.unreadcounts)
-
+ setfetchaccess(false)
         setstartfetching(true)
       }
      })
@@ -148,13 +150,17 @@ const Topnav = () => {
 
      
 
-    if( user?.accessToken && user?.role === '4d3b'){
+    if( user?.accessToken && user?.role === '4d3b' && fetchaccess){
         getnotif()
+     
+    
+
+
     
    
-    }else if( user?.accessToken && user?.role === 'b521c'){
+    }else if( user?.accessToken && user?.role === 'b521c' &&fetchaccess){
        getadminnotif()
-       
+   
     }else{
 
     }
@@ -163,8 +169,26 @@ const Topnav = () => {
 
 
   },[user])
-  
+   
 
+
+
+
+  
+  
+  useEffect(()=>{
+
+    if(user?.accessToken){
+
+
+    setTimeout(function () {
+       dispatch(getUser())
+    }, 600000);
+
+    }
+
+
+  },[user])
   
   useEffect(async()=>{
 
@@ -179,7 +203,7 @@ const Topnav = () => {
       var fetcheddate = new Date().toISOString()
       const eventSource = new EventSource(`${SSEURL?SSEURL:'http://localhost:8080'}/realtimeuser?date=${fetcheddate}&user=${user._id}&accessToken=${user.accessToken}`,{
 
-      
+      withCredentials: true,
       headers: {
          headers: {
           Accept: "text/event-stream",
@@ -338,7 +362,7 @@ const Topnav = () => {
 
     const unique =([...fetchnotification, ...notifsFormServer.findUser]);
 
-    console.log(unique, notifsFormServer)
+    console.log(unique, notifsFormServer, fetchnotification)
     
     function removeDuplicates(originalArray, prop) {
      var newArray = [];
@@ -470,23 +494,6 @@ console.log('wkwkw1')
     }
   };
 
-  const onClickOutsideNotifListener = () => {
-    
-    if(notifActive){
-      setnotifActive(!notifActive)
-       document.removeEventListener("click", onClickOutsideNotifListener)
-    }else{
-       document.addEventListener("click", onClickOutsideNotifListener)
-    }
-    
-
-  
-   
-  
- 
-   
-  }
-
 
   const [isActive, setActive] = useState(false);
 
@@ -507,6 +514,30 @@ console.log('wkwkw1')
     setActive(false)
     document.removeEventListener("click", onClickOutsideListener)
   }
+const useOutsideClick = (callback) => {
+  const ref = React.useRef();
+
+  React.useEffect(() => {
+    const handleClick = (event) => {
+      if (ref.current && !ref.current.contains(event.target)) {
+        callback();
+      }
+    };
+
+    document.addEventListener('click', handleClick, true);
+
+    return () => {
+      document.removeEventListener('click', handleClick, true);
+    };
+  }, [ref]);
+
+  return ref;
+};
+const handleClickOutside = () => {
+    setnotifActive(false)
+};
+const ref = useOutsideClick(handleClickOutside);
+
 
 if(currentloc === '/'){
     if (!userexist) {
@@ -609,7 +640,7 @@ if(currentloc === '/'){
                   <div id="dropdown2" className={" absolute  flex-col  z-100 w-44 bg-white rounded divide-y divide-gray-100  dark:bg-gray-700 " + (isActive ? 'flex' : 'hidden')}>
                     <ul className="py-1 flex flex-col text-sm text-gray-700 dark:text-gray-200" aria-labelledby="dropdownDefault">
                       <li>
-                        <a href="/changepass" className="block py-2 px-4 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Change Password</a>
+                        <Link to="/changepassword" className="block py-2 px-4 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Change Password</Link>
                       </li>
                       <li>
                         <a className="block py-2 px-4 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white" onClick={onLogout} >Logout</a>
@@ -661,7 +692,7 @@ if(currentloc === '/'){
                 <div className='searchbartop phone:justify-end mr-1'>
 
                   <form className='relative flex tablet:pl-0 flex-col phone:pl-8 tablet:ml-0 phone:mr-0 tablet:mr-1 tabletlg:mr-0 ' action='/advancedsearch'>
-                    <input  autoComplete='off' className='w-full   searchfield2  pr-10 phone:mr-1 tablet:mr-0' type="text" name="title" placeholder="Search book..." ref={elementRef} onChange={e => setDebouncedTerm(e.target.value)}  
+                    <input  autoComplete='off' className='w-full    searchfield2  pr-10 phone:mr-1 tablet:mr-0' type="text" name="title" placeholder="Search book..." ref={elementRef} onChange={e => setDebouncedTerm(e.target.value)}  
                     onMouseLeave={() => {
                    document.addEventListener("click", inputonClickOutsideListener)
                   }} required=""></input>
@@ -691,7 +722,7 @@ if(currentloc === '/'){
                        </div>
                        <div  className=' resultdetails relative col-span-9 flex flex-col ' >
                          <p className="resultdetailstitle ">{book.title}</p>
-                         <p className="resultdetailsauthor mt-1">-{book.author}</p>
+                         <p className="resultdetailsauthor mt-1">-{book.author.toString()}</p>
                        </div>                             
                       </div>
                     </Link>
@@ -709,7 +740,7 @@ if(currentloc === '/'){
                 </div>
                 <div className='mt-8 phone:block tablet:hidden w-full absolute inset-0'>
                      <div className={`absolute phone:h-screen tablet:h-fit searchresultbar2 searchresultbartop flex-col `  + ( searchresultdiv ? 'flex' : 'hidden')  } >
-                      <div className='w-full flex justify-end pr-3 text-xs my-1 mb-2' onClick={() =>{divElement.value = ''} }><Link style={{color:'#007aff'}} className='mr-4 ' to={'/advancedsearch'}>advanced search</Link><button className='' style={{color:'#007aff'}}>close</button></div>
+                      <div className='w-full flex justify-end pr-3 text-xs my-1 mb-2' onClick={() =>{divElement.value = ''} }><Link style={{color:'#007aff'}} className='mr-4 ' to={'/advancedsearch'}>Advanced Search</Link><button className='' style={{color:'#007aff'}}>close</button></div>
                   
                   {searchloading?
                       <div className="resultcontainer  pointer-events-none w-full flex mt-5 flex-row grid grid-cols-12 loadingcont" >
@@ -732,7 +763,7 @@ if(currentloc === '/'){
                        </div>
                        <div  className=' resultdetails relative col-span-9 flex flex-col ' >
                          <p className="resultdetailstitle ">{book.title}</p>
-                         <p className="resultdetailsauthor mt-1">-{book.author}</p>
+                         <p className="resultdetailsauthor mt-1">-{book.author.toString()}</p>
                        </div>                             
                       </div>
 </Link>
@@ -777,7 +808,7 @@ if(currentloc === '/'){
                      !notifloading && user?.role === '4d3b'?
                        fetchnotification?.length > 0  ? 
                         fetchnotification.map((notifs) =>(
-                      <Link to={notifs.typer === 'borrow'? '/borrow':notifs.typer === 'contribution'? '/contribute?tab=contributionrequest&page=1&option=all':notifs.typer === 'digital'? '/borrow?tab=FileRequests&page=null&option=all':'/' } className="resultcontainer2 w-full flex flex-col grid grid-cols-12 " style={{backgroundColor:`${notifs.status === 'unread'? '#353840':null}`}} id={`567${notifs.id}`}  key={notifs.id}>
+                      <Link to={notifs.typer === 'borrow'? '/borrow?tab=BorrowRequests&page=1&option=all':notifs.typer === 'contribution'? '/contribute?tab=contributionrequest&page=1&option=all':notifs.typer === 'digital'? '/borrow?tab=FileRequests&page=1&option=all':'/' } className="resultcontainer2 w-full flex flex-col grid grid-cols-12 " style={{backgroundColor:`${notifs.status === 'unread'? '#353840':null}`}} id={`567${notifs.id}`}  key={notifs.id}>
                    
                       <div  className=' resultdetails relative col-span-12 flex flex-col '  >
                              <div  className=' resultdetails relative flex flex-col ' >
@@ -842,13 +873,13 @@ if(currentloc === '/'){
                       
                       
                        <li className=' loginbtnnav phone:mr-1  laptop:mr-5'>
-                    <Link to={`/login`} className='toploginbtn px-3 py-1'> Login</Link>
+                    <Link to={`/studentlogin`} className='toploginbtn px-3 py-1'> Login</Link>
                   </li>
                     </div> : (
 
                   userexist && user ? (
                     <div className='flex flex-row '>
-                   <li className={` loginbtnnav laptop:ml-2 phone:-ml-1 relative flex flex-col ` + (searchresultdiv ? ' phone:hidden tablet:flex' : '')}  style={{boxShadow:'none'}}>
+                   <li ref={ref} className={` loginbtnnav laptop:ml-2 phone:-ml-1 relative flex flex-col ` + (searchresultdiv ? ' phone:hidden tablet:flex' : '')}  style={{boxShadow:'none'}}>
 
                      <button className='notifprofile  phone:mr-1 phone:ml-1 tablet:ml-0  laptop:mr-3' 
                      
@@ -857,16 +888,10 @@ if(currentloc === '/'){
                   onClick={()=>{
                     toggleNotif()
                     readnotif()
-                    if(notifActive === true){
-                    document.removeEventListener("click", onClickOutsideNotifListener)
-                    }
+                  
                   }  
-                }
-                  
-                  onMouseLeave={() => {
-                    document.addEventListener("click", onClickOutsideNotifListener)
-                  
-                  }} > {notifActive? <IoMdNotifications color="white"  size="1.3em"
+                }             
+                > {notifActive? <IoMdNotifications color="white"  size="1.3em"
                   
                   
                   />:<IoMdNotificationsOutline color="white"  size="1.3em"/> } 
@@ -911,7 +936,7 @@ if(currentloc === '/'){
                        fetchnotification?.length > 0? 
                         fetchnotification.map((notifs) =>(
 
-                      <Link  to={notifs.typer === 'borrow'? '/borrow':notifs.typer === 'contribution'? '/contribute?tab=contributionrequest&page=1&option=all':notifs.typer === 'digital'? '/borrow?tab=FileRequests&page=null&option=all':'/' }  className=" whitespace-normal resultcontainer2 w-full flex flex-col grid grid-cols-12 " style={{backgroundColor:`${notifs.status === 'unread'? '#353840':null}`}} id={notifs.id}  key={notifs.id}>
+                      <Link  to={notifs.typer === 'borrow'? '/borrow?tab=BorrowRequests&page=1&option=all':notifs.typer === 'contribution'? '/contribute?tab=contributionrequest&page=1&option=all':notifs.typer === 'digital'? '/borrow?tab=FileRequests&page=1&option=all':'/' }  className=" whitespace-normal resultcontainer2 w-full flex flex-col grid grid-cols-12 " style={{backgroundColor:`${notifs.status === 'unread'? '#353840':null}`}} id={notifs.id}  key={notifs.id}>
              
                       <div  className=' resultdetails relative col-span-12 flex flex-col '  >
                              <div  className=' resultdetails relative flex flex-col ' >
@@ -987,7 +1012,7 @@ if(currentloc === '/'){
                          <div  className="block py-2 px-4  flex flex-row items-center "> <FaUserCircle color="white" size="3.0em" className='mr-4'/><a className='welcomename flex flex-col'><p className='welcometext'>Welcome</p><p className='usernamewel usernametop'>{user.firstName} &nbsp; {user.lastName}</p></a> </div>
                       </li>
                       <li  >
-                        <a  href="/changepass" className="flex flex-row items-center py-2 px-4 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"><IoMdKey size="1.5em" className='mr-2'/> Change Password</a>
+                        <Link  to="/changepassword" className="flex flex-row items-center py-2 px-4 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"><IoMdKey size="1.5em" className='mr-2'/> Change Password</Link>
                       </li>
                       <li >
                         <a   className="flex flex-row items-center py-2 px-4 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white" onClick={onLogout} ><IoLogOutOutline size="1.5em" className='mr-2'/>Logout</a>

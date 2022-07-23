@@ -25,13 +25,15 @@ const Home = () => {
   const [fetchquote, setfetchquote] = useState(null)
   const [fetchauthor, setfetchquoteauthor] = useState(null)
   const [searchtext, setsearchtext] = useState(null)
+  const [bookcount, setbookcount] = useState(0)
+  const [counter, setcounter] = useState(0)
 
   const[featureloading, setfeatureloading] = useState(true)
   const[recentlyloading, setrecentloading] = useState(true)
 
   const ref = useRef()
   const ref2 = useRef()
-
+  
 
   const isVisible = Renderonview(ref)
   const isVisible2 = Renderonview(ref2)
@@ -56,6 +58,35 @@ const Home = () => {
     [swiped],
   )
   
+  useEffect(()=>{
+    
+    if(bookcount > 0){
+      console.log(bookcount)
+   
+
+    let start = 0;
+    // first three numbers from props
+    const end = parseInt(bookcount)
+    // if zero, return
+    if (start === end) return;
+
+    // find duration per increment
+    let totalMilSecDur = parseInt(0.1);
+    let incrementTime = (totalMilSecDur / end) * 1000;
+
+    // timer increments start counter 
+    // then updates count
+    // ends if start reaches end
+    let timer = setInterval(() => {
+      start += 1;
+      setcounter((start))
+      if (start === end) clearInterval(timer)       
+    }, incrementTime);
+    }
+
+
+
+  },[bookcount])
   useEffect(()=>{
 
      if(isVisible && featureloading){
@@ -94,6 +125,19 @@ const Home = () => {
           setfetchquoteauthor(res.author)
    
       
+        }
+      })
+      
+    } catch (error) { 
+       console.log(error);
+    }
+
+   try {
+    const bookcont = await bookService.getbookcount().then((res)=>{
+
+        if(res){
+         setbookcount(res)
+   
         }
       })
       
@@ -191,7 +235,7 @@ const Home = () => {
                 }} type="text" onChange={onChangeSearch} name="title" placeholder="Search book..." ></input>
                <Link id='btnSearch' className='searchbtn flex item-center justify-center' to={`/advancedsearch?title=${searchtext}`}><button type="button" title="Search" aria-label="Submit Search" className=' tabletlg:px-4 phone:px-3'><div><FaSearch /></div></button></Link>  
               </div>
-              <p className='mt-4 homedescr'>Search for 1000 library resources composed of books and journals that can be found on the PUP CEA Library</p>
+              <p className='mt-4 homedescr'>Search for <span className='font-semibold'>{counter}</span> library resources composed of books and journals that can be found on the PUP CEA Library</p>
             </div>
 
   
@@ -282,7 +326,7 @@ const Home = () => {
 
 
                       <h4 className='featuredtitle' draggable='true' onDragStart={(e) => {e.preventDefault()}}>{book.title}</h4>
-                      <h4 className='featuredauthor' draggable='true' onDragStart={(e) => {e.preventDefault()}}>-{book.author}</h4>
+                      <h4 className='featuredauthor' draggable='true' onDragStart={(e) => {e.preventDefault()}}>-{book.author.toString()}</h4>
 
                       <h4 className='featureddescript' draggable='true' onDragStart={(e) => {e.preventDefault()}}>{book.description}</h4>
 
@@ -386,7 +430,7 @@ const Home = () => {
                     </div> 
                     <div className='newhomedetcont flex justify-center items-center'>
                       <p className='newhomedetconttitle'>{book.title}</p>
-                      <p  className='newhomedetcontauhtor'>{book.author}</p>
+                      <p  className='newhomedetcontauhtor'>{book.author.toString()}</p>
                     </div>
 
                   </div>    

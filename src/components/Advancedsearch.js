@@ -341,7 +341,7 @@ const Advancedsearch = () => {
 
         <div className='relative advancedsearchcont2  w-full  pt-7 pb-16 px-1'>
 
-          <h1 className='advancetext' style={{ zIndex: "2" }}> Advanced Search </h1>
+          <h1 className='advancetext tablet:text-lg phone:text-base font-bold' style={{ zIndex: "2" }}> Advanced Search </h1>
           <div className='advancedbox relative ' style={{ zIndex: "3" }}>
 
             <form id='Advancedform' className='phone:mx-3 tablet:mx-5 py-5'>
@@ -419,7 +419,7 @@ const Advancedsearch = () => {
 
 
           </div>
-          <h1 ref={ref} className='advancetext mt-5' style={{ zIndex: "2" }}> Search Results</h1>
+          <h1 ref={ref} className='advancetext mt-5' style={{ zIndex: "2" }}> </h1>
 
           <Suspense  fallback={<div style={{ color: "white" }}></div>}>
             <SearchResults searchQuery={searchQuery} pageisLoading={ispageLoading} />

@@ -16,6 +16,7 @@ import Modal from 'react-modal';
 import { IoCloseSharp, } from "react-icons/io5";
 import Creatable from 'react-select/creatable';
 import { toast } from "react-toastify";
+import {BsCheckCircleFill, BsXCircleFill} from 'react-icons/bs'
 
 import bookService from '../features/book/bookService';
 
@@ -32,7 +33,9 @@ const Signuprequests = () => {
   const [pageloading, setpageloading] = useState(true)
   const [userloaded, setuserloaded] = useState(null)
   const [selecteditgenre, setselecteditgenre] = useState(null);
+  const [selecteditauthor, setselecteditauthor] = useState(null);
   const [istabLoading, setistabLoading] = useState(false)
+  const [refresh ,setrefresh] = useState(false)
   const [fileOptions, setFileOptions] = useState([
     { value: 'all', label: 'All' },
     { value: 'pending', label: 'Pending' },
@@ -60,6 +63,10 @@ const Signuprequests = () => {
 
 
 const tabClicked = (tabstatus) => {
+    
+    if(tabstatus === selectedTab){
+    setrefresh(!refresh)
+  }
     setistabLoading(true)
     setPage(1)
     setSelectedTab(tabstatus);
@@ -119,10 +126,12 @@ const tabClicked = (tabstatus) => {
          
         setpageloading(false)
         setistabLoading(false)
+       
         
       }
     } else {
       setpageloading(false)
+     
       if (!userloaded) {
         navigate('/')
       }
@@ -138,9 +147,11 @@ const tabClicked = (tabstatus) => {
          setapprovedbook(null)
         setconfirmbook(null)
         setistabLoading(false)
+   
       }
     } else {
       setpageloading(false)
+     
       if (!userloaded) {
         navigate('/')
       }
@@ -150,7 +161,7 @@ const tabClicked = (tabstatus) => {
 
 
 
-  }, [page, user, signRrequests, selectedTab, approvedbook  ])
+  }, [page, user, signRrequests, selectedTab, approvedbook, refresh  ])
 
 
   useEffect(() => {
@@ -277,6 +288,28 @@ const tabClicked = (tabstatus) => {
     return options;
 }
    }
+
+ const selectedauthoroptions = (author) => {
+ if(author){
+  let options = [];
+    // MAKE A LABEL FOR EACH GENRE VALUE
+    author.forEach(value => {
+
+      let label = value.split('_');
+      let formattedLabel = [];
+      //FORMAT LABEL INTO PROPER UPPERCASE AND CHANGE _ TO SPACE
+      label.forEach(word => {
+        formattedLabel.push(word.charAt(0).toUpperCase() + word.slice(1))
+      })
+
+      options = [...options, { value: value, label: formattedLabel.join(' ') }];
+
+    })
+    console.log(options)
+    setselecteditauthor(options)
+    return options;
+}
+}
   
   const onFormSubmit = (event) => {
     setistabLoading(true)
@@ -388,7 +421,7 @@ const tabClicked = (tabstatus) => {
                     </div>
                     <div className="conttitle tablet:col-span-9 phone:col-span-12">
                       <h4 className='text-white tablet:mr-8 phone:mr-0 mt-2' >Book Title:<span className='makethisbold text-white mx-2'> &nbsp;{getcontributedbook.bookquery[modalIsOpen.selectedBook].title}</span> </h4>
-                      <h4 className='text-white mt-2' >Author: <span className='makethisbold text-white mx-2'>{getcontributedbook.bookquery[modalIsOpen.selectedBook].author} &nbsp;</span></h4>
+                      <h4 className='text-white mt-2' >Author: <span className='makethisbold text-white mx-2'>{getcontributedbook.bookquery[modalIsOpen.selectedBook].author.toString()} &nbsp;</span></h4>
                       <h4 className='text-white mt-2' >Genre: <span className='makethisbold text-white mx-2'>{
                       getcontributedbook.bookquery[modalIsOpen.selectedBook].genre.map(openbook => (
                           <div className='genrecircle inline-flex' key={openbook}> <a className='openbookgenre pr-0.5 mb-2 ' key={openbook}><span className='px-1 '>{openbook}</span></a></div>
@@ -498,14 +531,14 @@ const tabClicked = (tabstatus) => {
                             </div>
 
                            <div className='flex flex-col'>
-                            <h4 className='removeunderline my-1'>{`${post.firstName} ${post.lastName}`}</h4>
+                            <h4 className='removeunderline twolineonly my-1'>{`${post.firstName} ${post.lastName}`}</h4>
 
                             <h6 className='twolineonly'><span className='makethisbold mr-2'>User Email:</span></h6>
-                            <span className='makethisbold mr-2 text-sm'>{post.email}</span>
-                            <h6 className='twolineonly mt-1'><span className='makethisbold mr-2'>Department:</span></h6>
-                            <span className='makethisbold mr-2 text-sm'>{post.department}</span>
+                            <span className='makethisbold twolineonly mr-2 text-sm'>{post.email}</span>
+                            <h6 className='twolineonly mt-1 phone:hidden tablet:flex'><span className='makethisbold mr-2'>Department:</span></h6>
+                            <span className='makethisbold mr-2 text-sm phone:hidden tablet:flex'>{post.department}</span>
                             <h6 className='twolineonly mt-1'><span className='makethisbold mr-2'>Student Number:</span></h6>
-                            <span className='makethisbold mr-2 text-sm'>{post.studentNumber}</span>
+                            <span className='makethisbold  mr-2 text-sm'>{post.studentNumber}</span>
 
                             </div>
                           </div>
@@ -540,6 +573,7 @@ const tabClicked = (tabstatus) => {
                             setconfirmbook(null)
                             setconfirmbook(getcontributedbook?.bookquery[i]); 
                             selectedgenreoptions(getborrowedbook.genre && getborrowedbook.genre[0] !== ''? getborrowedbook.genre: '');
+                            selectedauthoroptions(getborrowedbook.author && getborrowedbook.author[0] !== ''? getborrowedbook.author: '')
                             openModal(i)
                             console.log('dataloaded')
                           }}>
@@ -549,44 +583,37 @@ const tabClicked = (tabstatus) => {
                             </div>
 
                             <div className=' relative removeshadow text-white flex flex-col pl-1 w-100' style={{ zIndex: "2" }}>
-                              <div className='statusbar w-full flex  flex-row-reverse w-100'>
-
-                                {getborrowedbook.status === 'pending' ?
-                                  <> 
-                                  <button className='relative acceptbtn' onClick={()=>{
+                             <div className='absolute right-0 bottom-2 z-10 flex flex-row'>
+                              <button className='checkbuttonconf relative bg-gray mr-1 rounded-full '  onClick={()=>{declinecontri(getborrowedbook._id)}}>
+                                 <div className='absolute bg-white inset-2'></div>
+                                <BsXCircleFill fill='#A43033' size="2.0em" color='white' />
+                              </button>
+                               <button className='checkbuttonconf relative mr-1 bg-gray   rounded-full' onClick={()=>{
                                     setconfirmbook(null)
                                     setconfirmbook(getcontributedbook?.bookquery[i]); 
                                     selectedgenreoptions(getborrowedbook.genre && getborrowedbook.genre[0] !== ''? getborrowedbook.genre: '');
+                                    selectedauthoroptions(getborrowedbook.author && getborrowedbook.author[0] !== ''? getborrowedbook.author: '')
 
-                                    console.log('btn clicked accepted', confirmbook?.title)}} type="submit" form="confirmform" >
-                                    <h5 className=' stattext flex mx-3 flex-1  absolute' >Accept</h5>
-                                    <svg className='' width="150" height="25">
-                                      <path d="m 1 0 c 6 2 24 -1 30 11 c 3 5 5 13 13 13 h 105 V 0" stroke="#202125" />
-                                    </svg>
-                                  </button>
+                                    console.log('btn clicked accepted', confirmbook?.title)}} type="submit" form="confirmform">
 
-                                    <div className='relative declinebtn' onClick={()=>{declinecontri(getborrowedbook._id)}}  >
-                                      <h5 className=' stattext flex mx-2 flex-1  absolute'  >Decline</h5>
-                                      <svg className='' width="150" height="25">
-                                        <path d="m 1 0 c 6 2 24 -1 30 11 c 3 5 5 13 13 13 h 106 C 143 21 143 18 140 12 C 133 0 127 2 109 -1" stroke="#202125" />
-                                      </svg>
-                                    </div></> : null
-                                }
-                          
-                        
+                                <div className='absolute bg-white inset-2'></div>
+
+                                <BsCheckCircleFill fill='#3da450' size="2.0em" color='white'/>
+                              </button>
 
 
-                              </div>
+                            </div>
                               <span className='mt-1 h-full' onClick={()=>{
                             setconfirmbook(null)
                             setconfirmbook(getcontributedbook?.bookquery[i]); 
                             selectedgenreoptions(getborrowedbook.genre && getborrowedbook.genre[0] !== ''? getborrowedbook.genre: '');
+                            selectedauthoroptions(getborrowedbook.author && getborrowedbook.author[0] !== ''? getborrowedbook.author: '')
                             openModal(i)
                             
                             console.log('dataloaded')
                           }}>
-                                <h4 className='removeunderline mb-1'>{getborrowedbook.title}</h4>
-                                <h6 ><span className='makethisbold mr-2'>Author:</span>  {getborrowedbook.author} </h6>
+                                <h4 className='removeunderline mb-1 mt-2 tabletlg:text-lg phone:text-base'>{getborrowedbook.title}</h4>
+                                <h6 ><span className='makethisbold mr-2'>Author:</span>  {getborrowedbook.author.toString()} </h6>
                                 <h6  ><span className='makethisbold mr-2'>Contributor:</span> {getborrowedbook.contributerFName} &nbsp; {getborrowedbook.contributerLName}</h6>
                                 <h6 ><span className='makethisbold mr-2'>Date Requested:</span> {new Date(getborrowedbook.dateRequested).toISOString().split('T')[0].replace(/-/g, '/')}</h6>
                                 
@@ -637,7 +664,22 @@ const tabClicked = (tabstatus) => {
                 </div>
                 <div className="form-groupaddbook mt-2 flex flex-col ">
                   <label className='addbooklabel'><span style={{ color: 'red' }}></span>Author: </label>
-                  <input name="author" type="text" defaultValue={confirmbook? confirmbook.author: ''} ></input>
+                  <Creatable
+                    isClearable
+            
+
+                     value={selecteditauthor}
+                     onChange={(value) => {             
+                     setselecteditauthor(value);
+                     }}
+                    isMulti
+                    classNamePrefix="materialtype"
+                    name="author"
+                    
+               
+                  />
+
+
                 </div>
                 <div className="form-groupaddbook mt-2 flex flex-col ">
                   <label className='addbooklabel'>Genre: </label>

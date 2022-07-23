@@ -237,7 +237,8 @@
 }
 .resultdetails{
     padding: 0.5em;
-    flex-wrap: wrap;
+    
+    overflow: hidden;
     
 
   

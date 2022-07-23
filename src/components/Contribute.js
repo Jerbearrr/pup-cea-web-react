@@ -88,6 +88,7 @@ const Contribute = () => {
     const { user, isSuccess } = useSelector(state => state.auth);
   const [skipCount, setSkipCount] = useState(true);
    const [buttonloading, setbuttonloading]= useState(false)
+     const [authorOptions, setAuthorOptions] = useState();
  const navigate = useNavigate();
 const dispatch = useDispatch()
   const [options, setOptions] = useState([
@@ -220,7 +221,7 @@ useEffect(() => {
   const [genreOptions, setGenreOptions] = useState();
   const [seriesOptions, setSeriesOptions] = useState();
   const [formOptions, setFormOptions] = useState();
-  const [imgData, setImgData] = useState(require('.//style/images/placeholder_book1.png'));
+  const [imgData, setImgData] = useState();
 
  const [inputVal, setInputVal] =useState("")
   const inputRef = useRef(null)
@@ -276,12 +277,13 @@ inputRef.current.style.height = scrollHeight + "px";
   useEffect(async () => {
     window.scrollTo(0, 0);
     console.log('whyreq')
-    const { genres, types, forms, series } = await bookService.getUniqueFields();
+    const { genres, types, forms, series, author } = await bookService.getUniqueFields();
     const isSuccess = localStorage.getItem('isCreated');
     setGenreOptions(makeLabels(genres));
     setSeriesOptions(makeLabels(series));
     setTypeOptions(makeLabels(types));
     setFormOptions(makeLabels(forms));
+    setAuthorOptions(makeLabels(author))
 
     if (isSuccess === 'true') {
       toast.success('Book sent for approval');
@@ -500,7 +502,7 @@ inputRef.current.style.height = scrollHeight + "px";
                     </div>
                     <div className="conttitle tablet:col-span-9 phone:col-span-12">
                       <h4 className='text-white tablet:mr-8 phone:mr-0 mt-2' >Book Title:<span className='makethisbold text-white mx-2'> &nbsp;{getcontributedbook.bookquery[modalIsOpen.selectedBook].title}</span> </h4>
-                      <h4 className='text-white mt-2' >Author: <span className='makethisbold text-white mx-2'>{getcontributedbook.bookquery[modalIsOpen.selectedBook].author} &nbsp;</span></h4>
+                      <h4 className='text-white mt-2' >Author: <span className='makethisbold text-white mx-2'>{getcontributedbook.bookquery[modalIsOpen.selectedBook].author.toString()} &nbsp;</span></h4>
                       <h4 className='text-white mt-2' >Genre: <span className='makethisbold text-white mx-2'>{
                       getcontributedbook.bookquery[modalIsOpen.selectedBook].genre.map(openbook => (
                           <div className='genrecircle inline-flex' key={openbook}> <a className='openbookgenre pr-0.5 mb-2 ' key={openbook}><span className='px-1 '>{openbook}</span></a></div>
@@ -545,7 +547,7 @@ inputRef.current.style.height = scrollHeight + "px";
 
                  <div className={'absolute parentabsoluter' + (bgactive? ' flex' : 'hidden')}>
               
-                 <div className={'absolute ' + (imgData? 'blurcontainer' : 'blurcontainer2 ') } style={{ backgroundImage: 'url(' + `${imgData?imgData:require('.//style/images/placeholder_book1.png')  }` + ')'}} > </div>   
+                 <div className={'absolute ' + (imgData? 'blurcontainer' : 'blurcontainer2 ') } style={{ backgroundImage: 'url(' + `${imgData?imgData:''  }` + ')'}} > </div>   
                 
                  </div>
          
@@ -610,7 +612,15 @@ inputRef.current.style.height = scrollHeight + "px";
                 </div>
                 <div className="form-groupaddbook mt-2 flex flex-col ">
                   <label className='addbooklabel'><span style={{ color: 'red' }}></span>Author: </label>
-                  <input name="author" type="text" style={customStyles2} required></input>
+                      <Creatable
+                    isClearable
+                    options={authorOptions}
+                    isMulti
+                    classNamePrefix="materialtype"
+                    styles={customStyles2}
+                    name="author"
+                    required
+                  />
                 </div>
                 <div className="form-groupaddbook mt-2 flex flex-col ">
                   <label className='addbooklabel'>Genre: </label>

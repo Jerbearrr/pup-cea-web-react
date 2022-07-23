@@ -190,7 +190,7 @@ const Bookmarks = () => {
                               </div>
                               <div className=' removeshadow text-white flex flex-col px-2'>
                                 <h4 className='removeunderline' >{bookmarkedbook.title}</h4>
-                                <h5 className='mt-1'>-{bookmarkedbook.author}</h5>
+                                <h5 className='mt-1'>-{bookmarkedbook.author.toString()}</h5>
                                 <div className='flex-grow flex tablet:mt-2 phone:mt-0'>
                                   <div className='flex  flex phone:items-end tablet:items-start'>
                                     <h2 className='tablet:mt-2 phone:mt-0'>{bookmarkedbook.description}</h2>
@@ -235,7 +235,7 @@ const Bookmarks = () => {
                               <div className=' removeshadow text-white flex flex-col px-2'>
                         
                                   <h4 className='removeunderline' >{likedbook.title}</h4>
-                                <h5 className='mt-1'>-{likedbook.author}</h5>
+                                <h5 className='mt-1'>-{likedbook.author.toString()}</h5>
                                 <div className='flex-grow flex tablet:mt-2 phone:mt-0'>
                                   <div className='flex  flex phone:items-end tablet:items-start'>
                                     <h2 className='tablet:mt-2 phone:mt-0'>{likedbook.description}</h2>

@@ -76,6 +76,7 @@ const Requests = () => {
   const [canceledreq, setcanceledreq] =useState(null)
   const [fetchdaylimit, setfetchdaylimit] = useState(null)
 const [istabLoading, setistabLoading] = useState(false)
+  const [refresh ,setrefresh] = useState(false)
   const [selectedTab, setSelectedTab] = useTabs([
     'all',
     'pending',
@@ -110,8 +111,7 @@ const [istabLoading, setistabLoading] = useState(false)
 
   useEffect(async() => {
 
-     setpageloading(true)
-       try {
+      try {
     const featureddaylimit = await bookService.getdaylimit().then((res)=>{
 
         if(res){
@@ -125,6 +125,8 @@ const [istabLoading, setistabLoading] = useState(false)
    
        toast.error(error);
     }
+
+    setpageloading(true)
     window.scrollTo(0, 0);
     setSelectedTab(urlParams.get('tab') ?urlParams.get('tab'): 'bookmarks')
    
@@ -138,27 +140,32 @@ const [istabLoading, setistabLoading] = useState(false)
   }, [getborrowedbook])
 
 
-  useEffect(() => {
+  useEffect(async() => {
     setpageloading(true)
  window.scrollTo(0, 0);
     if (userexist) {
       if (user.length !== 0) {
         setuserloaded(user)
-          console.log('did ig oghere agin')
+   
         if(selectedTab === 'all' || selectedTab === 'pending' || selectedTab === 'confirmed'||selectedTab === 'received' || selectedTab === 'returned'){
         dispatch(getallborrowedBook({ page: page, status: selectedTab ? selectedTab : urlParams.get('tab') ?urlParams.get('tab'): 'all' }))   
+        
        }
       }
     } else {
        setpageloading(false)
+      
       if (!userloaded) {
-        setpageloading(false)
+     
+        setpageloading(false) 
         navigate('/')
       }
     }
 
 
-  }, [user, page, selectedTab,borrowbook,canceledreq ])
+
+
+  }, [user, page, selectedTab,borrowbook,canceledreq,refresh ])
 
 
 
@@ -271,7 +278,9 @@ const notifylateuser = async(id)=>{
   const tabClicked = (tabstatus) => {
 
    
-      
+       if(tabstatus === selectedTab){
+    setrefresh(!refresh)
+  }
       setSelectedTab(tabstatus);
       setPage(1);
    

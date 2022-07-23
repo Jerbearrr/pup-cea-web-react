@@ -4,7 +4,7 @@
     color: white;
     height: 100vh;
     width: 260px;
-    background-color: #202125;
+    background-color: #2a2c31;
     z-index: 200;
 
   
@@ -58,9 +58,10 @@
 
 }
 .sidemenu h2{
-    font-weight: 500!important;
-    font-size: 0.896rem!important;
-    line-height: 1.3em
+    font-weight: 600!important;
+    font-size: 0.856rem!important;
+    line-height: 1.3em;
+    letter-spacing: normal;
    
 }
 @media only screen and (max-width: 600px) {

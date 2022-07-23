@@ -1,5 +1,5 @@
 import React, { useState, useMemo } from "react";
-import { BrowserRouter as Router, Routes, Route, Link } from "react-router-dom";
+import { BrowserRouter as Router, Routes, Route, Link, Navigate } from "react-router-dom";
 import { ToastContainer } from "react-toastify";
 import 'react-toastify/dist/ReactToastify.css'
 import "./App.css";
@@ -30,8 +30,12 @@ import Contribute from "./components/Contribute";
 import ViewFile from './components/ViewFile';
 import Forgotpass from "./components/Forgotpass";
 import Admincontrol from "./components/Admincontrol";
+import Error404 from "./components/Error404";
 
 function App() {
+
+
+  
 
   return (
     <div >
@@ -317,6 +321,18 @@ function App() {
             </>
           }
         />
+
+         <Route path="/404" element={
+         
+         <>
+              <Topnav />
+              <Error404/>
+   
+
+            </>
+         
+         } />
+        <Route path="*" element={<Navigate replace to="/404" />} />
 
       </Routes>
       <ToastContainer limit={2} />

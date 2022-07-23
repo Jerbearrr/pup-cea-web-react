@@ -65,7 +65,10 @@ const SearchResults = ({ searchQuery }) => {
     }, [query])
 
     return (
-        <>
+        <> 
+      
+              
+                    
             {data.length > 0 && !buttonloading ? (
                 <InfiniteScroll
                     dataLength={data.length}
@@ -73,8 +76,12 @@ const SearchResults = ({ searchQuery }) => {
                     next={handleNextData}
                     hasMore={hasMore}
                     loader={<div><LoadingResults /></div>}
-                >
-                    <div style={{ zIndex: "2" }} className='searchresultcont w-full grid grid-row-2 desktop:grid-cols-6 laptop:grid-cols-6 tabletlg:grid-cols-4 tablet:grid-cols-4 phone:grid-cols-3 phone:gap-2 tablet:gap-2 tabletlg:gap-2 '>
+                >   
+                      <h1 className='advancetext flex mb-0  justify-between flex-row mt-2 items-center tablet:text-lg phone:text-base font-bold' style={{ zIndex: "2" }}> Search Results <span className='tablet:text-sm phone:text-xs text-white flex '>{data.length} results</span></h1>
+                    
+              
+              
+                    <div style={{ zIndex: "2" }} className='searchresultcont pt-2 w-full grid grid-row-2 desktop:grid-cols-6 laptop:grid-cols-6 tabletlg:grid-cols-4 tablet:grid-cols-4 phone:grid-cols-3 phone:gap-2 tablet:gap-2 tabletlg:gap-3 '>
                         {
                             data &&
                             (data.map(book => {
@@ -90,7 +97,7 @@ const SearchResults = ({ searchQuery }) => {
                                                 <div className="px-1 carddet " style={{ zIndex: "2" }}>
                                                     <div className=" cardtitle ">{book.title}</div>
                                                     <p className=" cardauthor  mb-1">
-                                                        {book.author}
+                                                        {book.author.toString()}
                                                     </p>
                                                 </div>
                                             </div>
