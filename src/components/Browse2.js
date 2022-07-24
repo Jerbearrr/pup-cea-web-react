@@ -848,7 +848,10 @@ const Browse2 = () => {
                 <Link to={`/openbook/${book._id}`} key={book._id}>
                    <div className='journalcontainer text-white flex flex-col p-3'>
                    <h4 className='text-justify align-middle'>{book.title}</h4>
-                   <p>Date Published: {format(new Date(book.dateOfPublication), 'yyyy-MM-dd')}</p>
+                   {book.dateOfPublication?
+                        <p>Date Published: {format(new Date(book.dateOfPublication), 'yyyy-MM-dd')}</p>:
+                        <p>Date Published: not specified</p>
+                   } 
                    <h5>{book.author.toString()}</h5>
                    <h6 className='text-justify'>{book.description?book.description:'There is no description for this journal'}</h6>
 
